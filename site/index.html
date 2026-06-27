@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Epistemic Ontology — a home for ontologies of knowledge and record</title>
+  <meta name="description" content="Epistemic Ontology publishes formal, dereferenceable OWL/SKOS vocabularies for reasoning about knowledge, records, and the ways they can be harmed.">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">Epistemic<span>Ontology</span></div>
+      <nav class="nav">
+        <a href="/">Ontologies</a>
+        <a href="/#about">About</a>
+        <a href="/#use">Use</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <section class="hero">
+        <h1>Formal vocabularies for knowledge&nbsp;and record.</h1>
+        <p class="lead">
+          Epistemic Ontology is a small, curated namespace for OWL&nbsp;2&nbsp;DL and SKOS
+          vocabularies that model how information is structured, trusted, and damaged.
+          Every term has a stable, dereferenceable IRI under
+          <code>https://www.epistemic-ontology.net/</code>.
+        </p>
+      </section>
+
+      <section id="ontologies">
+        <h2>Published ontologies</h2>
+        <div class="cards">
+
+          <article class="card">
+            <h3><a href="/record-harm/">Record Harm Ontology</a></h3>
+            <p class="ns mono">https://www.epistemic-ontology.net/record-harm#</p>
+            <p>
+              A taxonomy of the ways an informational record can be damaged —
+              prime harms (destruction, fabrication, alteration, omission, denial)
+              and the composite harms built upon them — with SHACL validation and
+              an event layer for specific occurrences.
+            </p>
+            <div class="meta">
+              <span class="badge">OWL 2 DL</span>
+              <span class="badge">SKOS</span>
+              <span class="badge">SHACL</span>
+              <span class="badge muted">v2.3</span>
+            </div>
+          </article>
+
+          <article class="card placeholder">
+            <h3>Next ontology</h3>
+            <p>
+              This namespace is built to grow. A second vocabulary —
+              on provenance, evidence, or epistemic trust — will live here under
+              its own slug, with the same stable-IRI and content-negotiation guarantees.
+            </p>
+            <div class="meta"><span class="badge muted">reserved</span></div>
+          </article>
+
+        </div>
+      </section>
+
+      <section id="about">
+        <h2>About</h2>
+        <p>
+          The goal is narrow and durable: a handful of carefully engineered,
+          inter-operable vocabularies, each published at a permanent address so it
+          can be cited, imported, and dereferenced for decades. Vocabularies here
+          favour OWL&nbsp;2&nbsp;DL where reasoning matters, SKOS where a controlled
+          vocabulary is enough, and SHACL for closed-world validation.
+        </p>
+        <p>
+          Maintained by Ron Hinchley. Source and issue trackers are linked from each
+          ontology's page.
+        </p>
+      </section>
+
+      <section id="use">
+        <h2>Using a vocabulary</h2>
+        <p>Each term IRI resolves to both human documentation and machine RDF, by content negotiation:</p>
+        <pre><code># Human-readable documentation
+curl -H "Accept: text/html" https://www.epistemic-ontology.net/record-harm
+
+# Turtle (also: application/rdf+xml, application/ld+json)
+curl -H "Accept: text/turtle" https://www.epistemic-ontology.net/record-harm</code></pre>
+        <p>
+          IRIs use hash namespaces (e.g.
+          <code>…/record-harm#Destruction</code>), so dereferencing any term fetches
+          the whole vocabulary document.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Ron Hinchley · Epistemic Ontology</span>
+      <span><a href="/">epistemic-ontology.net</a></span>
+    </div>
+  </footer>
+</body>
+</html>

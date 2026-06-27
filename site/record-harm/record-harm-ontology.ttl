@@ -1,0 +1,438 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record-harm#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+# TODO [namespace]: the base IRI https://www.epistemic-ontology.net/record-harm# is an
+# RFC 2606 placeholder -- non-resolvable and unowned. Before this ontology has
+# external adopters, migrate to a persistent, dereferenceable base (e.g.
+# https://w3id.org/record-harm#). That rewrites every ex: IRI, so it is a
+# deliberate v3.0 BREAKING change, not a minor edit -- handle it on its own.
+
+# ============================================
+# Record Harm Ontology v2
+# ============================================
+# Changes from v1 are documented inline as comments tagged [v2].
+# Summary of design decisions:
+#  - isFundamentalRoot/isComposite booleans replaced by disjoint
+#    classes ex:PrimeHarm / ex:CompositeHarm (reasoner-checkable).
+#  - The seven aspect-named subclasses (ExistenceHarm, MutationHarm...)
+#    are dropped. targetsAspect was already doing this job and the
+#    two mechanisms had drifted out of sync (MutationHarm had no
+#    matching aspect individual). targetsAspect is now the single
+#    source of truth for "which aspect does this attack."
+#  - ex:harms ex:Record, repeated identically on all 12 instances,
+#    is replaced by one class-level restriction. This ontology
+#    models harm TYPES, not harm EVENTS, so there is no real Record
+#    individual for instances to point at; see note at ex:RecordHarm.
+#  - ex:composesWith removed (declared, never used, no semantic
+#    daylight between it and buildsUpon as actually applied).
+#  - ex:hasDescription replaced with skos:definition; RecordAspect
+#    promoted to a real skos:ConceptScheme (skos was imported but
+#    unused in v1).
+#  - buildsUpon now declared Transitive/Asymmetric/Irreflexive.
+#  - dc:created now properly typed as xsd:date.
+#
+# [v2.1] Revisions after review:
+#  - ex:Denial promoted from CompositeHarm (buildsUpon Suppression) to
+#    a fifth PrimeHarm. Rationale: Suppression requires an active act
+#    of hiding, but denial doesn't -- you can deny a record's
+#    legitimacy while it remains fully accessible ("that document is
+#    fake," said of something sitting in plain view). That's a
+#    distinct move, not a derivative of suppression. This also
+#    cleans up ex:Repudiation, which already built upon both Denial
+#    and Fabrication -- now legibly "a composite of two primes"
+#    rather than "a composite of a composite and a prime."
+#  - Every harm instance now carries rdfs:isDefinedBy and is
+#    explicitly typed skos:Concept + skos:inScheme (see
+#    ex:RecordHarmScheme below), matching the pattern already used
+#    for RecordAspect. This also closes a latent gap: skos:definition
+#    has rdfs:domain skos:Concept in the SKOS spec, so any reasoner
+#    doing RDFS domain entailment would already infer this typing --
+#    better to assert it than rely on entailment a lightweight
+#    consumer may not compute.
+#  - Comment added at ex:CompositeHarm clarifying that the explicit
+#    `a ex:CompositeHarm` on every instance is a deliberate fallback
+#    for tools that don't evaluate owl:equivalentClass restrictions,
+#    not an oversight -- the restriction is there for DL reasoners
+#    to cross-check, the asserted type is there for everyone else.
+#
+# [v2.2] Event layer + controlled vocabularies for soft properties:
+#  - ex:HarmEvent added: instances of a harm TYPE (Destruction etc.)
+#    occurring to a specific Record at a specific time. ex:harms's
+#    domain is now owl:unionOf(RecordHarm, HarmEvent) -- NOT two
+#    separate rdfs:domain triples, which in RDFS combine as an
+#    intersection, not a choice, and would have wrongly required
+#    every harms-user to be both at once.
+#  - ex:severity placed on HarmEvent, not RecordHarm: severity is a
+#    property of a particular occurrence ("this specific destroyed
+#    record"), not of the harm category in the abstract.
+#  - ex:detectability / ex:reversibility placed on RecordHarm (this
+#    one IS reasonably type-level -- irreversibility is close to
+#    definitional for Destruction as a category) but modeled as
+#    object properties into small SKOS vocabularies rather than
+#    free xsd:string, for the same reason RecordAspect was promoted
+#    to SKOS in v2: an uncontrolled string field allows "Easy",
+#    "easy", "kinda hard" to coexist with no way to query reliably.
+#  - ex:HarmPattern added with ex:includesHarm (minCardinality 2,
+#    mirroring how CompositeHarm itself is defined) plus one worked
+#    example, rather than left as a bare stub class.
+#  - ex:isBuiltUponBy added as owl:inverseOf ex:buildsUpon.
+#  - SHACL shapes moved to a companion file (record-harm-shapes.ttl)
+#    rather than mixed into the ontology -- standard practice, and
+#    it operationalizes the buildsUpon-cardinality check as a hard,
+#    closed-world validation rule instead of something only visible
+#    to a DL reasoner.
+#
+# [v2.3] OWL 2 DL profile fix:
+#  - ex:buildsUpon is NO LONGER owl:TransitiveProperty. v2.0-v2.2 declared
+#    it transitive AND asymmetric AND irreflexive AND used it in a
+#    cardinality restriction (ex:CompositeHarm's equivalentClass). OWL 2 DL
+#    treats a transitive property as "non-simple" and forbids non-simple
+#    properties from being asymmetric, irreflexive, or used in cardinality
+#    restrictions -- so all three of those uses were illegal and the
+#    ontology was silently OWL 2 Full, where a conforming DL reasoner
+#    refuses the very cardinality-based CompositeHarm definition this design
+#    relies on. Dropping transitivity restores OWL 2 DL and keeps the
+#    asymmetric/irreflexive cycle guards and the reasoner-derivable
+#    CompositeHarm membership working. Transitive closure is unaffected for
+#    querying: use the SPARQL property path ex:buildsUpon+ (see QUERIES.md);
+#    it is simply computed on demand rather than materialized by the reasoner.
+#  - ex:Agent class added. The example data (and examples/example-harm-events.ttl)
+#    typed perpetrators with an undeclared class; declare it, using the
+#    cross-vocabulary standard name "Agent" (cf. foaf:Agent, prov:Agent,
+#    dcterms:Agent) rather than the original "Actor". ex:perpetrator's range
+#    stays open for FOAF/PROV-O interop.
+
+ex:RecordHarmOntology a owl:Ontology ;
+    dc:title "Record Harm Ontology" ;
+    dc:description "Ontology for modeling ontological harms to records. Captures prime (fundamental) and composite ways to damage the existence, authenticity, integrity, accessibility, context, or trustworthiness of a Record." ;
+    dc:creator "Grok conceptual modeling; revised by Claude, 2026-06-20" ;
+    owl:versionInfo "2.3" ;
+    dc:created "2026-06-20"^^xsd:date .
+
+# ----------------------------------------
+# Core Classes
+# ----------------------------------------
+
+ex:Record a owl:Class ;
+    rdfs:label "Record" ;
+    rdfs:comment "Any informational artifact (document, data, log, etc.) that serves as evidence or representation of events, facts, actions, or states of affairs. The central entity being harmed." .
+
+ex:Agent a owl:Class ;
+    rdfs:label "Agent" ;
+    rdfs:comment "[v2.3] An agent (person, organization, or system) that can perpetrate a HarmEvent. A deliberately lightweight placeholder so example data has something to type perpetrators with instead of bare owl:Thing. Named to match the cross-vocabulary standard (foaf:Agent, prov:Agent, dcterms:Agent). ex:perpetrator's range is intentionally NOT narrowed to this class -- if you integrate one of those vocabularies, type agents as foaf:Agent / prov:Agent instead and this class can be dropped or aligned via rdfs:subClassOf." .
+
+ex:RecordHarm a owl:Class ;
+    rdfs:label "Record Harm" ;
+    rdfs:comment "Superclass for any harm TYPE that can damage the ontological status of a Record -- its being, truthfulness, wholeness, accessibility, contextual grounding, or trustworthiness. NOTE [v2]: instances of this class (Destruction, Fabrication, ...) are harm TYPES, not harm EVENTS -- there is no particular Record being pointed at. If you need to record that a specific record was actually destroyed on a specific date by a specific actor, model a separate ex:HarmEvent class whose instances carry ex:harms pointing at real ex:Record individuals, and ex:ofType pointing at one of these harm-type individuals. The restriction below documents the relationship at the type level only." ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+        owl:onProperty ex:harms ;
+        owl:someValuesFrom ex:Record
+    ] .
+
+ex:PrimeHarm a owl:Class ;
+    rdfs:subClassOf ex:RecordHarm ;
+    rdfs:label "Prime Harm" ;
+    rdfs:comment "[v2] A harm that is ontologically irreducible -- it does not presuppose or extend any other harm in this taxonomy. Replaces the v1 isFundamentalRoot boolean." ;
+    owl:disjointWith ex:CompositeHarm .
+
+ex:CompositeHarm a owl:Class ;
+    rdfs:subClassOf ex:RecordHarm ;
+    rdfs:label "Composite Harm" ;
+    rdfs:comment "[v2] A harm that is built from, or presupposes, one or more other harms via ex:buildsUpon. Replaces the v1 isComposite boolean. Defined as any RecordHarm with at least one buildsUpon edge, so membership is reasoner-derivable rather than hand-asserted -- this is what exposed the v1 inconsistency in ex:Denial." ;
+    owl:equivalentClass [
+        a owl:Restriction ;
+        owl:onProperty ex:buildsUpon ;
+        owl:minCardinality "1"^^xsd:nonNegativeInteger
+    ] .
+    # [v2.1] Every composite instance below is ALSO explicitly typed
+    # `a ex:CompositeHarm` directly -- not relying solely on this
+    # restriction being evaluated. Tools that just read asserted
+    # rdf:type triples (no DL reasoner) get the right answer for
+    # free; tools that do reason over the restriction get a
+    # cross-check against the asserted type (this is exactly what
+    # caught the v1 Denial inconsistency).
+
+ex:HarmEvent a owl:Class ;
+    rdfs:label "Harm Event" ;
+    rdfs:comment "[v2.2] A specific occurrence of a harm TYPE happening to a specific Record -- e.g. 'this particular report was destroyed on 2026-06-15.' Distinct from ex:RecordHarm (the type taxonomy) per the note on that class. Requires exactly one ex:ofType and at least one ex:harms." ;
+    rdfs:subClassOf
+        [ a owl:Restriction ; owl:onProperty ex:ofType ; owl:cardinality "1"^^xsd:nonNegativeInteger ] ,
+        [ a owl:Restriction ; owl:onProperty ex:harms ; owl:minCardinality "1"^^xsd:nonNegativeInteger ] .
+
+ex:HarmPattern a owl:Class ;
+    rdfs:label "Harm Pattern" ;
+    rdfs:comment "[v2.2] A named, recurring combination of two or more harm TYPES that tend to occur together in practice (as opposed to ex:CompositeHarm, which is one harm type formally presupposing another within the taxonomy itself). E.g. a cover-up bundles suppression, selective alteration, and denial as a package, even though those three are not formal sub-parts of one another." ;
+    rdfs:subClassOf
+        [ a owl:Restriction ; owl:onProperty ex:includesHarm ; owl:minCardinality "2"^^xsd:nonNegativeInteger ] .
+
+# ----------------------------------------
+# Properties
+# ----------------------------------------
+
+ex:harms a owl:ObjectProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( ex:RecordHarm ex:HarmEvent ) ] ;
+    rdfs:range ex:Record ;
+    rdfs:label "harms" ;
+    rdfs:comment "Links a harm (type or event) to the Record it damages or threatens. [v2.2] Domain widened from RecordHarm alone via owl:unionOf so ex:HarmEvent instances can use it too -- two separate rdfs:domain triples would have combined as an intersection, not a union." .
+
+ex:isBuiltUponBy a owl:ObjectProperty ;
+    owl:inverseOf ex:buildsUpon ;
+    rdfs:label "is built upon by" ;
+    rdfs:comment "[v2.2] Inverse of ex:buildsUpon, e.g. for querying 'what composites depend on Omission' without a property path." .
+
+ex:ofType a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain ex:HarmEvent ;
+    rdfs:range ex:RecordHarm ;
+    rdfs:label "of type" ;
+    rdfs:comment "[v2.2] Links a HarmEvent to the harm-type individual it instantiates, e.g. a specific destruction event ex:ofType ex:Destruction. [v2.3] Declared owl:FunctionalProperty: a HarmEvent instantiates at most one harm type. DL-safe (ofType is simple/non-transitive). Note this gives OWL 'at most one' semantics -- a DL reasoner would treat two differing ofType values as owl:sameAs rather than an error; the hard 'exactly one' mistake-catch is the maxCount/minCount in HarmEventShape (record-harm-shapes.ttl)." .
+
+ex:perpetrator a owl:ObjectProperty ;
+    rdfs:domain ex:HarmEvent ;
+    rdfs:label "perpetrator" ;
+    rdfs:comment "[v2.2] The actor responsible for a HarmEvent. Range deliberately left open (owl:Thing) -- if this ontology is ever combined with an agent vocabulary such as FOAF or PROV-O, range it to foaf:Agent or prov:Agent rather than reinventing one here. [v2.3] Example data types perpetrators as ex:Agent, a lightweight class provided for that purpose; the open range still permits any agent type." .
+
+ex:severity a owl:DatatypeProperty ;
+    rdfs:domain ex:HarmEvent ;
+    rdfs:range xsd:integer ;
+    rdfs:label "severity" ;
+    rdfs:comment "[v2.2] Severity (1=trivial, 10=catastrophic) of a SPECIFIC occurrence, not of the harm type in the abstract -- 'how bad is Destruction in general' isn't a coherent question, destroying a parking receipt and a birth certificate are both Destruction at wildly different severities. See record-harm-shapes.ttl for the 1-10 range constraint; OWL alone won't enforce it." .
+
+ex:includesHarm a owl:ObjectProperty ;
+    rdfs:domain ex:HarmPattern ;
+    rdfs:range ex:RecordHarm ;
+    rdfs:label "includes harm" ;
+    rdfs:comment "[v2.2] Links a HarmPattern to the harm types it bundles together in practice." .
+
+ex:detectability a owl:ObjectProperty ;
+    rdfs:domain ex:RecordHarm ;
+    rdfs:range skos:Concept ;
+    rdfs:label "detectability" ;
+    rdfs:comment "[v2.2] How readily this harm TYPE tends to be noticed, in general. Object property into ex:DetectabilityScheme rather than a free xsd:string -- an uncontrolled string field allows 'Easy', 'easy', 'kinda hard' to coexist with no reliable way to query it, the same problem RecordAspect had in v1 before being promoted to SKOS." .
+
+ex:reversibility a owl:ObjectProperty ;
+    rdfs:domain ex:RecordHarm ;
+    rdfs:range skos:Concept ;
+    rdfs:label "reversibility" ;
+    rdfs:comment "[v2.2] Whether this harm TYPE can, in general, be undone. Object property into ex:ReversibilityScheme for the same controlled-vocabulary reasoning as ex:detectability." .
+
+ex:targetsAspect a owl:ObjectProperty ;
+    rdfs:domain ex:RecordHarm ;
+    rdfs:range skos:Concept ;
+    rdfs:label "targets aspect" ;
+    rdfs:comment "The aspect(s) of the record's ontology attacked by this harm. Multi-valued. [v2] This is now the SOLE place aspect-targeting is recorded -- v1 duplicated this via aspect-named subclasses (ExistenceHarm, AuthenticityHarm...) which had drifted out of sync with this property (e.g. MutationHarm had no matching aspect). Range narrowed to skos:Concept since aspects are now modeled as a SKOS vocabulary." .
+
+ex:buildsUpon a owl:ObjectProperty , owl:AsymmetricProperty , owl:IrreflexiveProperty ;
+    rdfs:domain ex:RecordHarm ;
+    rdfs:range ex:RecordHarm ;
+    rdfs:label "builds upon" ;
+    rdfs:comment "Indicates that this harm depends on, extends, or presupposes another harm. Asymmetric and irreflexive: a harm cannot build upon itself or directly back upon something that builds upon it. [v2.3] NO LONGER declared owl:TransitiveProperty. A transitive property is 'non-simple' in OWL 2 DL, and OWL 2 DL forbids non-simple properties from being declared asymmetric/irreflexive OR used in cardinality restrictions -- but buildsUpon is all of those (see ex:CompositeHarm's equivalentClass minCardinality). Keeping it transitive silently put the whole ontology in OWL 2 Full, where a conforming DL reasoner (HermiT/Pellet/ELK) refuses the cardinality-based CompositeHarm definition this design depends on. Transitive *closure* is still available where needed via the SPARQL property path buildsUpon+ (see docs/QUERIES.md); it is simply not materialized by the reasoner. This keeps the ontology in OWL 2 DL so the reasoner cross-checks (disjointness, cardinality-derived CompositeHarm membership) actually run." .
+
+# [v2] ex:hasDescription and ex:composesWith removed.
+#   hasDescription -> replaced by skos:definition (standard vocabulary,
+#     same job, interoperates with any SKOS-aware tool).
+#   composesWith -> was declared in v1 but never asserted anywhere;
+#     dropped rather than carried forward unused.
+#   ex:isFundamentalRoot / ex:isComposite -> removed, replaced by
+#     ex:PrimeHarm / ex:CompositeHarm class membership above.
+
+# ----------------------------------------
+# Record Aspects -- now a proper SKOS vocabulary
+# ----------------------------------------
+
+ex:RecordAspectScheme a skos:ConceptScheme ;
+    skos:prefLabel "Record Aspect Scheme" ;
+    rdfs:comment "[v2] RecordAspect was an owl:Class with six bare individuals in v1; skos was imported but never used. This is a textbook controlled vocabulary, so it's now a skos:ConceptScheme." .
+
+ex:Existence a skos:Concept ; skos:inScheme ex:RecordAspectScheme ; skos:prefLabel "Existence" .
+ex:Authenticity a skos:Concept ; skos:inScheme ex:RecordAspectScheme ; skos:prefLabel "Authenticity" .
+ex:Integrity a skos:Concept ; skos:inScheme ex:RecordAspectScheme ; skos:prefLabel "Integrity / Completeness" .
+ex:Accessibility a skos:Concept ; skos:inScheme ex:RecordAspectScheme ; skos:prefLabel "Accessibility" .
+ex:Context a skos:Concept ; skos:inScheme ex:RecordAspectScheme ; skos:prefLabel "Context / Provenance" .
+ex:Trustworthiness a skos:Concept ; skos:inScheme ex:RecordAspectScheme ; skos:prefLabel "Trustworthiness" .
+
+# [v2.2] Every harm instance below now carries a seed ex:detectability
+# and ex:reversibility value, so the new properties aren't dead weight
+# (that was the specific problem with v1's unused composesWith).
+# These are illustrative judgment calls, not settled claims -- e.g.
+# Suppression is tagged Reversible on the theory that un-suppressing
+# is a deliberate, achievable act, but reasonable people could argue
+# some suppression (once the moment of relevance has passed) is
+# functionally irreversible. Revise freely.
+
+ex:DetectabilityScheme a skos:ConceptScheme ;
+    skos:prefLabel "Detectability Scheme" ;
+    rdfs:comment "[v2.2] Controlled vocabulary for ex:detectability, replacing a free-text severity-style string field." .
+ex:EasilyDetectable a skos:Concept ; skos:inScheme ex:DetectabilityScheme ; skos:prefLabel "Easily detectable" .
+ex:ModeratelyDetectable a skos:Concept ; skos:inScheme ex:DetectabilityScheme ; skos:prefLabel "Moderately detectable" .
+ex:DifficultToDetect a skos:Concept ; skos:inScheme ex:DetectabilityScheme ; skos:prefLabel "Difficult to detect" .
+
+ex:ReversibilityScheme a skos:ConceptScheme ;
+    skos:prefLabel "Reversibility Scheme" ;
+    rdfs:comment "[v2.2] Controlled vocabulary for ex:reversibility." .
+ex:Reversible a skos:Concept ; skos:inScheme ex:ReversibilityScheme ; skos:prefLabel "Reversible" .
+ex:PartiallyReversible a skos:Concept ; skos:inScheme ex:ReversibilityScheme ; skos:prefLabel "Partially reversible" .
+ex:Irreversible a skos:Concept ; skos:inScheme ex:ReversibilityScheme ; skos:prefLabel "Irreversible" .
+
+# [v2] No ex:Mutation concept -- v1's MutationHarm class had no aspect
+# counterpart at all. Alteration's actual aspects (Authenticity, Integrity)
+# already cover what MutationHarm was trying to express.
+
+ex:RecordHarmScheme a skos:ConceptScheme ;
+    skos:prefLabel "Record Harm Scheme" ;
+    rdfs:comment "[v2.1] Groups all twelve harm instances as a SKOS vocabulary, parallel to ex:RecordAspectScheme. Each harm instance below is typed skos:Concept and skos:inScheme this, in addition to its ex:PrimeHarm/ex:CompositeHarm OWL typing -- the OWL types carry the dependency reasoning (buildsUpon, disjointness), the SKOS types make the vocabulary itself browsable/exportable by generic SKOS tooling." .
+
+# ============================================
+# Specific Harms
+# ============================================
+
+# ---- PRIME / FUNDAMENTAL ROOTS ----
+
+ex:Destruction a ex:RecordHarm , ex:PrimeHarm , skos:Concept ;
+    rdfs:label "Destruction / Erasure of record" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Existence ;
+    ex:detectability ex:ModeratelyDetectable ;
+    ex:reversibility ex:Irreversible ;
+    skos:definition "Complete physical or digital annihilation of the record. Removes its very being from existence. Ontologically prime: pure annihilation of presence." .
+
+ex:Fabrication a ex:RecordHarm , ex:PrimeHarm , skos:Concept ;
+    rdfs:label "Fabrication / Falsification of record" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Authenticity ;
+    ex:detectability ex:DifficultToDetect ;
+    ex:reversibility ex:PartiallyReversible ;
+    skos:definition "Creation of a record that never occurred or that distorts reality. Introduces counterfeit being. Ontologically prime: false being presented as true." .
+
+ex:Alteration a ex:RecordHarm , ex:PrimeHarm , skos:Concept ;
+    rdfs:label "Alteration / Corruption of record" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Authenticity , ex:Integrity ;
+    ex:detectability ex:DifficultToDetect ;
+    ex:reversibility ex:PartiallyReversible ;
+    skos:definition "Modification of an existing genuine record (content, dates, metadata, hashes). Violates the record's identity and continuity with its original referent. Prime mutation of being." .
+
+ex:Omission a ex:RecordHarm , ex:PrimeHarm , skos:Concept ;
+    rdfs:label "Omission from record" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Integrity ;
+    ex:detectability ex:DifficultToDetect ;
+    ex:reversibility ex:PartiallyReversible ;
+    skos:definition "Deliberate exclusion of relevant elements that should be part of the record. Creates a mutilated or incomplete entity. Prime partial annihilation." .
+
+ex:Denial a ex:RecordHarm , ex:PrimeHarm , skos:Concept ;
+    rdfs:label "Denial of record" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Trustworthiness , ex:Existence ;
+    ex:detectability ex:EasilyDetectable ;
+    ex:reversibility ex:Reversible ;
+    skos:definition "Refusing to acknowledge the existence or validity of a genuine record, independent of whether the record remains accessible. Attacks its ontological status as something that is. [v2.1] Promoted to a fifth PrimeHarm: unlike Suppression, denial requires no act of hiding -- a fully accessible record can still be denied ('that document is fake'). That made it irreducible to the other four primes, so it now stands alongside them rather than building upon Suppression." .
+
+# ---- COMPOSITE / DERIVED HARMS ----
+
+ex:ForgeryOfProvenance a ex:RecordHarm , ex:CompositeHarm , skos:Concept ;
+    rdfs:label "Forgery of provenance / Chain of custody" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Authenticity , ex:Context ;
+    ex:detectability ex:DifficultToDetect ;
+    ex:reversibility ex:PartiallyReversible ;
+    ex:buildsUpon ex:Fabrication , ex:Alteration ;
+    skos:definition "Falsifying the origin, history, custody trail, or authorizing authority of a record. Severely damages the existential link to reality. Typically requires fabrication or alteration of metadata/provenance data." .
+
+ex:Fragmentation a ex:RecordHarm , ex:CompositeHarm , skos:Concept ;
+    rdfs:label "Fragmentation / Scattering of record" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Integrity , ex:Accessibility ;
+    ex:detectability ex:ModeratelyDetectable ;
+    ex:reversibility ex:PartiallyReversible ;
+    ex:buildsUpon ex:Omission ;
+    skos:definition "Breaking a coherent record into disconnected pieces across systems, people, formats, or locations. Destroys wholeness and relational integrity." .
+
+ex:Suppression a ex:RecordHarm , ex:CompositeHarm , skos:Concept ;
+    rdfs:label "Suppression / Sequestration of record" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Accessibility ;
+    ex:detectability ex:ModeratelyDetectable ;
+    ex:reversibility ex:Reversible ;
+    ex:buildsUpon ex:Omission ;
+    skos:definition "Actively preventing access to or circulation of an existing record (hiding, classifying, burying, restricting). Renders the record's being socially or practically inert." .
+
+ex:Obfuscation a ex:RecordHarm , ex:CompositeHarm , skos:Concept ;
+    rdfs:label "Obfuscation of record" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Accessibility ;
+    ex:detectability ex:DifficultToDetect ;
+    ex:reversibility ex:Reversible ;
+    ex:buildsUpon ex:Suppression ;
+    skos:definition "Rendering a record difficult to understand, locate, or interpret without necessarily changing its surface content. Undermines epistemic clarity; often combines suppression with deliberate complexity or noise." .
+
+ex:Decontextualization a ex:RecordHarm , ex:CompositeHarm , skos:Concept ;
+    rdfs:label "Decontextualization / Miscontextualization" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Context , ex:Integrity ;
+    ex:detectability ex:ModeratelyDetectable ;
+    ex:reversibility ex:PartiallyReversible ;
+    ex:buildsUpon ex:Omission ;
+    skos:definition "Stripping a record of its original metadata, provenance, timing, or surrounding circumstances, or placing it in a false context. Attacks the record's meaning-bearing connections to reality." .
+
+ex:Contamination a ex:RecordHarm , ex:CompositeHarm , skos:Concept ;
+    rdfs:label "Contamination / Poisoning of record" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Trustworthiness , ex:Authenticity ;
+    ex:detectability ex:DifficultToDetect ;
+    ex:reversibility ex:PartiallyReversible ;
+    ex:buildsUpon ex:Fabrication ;
+    skos:definition "Introducing false elements into an otherwise genuine record, or mixing genuine records with fabricated ones, so that doubt infects the whole. Undermines trustworthiness of the entire ontological status." .
+
+ex:Repudiation a ex:RecordHarm , ex:CompositeHarm , skos:Concept ;
+    rdfs:label "Repudiation / Disavowal of authorship or authority" ;
+    rdfs:isDefinedBy ex:RecordHarmOntology ;
+    skos:inScheme ex:RecordHarmScheme ;
+    ex:targetsAspect ex:Trustworthiness , ex:Authenticity ;
+    ex:detectability ex:EasilyDetectable ;
+    ex:reversibility ex:Reversible ;
+    ex:buildsUpon ex:Denial , ex:Fabrication ;
+    skos:definition "Claiming that a genuine record was not created by its apparent author or authority, or that it lacks proper authorization. Attacks the record's legitimacy at the level of its source-being; combines denial of authorship with possible forgery of authority claims. [v2.1] Now legible as a composite of two primes (Denial + Fabrication) rather than a composite of a composite and a prime." .
+
+# ----------------------------------------
+# Worked examples (illustrative individuals -- delete or replace
+# with real data; included so HarmEvent and HarmPattern aren't
+# defined-but-never-demonstrated, same reasoning as the
+# detectability/reversibility seed values above)
+# ----------------------------------------
+
+ex:SomeSpecificRecord a ex:Record ;
+    rdfs:label "Example: Q2 audit log" ;
+    rdfs:comment "[v2.2] Placeholder Record individual for the worked HarmEvent example below. Replace with real records in actual use." .
+
+ex:SomeAgent a ex:Agent ;
+    rdfs:label "Example perpetrator" .
+
+ex:exampleDestructionEvent a ex:HarmEvent ;
+    rdfs:label "Example: destruction of the Q2 audit log" ;
+    ex:ofType ex:Destruction ;
+    ex:harms ex:SomeSpecificRecord ;
+    dc:date "2026-06-15"^^xsd:date ;
+    ex:perpetrator ex:SomeAgent ;
+    ex:severity 8 .
+
+ex:CoverUpPattern a ex:HarmPattern ;
+    rdfs:label "Cover-up" ;
+    rdfs:comment "Worked example of a HarmPattern: suppression, selective alteration, and denial deployed together. None of these three formally presupposes another the way ex:CompositeHarm members do (this is why it's a HarmPattern, not itself a CompositeHarm) -- they're independently-typed harms that simply tend to co-occur as a real-world bundle." ;
+    ex:includesHarm ex:Suppression , ex:Alteration , ex:Denial .

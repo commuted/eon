@@ -62,21 +62,25 @@ Re-run the relevant script after any ontology change:
 ## Deploy
 
 ```bash
-# 1. Put the web root where nginx expects it
-sudo mkdir -p /var/www/epistemic-ontology
-sudo cp -r site /var/www/epistemic-ontology/
+# 1. Put the web root where nginx serves it (root /var/www/html in the config)
+sudo cp -r site/. /var/www/html/
 
 # 2. Install the server block
 sudo cp nginx/epistemic-ontology.net.conf /etc/nginx/sites-available/epistemic-ontology.net
 sudo ln -s /etc/nginx/sites-available/epistemic-ontology.net /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 
-# 3. TLS (Let's Encrypt)
-sudo certbot --nginx -d epistemic-ontology.net -d www.epistemic-ontology.net
+# 3. TLS — the cert MUST cover every name in server_name, or .org / www
+#    visitors get a certificate-mismatch error.
+sudo certbot --nginx \
+  -d epistemic-ontology.net -d www.epistemic-ontology.net \
+  -d epistemic-ontology.org -d www.epistemic-ontology.org
 ```
 
-DNS: point `A`/`AAAA` records for `epistemic-ontology.net` and
-`www.epistemic-ontology.net` at the server. The apex redirects to `www`.
+DNS: point `A`/`AAAA` records for all four names at the server. HTTP (and the
+bare IP) redirect to the canonical apex `https://epistemic-ontology.net`; over
+HTTPS all four names are served directly from the same root — so the namespace
+IRIs minted at `www.epistemic-ontology.net` resolve without a cross-host hop.
 
 ## Dereferenceable IRIs
 

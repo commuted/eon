@@ -1,0 +1,63 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/cogito#> .
+
+# ============================================================================
+# Worked example: the COGITO as the foundational carrier (ROOT.md §11)
+# ----------------------------------------------------------------------------
+# Tests that the DEFINED classes rec:Cogito and rec:FoundationalCarrier classify
+# correctly under a reasoner. Validate MERGED with the ontology.
+#
+#   * ex:Cogito       -- a record borne BY the agent itself; for/of/by coincide
+#                        -> reasoner should derive rec:Cogito, and ex:Meditator
+#                           -> rec:FoundationalCarrier.
+#   * ex:NoteOnTablet -- a record borne by a Continuum-excision carrier (wax),
+#                        NOT an agent -> must NOT be a Cogito (negative control).
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/cogito>
+    a owl:Ontology ;
+    rdfs:comment "Cogito / foundational-carrier example; merge with the ontology to validate."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+# the agent, here SERVING AS its own carrier (Agent and Carrier are not disjoint)
+ex:Meditator a owl:NamedIndividual , rec:Agent , rec:Carrier ;
+    rdfs:label "the meditating agent"@en .
+
+# the cogito: for-whom = carrier = intentional-object, all the one agent,
+# held with SELF-VERIFYING warrant (true in virtue of the act of recording)
+ex:Cogito a owl:NamedIndividual , rec:Record ;
+    rdfs:label "I think, therefore I am"@en ;
+    rec:forAgent       ex:Meditator ;   # for-whom
+    rec:borneBy        ex:Meditator ;   # carrier (self-supporting)
+    rec:directedToward ex:Meditator ;   # intentional object -> the agent's own existence
+    rec:hasWarrant     rec:SelfVerifying ;
+    rdfs:comment "The three roles collapse onto the one agent. Certifies existence ('I am'), not nature (no res cogitans)."@en .
+# NOTE: rec:Cogito is intentionally NOT asserted -- the reasoner must DERIVE it
+# from the definition (Record + borneBy some Agent + self-verifying warrant).
+
+# -- negative control 1: an external record on a Continuum-excision carrier ----
+ex:WaxTablet a owl:NamedIndividual , rec:Carrier ;
+    rdfs:label "a wax tablet (excised support, not an agent)"@en .
+
+ex:NoteOnTablet a owl:NamedIndividual , rec:Record ;
+    rdfs:label "a note pressed into the wax"@en ;
+    rec:forAgent  ex:Meditator ;
+    rec:borneBy   ex:WaxTablet ;
+    rec:hasWarrant rec:Empirical .
+
+# -- negative control 2: a MEMORY -- ALSO borne by the agent, but empirical, so
+#    NOT a cogito. This is what the self-verifying warrant clause exists to
+#    exclude (last turn's looser "borne by an agent" definition would have
+#    wrongly swept it in). Its intentional object is a sunset, not the agent.
+ex:SunsetSeen a owl:NamedIndividual , rec:Record ;
+    rdfs:label "a remembered sunset"@en .
+
+ex:MemoryOfSunset a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the agent's memory of a sunset"@en ;
+    rec:forAgent       ex:Meditator ;
+    rec:borneBy        ex:Meditator ;     # agent-borne...
+    rec:directedToward ex:SunsetSeen ;    # ...but directed elsewhere
+    rec:hasWarrant     rec:Empirical .    # ...and defeasible -> NOT a cogito

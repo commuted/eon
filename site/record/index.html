@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Record Ontology — Epistemic Ontology</title>
+  <meta name="description" content="A domain-neutral OWL 2 DL ontology of warranted record-structure: one class (Record), a warrant triad, inference as a derivation DAG, and the cogito as the foundational carrier.">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand"><a href="/" style="color:inherit">Epistemic<span>Ontology</span></a></div>
+      <nav class="nav">
+        <a href="/">Ontologies</a>
+        <a href="#download">Download</a>
+        <a href="#terms">Terms</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <a class="back" href="/">← All ontologies</a>
+
+      <section class="hero" style="padding-top:1rem">
+        <h1>Record Ontology</h1>
+        <p class="lead">
+          A domain-neutral ontology of <em>warranted record-structure</em> — how
+          agents warrant, compose, ground, and revise records. It models the
+          connective grammar of knowledge, <em>not</em> the things known.
+        </p>
+        <p style="margin-top:1rem">
+          <span class="badge">OWL 2 DL</span>
+          <span class="badge">reasoner-validated</span>
+          <span class="badge muted">version 0.4.0</span>
+        </p>
+      </section>
+
+      <section>
+        <h2>Namespace</h2>
+        <p>The base IRI for all terms is:</p>
+        <pre><code>https://www.epistemic-ontology.net/record#</code></pre>
+        <p>
+          A hash namespace: dereferencing any term — for example
+          <code>…/record#Cogito</code> — returns the whole ontology document.
+          The recommended prefix is <code>rec:</code>.
+        </p>
+      </section>
+
+      <section id="download">
+        <h2>Download &amp; content negotiation</h2>
+        <p>
+          The namespace IRI serves human documentation or machine RDF depending on the
+          <code>Accept</code> header. The serializations are also available directly:
+        </p>
+        <table>
+          <tr><th>Resource</th><th>Media type</th><th>URL</th></tr>
+          <tr><td>Ontology</td><td><code>text/turtle</code></td><td><a href="/record/record-ontology.ttl">record-ontology.ttl</a></td></tr>
+          <tr><td>Example — narrative</td><td><code>text/turtle</code></td><td><a href="/record/historical-narrative.ttl">historical-narrative.ttl</a></td></tr>
+          <tr><td>Example — cogito</td><td><code>text/turtle</code></td><td><a href="/record/cogito.ttl">cogito.ttl</a></td></tr>
+        </table>
+        <pre><code>curl -H "Accept: text/turtle" https://www.epistemic-ontology.net/record</code></pre>
+      </section>
+
+      <section id="terms">
+        <h2>Core terms</h2>
+
+        <h3 style="margin-bottom:.3rem">The one class, and the one non-record</h3>
+        <table>
+          <tr><th>Term</th><th>Meaning</th></tr>
+          <tr><td><code>rec:Record</code></td><td>The single class — a form, in a carrier, for an agent, at a level of abstraction. Records are made of Records.</td></tr>
+          <tr><td><code>rec:Continuum</code></td><td>The one thing that is <em>not</em> a record: the undivided ground carriers are individuated from (<code>rec:TheContinuum</code>; disjoint from <code>rec:Record</code>).</td></tr>
+          <tr><td><code>rec:Agent</code></td><td>A person or an AI — the one a record is <em>for</em>, and the one who individuates carriers.</td></tr>
+        </table>
+
+        <h3 style="margin-bottom:.3rem">Warrant — a triad, one value per limit</h3>
+        <table>
+          <tr><td><code>rec:Formal</code></td><td>True in virtue of form (deductive — the triangle verifies itself); reaches toward the form-in-itself.</td></tr>
+          <tr><td><code>rec:Empirical</code></td><td>True by givenness (the senses, an instrument); defeasible; reaches toward the world-in-itself.</td></tr>
+          <tr><td><code>rec:SelfVerifying</code></td><td>True in virtue of the act of recording (the cogito); reaches the Agent-in-itself — the one limit <em>not</em> excluded.</td></tr>
+        </table>
+
+        <h3 style="margin-bottom:.3rem">Inference, carrier, metadata</h3>
+        <table>
+          <tr><td><code>rec:Inference</code></td><td>Defined: a Record with <code>rec:hasPremise</code> and <code>rec:concludes</code>. Carries a <code>rec:hasForce</code> — truth-preserving or ampliative. Chains form a derivation DAG.</td></tr>
+          <tr><td><code>rec:Cogito</code></td><td>Defined: a self-verifying Record <code>rec:borneBy</code> an Agent. The foundational carrier that halts the regress (credit Descartes — for existence, not nature).</td></tr>
+          <tr><td><code>rec:borneBy</code></td><td>The carrier that bears a record's form — a distinct relatum, grounded at the Agent via the cogito.</td></tr>
+          <tr><td><code>rec:metadataOf</code></td><td>A record about a record (sub-property of <code>rec:directedToward</code>). There is no metadata layer — only records directed at records.</td></tr>
+        </table>
+
+        <h3 style="margin-bottom:.3rem">Stance</h3>
+        <p style="margin-top:.2rem">
+          DL-in-form, ecumenical-in-content: the OWL/DL ↔ SKOS schism is demoted to
+          the <code>rec:Warrant</code> attribute (formal = subsumption; empirical =
+          convention), not a choice of framework. The conceptual source of truth is
+          <code>ROOT.md</code> in the source repository.
+        </p>
+      </section>
+
+      <section>
+        <h2>Source &amp; citation</h2>
+        <p>
+          Source, rationale (<code>ROOT.md</code>), and issue tracker:
+          <a href="https://github.com/commuted/record-ontology">github.com/commuted/record-ontology</a>.
+          Released under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
+          (ontology &amp; docs); scripts under MIT.
+        </p>
+        <pre><code>@misc{recordontology2026,
+  title   = {The Record Ontology: A Domain-Neutral Model of Warranted Record-Structure},
+  author  = {Hinchley, Ron},
+  year    = {2026},
+  version = {0.4.0},
+  url     = {https://www.epistemic-ontology.net/record}
+}</code></pre>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© 2026 Ron Hinchley · Epistemic Ontology</span>
+      <span><a href="/record/">record</a></span>
+    </div>
+  </footer>
+</body>
+</html>

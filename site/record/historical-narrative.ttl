@@ -1,0 +1,114 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/historical-narrative#> .
+
+# ============================================================================
+# Worked example: a HISTORICAL NARRATIVE as a derivation DAG
+# ----------------------------------------------------------------------------
+# Tests the Record Ontology against ROOT.md §8 (inference / DAG / narrative) and
+# §9 (metadata). Validate MERGED with ontology/record-ontology.ttl, never alone.
+#
+# Shape:  three empirical leaves + one formal object (a dating computation),
+#         two AMPLIATIVE inferences (the second consuming the first's conclusion
+#         -> recursion), one narrative root directed at the past-as-recorded.
+#         One record is held AS metadata of another.
+#
+# Claim under test: revisability is ENTAILED (ampliative force over given
+# leaves), and "metadata" needs no new machinery -- it is a record directed at
+# a record.
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/historical-narrative>
+    a owl:Ontology ;
+    rdfs:comment "Example individuals for the Record Ontology; merge with the ontology to validate."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+# -- the agent everything is FOR ---------------------------------------------
+ex:Historian a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the historian"@en .
+
+# -- empirical leaves (given; defeasible) ------------------------------------
+ex:LetterToAtticus a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Cicero, letter to Atticus (attested text)"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:RomanRepublicPast .
+
+ex:DenariusCoin a owl:NamedIndividual , rec:Record ;
+    rdfs:label "denarius bearing Caesar's image"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:RomanRepublicPast .
+
+ex:LivyPassage a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Livy, Ab Urbe Condita (passage)"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:RomanRepublicPast .
+
+# -- a formal OBJECT (the "triangle" face): a calendar computation ------------
+#    Formally warranted, internally completable -- not an inference (no premises).
+ex:JulianDateConversion a owl:NamedIndividual , rec:Record ;
+    rdfs:label "consular-year -> proleptic Julian date conversion"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasWarrant rec:Formal .
+
+# -- metadata: a record held ABOUT another record (ROOT.md §9) ----------------
+#    NOT a separate layer. Under a reading LoA this dating is background; under
+#    authentication it would become the focal record. Same individual either way.
+ex:AtticusLetterDating a owl:NamedIndividual , rec:Record ;
+    rdfs:label "dating of the Atticus letter (54 BCE)"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasWarrant rec:Empirical ;
+    rec:metadataOf ex:LetterToAtticus ;
+    rec:hasPremise ex:JulianDateConversion .   # leans on the formal object
+
+# -- inference 1 (ampliative): sources -> a historical claim ------------------
+ex:Inf_CaesarPower a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: Caesar consolidated power"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:LetterToAtticus , ex:DenariusCoin ;
+    rec:concludes ex:CaesarConsolidatedPower .
+
+ex:CaesarConsolidatedPower a owl:NamedIndividual , rec:Record ;
+    rdfs:label "claim: Caesar consolidated personal power"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasWarrant rec:Empirical ;          # held via ampliative inference -> defeasible
+    rec:directedToward ex:RomanRepublicPast .
+
+# -- inference 2 (ampliative): consumes inference 1's conclusion (RECURSION) ---
+ex:Inf_RepublicEnded a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: the Republic effectively ended"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:CaesarConsolidatedPower , ex:LivyPassage ;
+    rec:concludes ex:RepublicEffectivelyEnded .
+
+ex:RepublicEffectivelyEnded a owl:NamedIndividual , rec:Record ;
+    rdfs:label "claim: the Roman Republic effectively ended"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:RomanRepublicPast .
+
+# -- the narrative: a composite Record over leaves + inferences + claims ------
+ex:FallOfRepublicNarrative a owl:NamedIndividual , rec:Record ;
+    rdfs:label "narrative: the fall of the Roman Republic"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasWarrant rec:Empirical ;          # mixed grounds; the WHOLE is defeasible
+    rec:directedToward ex:RomanRepublicPast ;
+    rec:composedOf ex:LetterToAtticus , ex:DenariusCoin , ex:LivyPassage ,
+                   ex:JulianDateConversion , ex:AtticusLetterDating ,
+                   ex:Inf_CaesarPower , ex:CaesarConsolidatedPower ,
+                   ex:Inf_RepublicEnded , ex:RepublicEffectivelyEnded .
+
+# -- the intentional object: the past AS RECORDED (immediate object) ----------
+#    This is in the record web. The past-in-itself (dynamical object) is the
+#    EXCLUDED LIMIT beyond it -- deliberately NOT instantiated. The gap between
+#    them is why the narrative stays revisable.
+ex:RomanRepublicPast a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the late Roman Republic, as recorded"@en ;
+    rec:forAgent ex:Historian ;
+    rec:hasWarrant rec:Empirical .

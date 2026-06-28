@@ -1,0 +1,318 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+
+# ============================================================================
+# The Record Ontology  --  SEED / BASE (v0.1.0)
+# ============================================================================
+# This is a deliberately minimal base. It encodes ONLY what ROOT.md records as
+# settled, and flags the open questions inline as comments. Read ROOT.md first;
+# this file is the formal shadow of that prose.
+#
+# Founding constraint: this ontology is built FOR an agent (person or AI) and
+# never steps outside one. THE RULE: no class may be defined by a relation to an
+# object that lies outside all records. We name records by what the agent holds
+# -- form, warrant, givenness, relations to other records, pragmatic adequacy --
+# never by a certified correspondence to a thing-in-itself. (Bonhoeffer: we do
+# not take the sicut-deus standpoint that would see both shadow and caster.)
+#
+# Born at a permanent namespace on purpose -- NOT an example.org placeholder --
+# applying the lesson record-harm is still paying for in its v3.0 migration.
+# Confirm the namespace before any external adopter relies on these IRIs.
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record>
+    a owl:Ontology ;
+    dc:title "The Record Ontology"@en ;
+    dc:creator "Ron Hinchley / epistemic-ontology.net" ;
+    dc:license <http://creativecommons.org/licenses/by/4.0/> ;
+    owl:versionInfo "0.4.0 — warrant triad: + self-verifying; cogito tightened" ;
+    rdfs:comment "A base ontology of the Record, constrained to agents. One class (Record); formal/empirical is an attribute (warrant), not a kind; two excluded limits (world-in-itself, form-in-itself) are never instantiated. See ROOT.md for the full rationale."@en .
+
+
+# ----------------------------------------------------------------------------
+# THE ONE CLASS
+# ----------------------------------------------------------------------------
+# A Record is a form, in a carrier, for an agent, at a level of abstraction.
+# There is intentionally NO separate `Form` class: the form-in-itself is no more
+# available to an agent than the thing-in-itself (a `Form` class would be the
+# "formal apple"). Everything an agent holds is a Record.
+
+rec:Record a owl:Class ;
+    rdfs:label "Record"@en ;
+    rdfs:comment "A form, in a carrier, for an agent, at a level of abstraction. The single class of this ontology. Records are patchworks of Records and are warranted formally and/or empirically (see rec:hasWarrant)."@en ;
+    # Agent-relativity (A1): every Record is FOR some Agent. No agent => no record.
+    rdfs:subClassOf [ a owl:Restriction ;
+                      owl:onProperty rec:forAgent ;
+                      owl:someValuesFrom rec:Agent ] .
+
+
+# ----------------------------------------------------------------------------
+# THE CONTINUUM  --  the one thing that is NOT a Record
+# ----------------------------------------------------------------------------
+# The undivided, continuously interacting ground; the origin you never get
+# behind. Carriers are individuated from it, and the cut is never clean: the
+# excision is always part of the support, never causally sealed off. No support
+# equals the whole Continuum => no total support, no complete empirical record.
+
+rec:Continuum a owl:Class ;
+    rdfs:label "Continuum"@en ;
+    rdfs:comment "The undivided, continuously interacting ground. The only thing that is not a Record and not agent-relative. One distinguished individual, not a class of many (see rec:TheContinuum)."@en ;
+    owl:disjointWith rec:Record .
+
+rec:TheContinuum a owl:NamedIndividual , rec:Continuum ;
+    rdfs:label "the Continuum"@en ;
+    rdfs:comment "The single distinguished individual of rec:Continuum."@en .
+
+
+# ----------------------------------------------------------------------------
+# AGENT  --  person or AI; the one a Record is FOR
+# ----------------------------------------------------------------------------
+# This is the join point with record-harm (which has its own ex:Agent). When
+# this ontology stabilises, record-harm should source Record and Agent here.
+
+rec:Agent a owl:Class ;
+    rdfs:label "Agent"@en ;
+    rdfs:comment "A person or an AI: the one for whom something is a Record, and the one who individuates carriers from the Continuum. Outside an agent there is no record, only the continuum interacting with itself."@en .
+
+rec:forAgent a owl:ObjectProperty ;
+    rdfs:label "for agent"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:range  rec:Agent ;
+    rdfs:comment "Agent-relativity: the agent FOR WHOM this is a record."@en .
+
+
+# ----------------------------------------------------------------------------
+# CARRIER  --  the support that bears a record's form (ROOT.md §11)
+# ----------------------------------------------------------------------------
+# A record needs a carrier. Regress: what carries the carrier? For EXTERNAL
+# records the carrier is an excision from the Continuum (defeasible; the cut is
+# part of the support, never severed -- §5). The regress is halted by the COGITO:
+# the one record whose carrier is the act of recording itself. Its carrier is the
+# AGENT. So Carrier is a distinct relatum with TWO grounding modes -- a
+# Continuum-excision (the many) or the Agent (the one, self-supporting). Note an
+# Agent may also SERVE as a carrier; Agent and Carrier are not disjoint.
+
+rec:Carrier a owl:Class ;
+    rdfs:label "Carrier"@en ;
+    rdfs:comment "The support that bears a record's form. Two grounding modes: an excision from the Continuum (external records) or the Agent itself (the cogito; ROOT.md §11)."@en .
+
+rec:borneBy a owl:ObjectProperty ;
+    rdfs:label "borne by"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:range  rec:Carrier ;
+    rdfs:comment "The carrier that bears this record's form."@en .
+
+# The COGITO -- a DEFINED class (not a primitive kind): a Record borne by an
+# AGENT (carrier = agent, not a Continuum-excision) AND held with SELF-VERIFYING
+# warrant. The warrant clause is what tightens it: "borne by an agent" alone is
+# too loose -- a MEMORY is also agent-borne yet empirical/defeasible; requiring
+# self-verifying warrant excludes it. Self-verifying warrant is broader than the
+# cogito (performatives like "I promise" share it), so this DL class captures the
+# self-verifying-agent-borne FAMILY; the cogito-proper (bare existence, the
+# for=by=of coincidence on one agent) is asserted on instances and graph-checked.
+# Credit DESCARTES -- for the FIXED POINT (existence, the "I am"), NOT the res
+# cogitans (nature), which would be a self-knowledge apple (ROOT.md §11).
+rec:Cogito a owl:Class ;
+    rdfs:label "Cogito"@en ;
+    dc:source "Descartes, Discourse on the Method (1637); Meditations on First Philosophy (1641)" ;
+    rdfs:seeAlso <https://en.wikipedia.org/wiki/Cogito,_ergo_sum> ;
+    rdfs:comment "DEFINED: a Record borne by an Agent and held with self-verifying warrant. The self-supporting record that grounds the carrier regress. Certifies the agent's EXISTENCE, not its nature."@en ;
+    owl:equivalentClass [ a owl:Class ;
+        owl:intersectionOf (
+            rec:Record
+            [ a owl:Restriction ; owl:onProperty rec:borneBy ; owl:someValuesFrom rec:Agent ]
+            [ a owl:Restriction ; owl:onProperty rec:hasWarrant ; owl:hasValue rec:SelfVerifying ]
+        ) ] .
+
+# The FOUNDATIONAL CARRIER -- a DEFINED class: a Carrier that is an Agent (the
+# agent qua carrier, the self-supporting mode). The direct answer to "is the
+# agent-as-carrier defined or stipulated?" -- defined, in keeping with the
+# no-primitive-kinds discipline.
+rec:FoundationalCarrier a owl:Class ;
+    rdfs:label "Foundational Carrier"@en ;
+    rdfs:comment "DEFINED: Carrier AND Agent. The self-supporting carrier that bears the cogito and halts the regress."@en ;
+    owl:equivalentClass [ a owl:Class ;
+        owl:intersectionOf ( rec:Carrier rec:Agent ) ] .
+
+
+# ----------------------------------------------------------------------------
+# COMPOSITION  --  Records are made of Records
+# ----------------------------------------------------------------------------
+# The hierarchy/patchwork. A book; an idea communicated; formal and empirical
+# grounds woven together.
+# OPEN [transitivity]: left NON-transitive in this base. Mereological
+# transitivity is a deliberate later decision -- cf. record-harm, which had to
+# DROP buildsUpon transitivity to stay within OWL 2 DL.
+
+rec:composedOf a owl:ObjectProperty ;
+    rdfs:label "composed of"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:range  rec:Record ;
+    owl:inverseOf rec:partOf ;
+    rdfs:comment "This Record is composed of (has as a part) another Record."@en .
+
+rec:partOf a owl:ObjectProperty ;
+    rdfs:label "part of"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:range  rec:Record ;
+    rdfs:comment "Inverse of rec:composedOf."@en .
+
+
+# ----------------------------------------------------------------------------
+# ATTRIBUTES  (on the Record or its grounds -- so patchworks decompose)
+# ----------------------------------------------------------------------------
+# What once looked like KINDS of record are attributes, because one record is
+# formal here and empirical there. They attach to a record's grounds/parts.
+# NOTE: fidelity and completeness are deliberately ABSENT as primitives -- they
+# are ENTAILED by warrant (formal grounds: completable, high-fidelity; empirical
+# grounds: neither). One fewer thing to stipulate.
+
+# -- warrant: a TRIAD, one value per limit (the old "kinds", now a property) --
+# Three ways a record is held/justified, each reaching toward one "in-itself":
+#   formal          -> form-in-itself   (excluded limit, see below)
+#   empirical/given -> world-in-itself  (excluded limit)
+#   self-verifying  -> Agent-in-itself  (NOT excluded -- given to itself; §11)
+rec:Warrant a owl:Class ;
+    rdfs:label "Warrant"@en ;
+    rdfs:comment "How a record (or a ground of it) is held/justified. Three values: rec:Formal, rec:Empirical, rec:SelfVerifying -- one per limit. Mixable across a patchwork."@en .
+
+rec:Formal a owl:NamedIndividual , rec:Warrant ;
+    rdfs:label "formal"@en ;
+    rdfs:comment "Internal, deductive warrant -- the triangle verifies itself. Agent-INDEPENDENT, type-level. Internally completable and high-fidelity. Approaches (never grasps) the form-in-itself."@en .
+
+rec:Empirical a owl:NamedIndividual , rec:Warrant ;
+    rdfs:label "empirical / given"@en ;
+    rdfs:comment "Warrant by givenness -- arriving through the senses or an instrument. Defeasible and never closed. Named by the MODE OF GIVENNESS, never by what it is 'of' (which would eat the apple)."@en .
+
+rec:SelfVerifying a owl:NamedIndividual , rec:Warrant ;
+    rdfs:label "self-verifying / performative"@en ;
+    dc:source "Hintikka, 'Cogito, Ergo Sum: Inference or Performance?' (1962)" ;
+    rdfs:comment "Warrant in virtue of the ACT of recording, not the form (the cogito as performance, not inference). Agent-DEPENDENT, first-person, token-level. Reaches the Agent-in-itself, the one limit NOT excluded (§11). A PEER of rec:Formal, not a species of it: formal is agent-independent and extensible; self-verifying is agent-dependent and barren -- maximally certain (high fidelity) but non-extensible (zero amplification): it certifies existence, not nature."@en .
+
+rec:hasWarrant a owl:ObjectProperty ;
+    rdfs:label "has warrant"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:range  rec:Warrant ;
+    rdfs:comment "Attaches a warrant to a record or (for patchworks) to a ground/part of it."@en .
+
+# -- level of abstraction (grain): switch / Maxwell / QM ----------------------
+rec:atLevelOfAbstraction a owl:ObjectProperty ;
+    rdfs:label "at level of abstraction"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:comment "Floridi's Level of Abstraction: the grain of the excision. The same phenomenon may be recorded at the level of a light switch (expected to work), Maxwell's equations, or quantum mechanics. Range deferred."@en .
+
+# -- directedness: the intentional object (what it is OF, as recorded) --------
+rec:directedToward a owl:ObjectProperty ;
+    rdfs:label "directed toward"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:comment "The intentional object: what the record is of, AS RECORDED (Husserl; Peirce's immediate object). NOT a certified reference. The dynamical object / world-in-itself it asymptotically approaches is an EXCLUDED LIMIT -- never modelled as a class. Range therefore stays within the record web; deferred."@en .
+
+# -- metadata: NOT a layer -- a record directed at another record --------------
+# There is no metadata in this ontology (the excision is part of the support, so
+# provenance is constitutive, not strippable). What is called "metadata" is just
+# a record directed at another record. "Metadata-ness" is a ROLE relative to a
+# chosen level of abstraction and purpose -- it can swap (a timestamp is
+# background when reading, focal under authentication). Hence a sub-property of
+# directedToward, never a class. The LoA-relativity is not expressible in OWL and
+# lives in usage; this property only records the directedness.
+rec:metadataOf a owl:ObjectProperty ;
+    rdfs:label "metadata of"@en ;
+    rdfs:subPropertyOf rec:directedToward ;
+    rdfs:domain rec:Record ;
+    rdfs:range  rec:Record ;
+    rdfs:comment "Role-relation: this record is held AS metadata of another record, at some level of abstraction. Not a class; LoA/purpose-relative and reversible."@en .
+
+# -- provenance: the genealogy (constitutive, not metadata) -------------------
+rec:hasProvenance a owl:ObjectProperty ;
+    rdfs:label "has provenance"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:comment "The genealogy: observation -> formal mental paths -> traversal between agents -> social fixation. The excision is always part of the support, so provenance is CONSTITUTIVE, not strippable metadata. Range deferred."@en .
+
+# -- pragmatic adequacy: fitness for purpose ----------------------------------
+rec:pragmaticAdequacy a owl:ObjectProperty ;
+    rdfs:label "pragmatic adequacy"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:comment "Fitness for purpose ('expected to work'), relative to a purpose and an agent (Peirce/Dewey). Range deferred."@en .
+
+
+# ----------------------------------------------------------------------------
+# INFERENCE  --  the OPERATIONAL face of the formal (vs. the triangle, its
+#                OBJECT face). An inference IS a Record (a formal record whose
+#                form is a transition over records); it is set apart not by
+#                composing (everything composes) but by its RELATIONAL FORM:
+#                it has premises and a conclusion.
+# ----------------------------------------------------------------------------
+
+rec:hasPremise a owl:ObjectProperty ;
+    rdfs:label "has premise"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:range  rec:Record ;
+    rdfs:comment "A record this inference takes as input. Premises may themselves be conclusions of other inferences -> derivation DAG."@en .
+
+rec:concludes a owl:ObjectProperty ;
+    rdfs:label "concludes"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:range  rec:Record ;
+    rdfs:comment "The record this inference yields as output."@en .
+
+# `Inference` is a DEFINED class, never a primitive kind: a record BECOMES an
+# inference by having premises and a conclusion (reasoner-recognised). This keeps
+# the no-primitive-kinds discipline -- the "triangle / formal object" face is
+# simply a formally-warranted record that is NOT an inference (the residual; no
+# class needed for it).
+rec:Inference a owl:Class ;
+    rdfs:label "Inference"@en ;
+    rdfs:comment "DEFINED: Record AND (has some premise) AND (concludes something). The operational face of the formal. Not a stipulated kind."@en ;
+    owl:equivalentClass [ a owl:Class ;
+        owl:intersectionOf (
+            rec:Record
+            [ a owl:Restriction ; owl:onProperty rec:hasPremise ; owl:someValuesFrom rec:Record ]
+            [ a owl:Restriction ; owl:onProperty rec:concludes  ; owl:someValuesFrom rec:Record ]
+        ) ] .
+
+# Force -- the second parameter of an inference, and the HINGE between formal and
+# empirical warrant. Truth-preserving (deductive) passes a triangle's
+# completeness through unchanged; ampliative (abductive/inductive) adds content
+# and is therefore DEFEASIBLE even from certain premises. This is why a
+# historical narrative -- ampliative inference over given leaves -- can never
+# reach formal completeness, and its revisability is ENTAILED, not stipulated.
+rec:InferentialForce a owl:Class ;
+    rdfs:label "Inferential Force"@en ;
+    rdfs:comment "How an inference carries warrant from premises to conclusion. Two values: rec:TruthPreserving, rec:Ampliative."@en .
+
+rec:TruthPreserving a owl:NamedIndividual , rec:InferentialForce ;
+    rdfs:label "truth-preserving (deductive)"@en ;
+    rdfs:comment "Passes the completeness/fidelity of formal premises through unchanged. Triangle-grade."@en .
+
+rec:Ampliative a owl:NamedIndividual , rec:InferentialForce ;
+    rdfs:label "ampliative (abductive / inductive)"@en ;
+    rdfs:comment "Adds content beyond the premises -- defeasible even when the premises are certain. The force on which empirical and historical reasoning runs."@en .
+
+rec:hasForce a owl:ObjectProperty ;
+    rdfs:label "has force"@en ;
+    rdfs:domain rec:Inference ;
+    rdfs:range  rec:InferentialForce ;
+    rdfs:comment "The force of an inference. A record whose force is ampliative cannot be internally completed regardless of its premises."@en .
+
+
+# ============================================================================
+# EXCLUDED LIMITS  (recorded here as commentary; NEVER classes)
+# ----------------------------------------------------------------------------
+# Two things the model points at but never instantiates. Making either a class
+# would re-seat the all-knowing observer the agent constraint forbids:
+#   * world-in-itself -- Peirce's dynamical object, the caster of the shadow.
+#                        Approached only through rec:directedToward.
+#   * form-in-itself  -- the Platonic triangle. Approached only through formal
+#                        warrant (rec:Formal).
+# The permanently open gap between what the agent holds and these limits is our
+# finitude. Do NOT add owl:Class declarations for them.
+#
+# OPEN [carrier]: the Carrier (the marked locus that bears the form) is NOT yet
+# committed. Either it is a distinct relatum (Record = a form borne by a
+# Carrier) or it dissolves into the record's locus/provenance in the Continuum.
+# Left undecided in this base.
+# ============================================================================

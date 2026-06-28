@@ -77,10 +77,11 @@ sudo certbot --nginx \
   -d epistemic-ontology.org -d www.epistemic-ontology.org
 ```
 
-DNS: point `A`/`AAAA` records for all four names at the server. HTTP (and the
-bare IP) redirect to the canonical apex `https://epistemic-ontology.net`; over
-HTTPS all four names are served directly from the same root — so the namespace
-IRIs minted at `www.epistemic-ontology.net` resolve without a cross-host hop.
+DNS: point `A`/`AAAA` records for all four names at the server. The canonical
+host is the apex `https://epistemic-ontology.net`; HTTP (and the bare IP) and the
+other three names (`www`, `.org`, `www.org`) all `301`-redirect to it. The
+namespace IRIs minted at `www.epistemic-ontology.net` therefore resolve via one
+permanent `301` to the apex, then the `303` content negotiation.
 
 ## Dereferenceable IRIs
 

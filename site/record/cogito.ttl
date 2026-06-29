@@ -5,59 +5,66 @@
 @prefix ex:   <https://www.epistemic-ontology.net/record/examples/cogito#> .
 
 # ============================================================================
-# Worked example: the COGITO as the foundational carrier (ROOT.md §11)
+# Worked example: the cogito as a self-verifying PATTERN (ROOT.md §11)
 # ----------------------------------------------------------------------------
-# Tests that the DEFINED classes rec:Cogito and rec:FoundationalCarrier classify
-# correctly under a reasoner. Validate MERGED with the ontology.
+# There is no Cogito class. The cogito is recognised by its PATTERN:
+#   self-verifying warrant + reflexive provenance (its support IS the act) +
+#   directedness at the agent's own existence (for-whom = of-what).
 #
-#   * ex:Cogito       -- a record borne BY the agent itself; for/of/by coincide
-#                        -> reasoner should derive rec:Cogito, and ex:Meditator
-#                           -> rec:FoundationalCarrier.
-#   * ex:NoteOnTablet -- a record borne by a Continuum-excision carrier (wax),
-#                        NOT an agent -> must NOT be a Cogito (negative control).
+# The point of demoting it from a class to a pattern: a PROMISE shares the
+# self-verifying warrant but is NOT the cogito (it is directed elsewhere, and its
+# provenance is the utterance, not reflexive). The old defined Cogito class would
+# have wrongly captured the promise; the pattern does not.
+# Validate MERGED with the ontology.
 # ============================================================================
 
 <https://www.epistemic-ontology.net/record/examples/cogito>
     a owl:Ontology ;
-    rdfs:comment "Cogito / foundational-carrier example; merge with the ontology to validate."@en ;
+    rdfs:comment "Cogito-as-pattern example; merge with the ontology to validate."@en ;
     owl:imports <https://www.epistemic-ontology.net/record> .
 
-# the agent, here SERVING AS its own carrier (Agent and Carrier are not disjoint)
-ex:Meditator a owl:NamedIndividual , rec:Agent , rec:Carrier ;
+ex:Meditator a owl:NamedIndividual , rec:Agent ;
     rdfs:label "the meditating agent"@en .
 
-# the cogito: for-whom = carrier = intentional-object, all the one agent,
-# held with SELF-VERIFYING warrant (true in virtue of the act of recording)
+# THE COGITO: self-verifying, reflexive provenance, directed at its own existence
 ex:Cogito a owl:NamedIndividual , rec:Record ;
     rdfs:label "I think, therefore I am"@en ;
-    rec:forAgent       ex:Meditator ;   # for-whom
-    rec:borneBy        ex:Meditator ;   # carrier (self-supporting)
-    rec:directedToward ex:Meditator ;   # intentional object -> the agent's own existence
-    rec:hasWarrant     rec:SelfVerifying ;
-    rdfs:comment "The three roles collapse onto the one agent. Certifies existence ('I am'), not nature (no res cogitans)."@en .
-# NOTE: rec:Cogito is intentionally NOT asserted -- the reasoner must DERIVE it
-# from the definition (Record + borneBy some Agent + self-verifying warrant).
+    rec:forAgent       ex:Meditator ;     # for-whom  )  coincide
+    rec:directedToward ex:Meditator ;     # of-what   )  on the agent
+    rec:hasProvenance  ex:TheThinking ;   # whence: the act itself (reflexive)
+    rec:hasWarrant     rec:SelfVerifying .
+ex:TheThinking a owl:NamedIndividual , rec:Record ;
+    rec:forAgent ex:Meditator ; rec:hasWarrant rec:SelfVerifying .
 
-# -- negative control 1: an external record on a Continuum-excision carrier ----
-ex:WaxTablet a owl:NamedIndividual , rec:Carrier ;
-    rdfs:label "a wax tablet (excised support, not an agent)"@en .
+# A PERFORMATIVE that is NOT the cogito: self-verifying, but directed elsewhere
+# (a future act) and not reflexively provenanced. No conflation with the cogito.
+ex:IPromiseToHelp a owl:NamedIndividual , rec:Record ;
+    rdfs:label "I promise to help"@en ;
+    rec:forAgent       ex:Meditator ;
+    rec:directedToward ex:TheHelpingAct ;   # elsewhere -- for != of
+    rec:hasProvenance  ex:TheUtterance ;
+    rec:hasWarrant     rec:SelfVerifying .
+ex:TheHelpingAct a owl:NamedIndividual , rec:Record .
+ex:TheUtterance  a owl:NamedIndividual , rec:Record .
 
-ex:NoteOnTablet a owl:NamedIndividual , rec:Record ;
-    rdfs:label "a note pressed into the wax"@en ;
-    rec:forAgent  ex:Meditator ;
-    rec:borneBy   ex:WaxTablet ;
-    rec:hasWarrant rec:Empirical .
-
-# -- negative control 2: a MEMORY -- ALSO borne by the agent, but empirical, so
-#    NOT a cogito. This is what the self-verifying warrant clause exists to
-#    exclude (last turn's looser "borne by an agent" definition would have
-#    wrongly swept it in). Its intentional object is a sunset, not the agent.
-ex:SunsetSeen a owl:NamedIndividual , rec:Record ;
-    rdfs:label "a remembered sunset"@en .
-
+# A MEMORY: agent's, but empirical/defeasible -> not the cogito.
+ex:SunsetSeen a owl:NamedIndividual , rec:Record .
 ex:MemoryOfSunset a owl:NamedIndividual , rec:Record ;
     rdfs:label "the agent's memory of a sunset"@en ;
     rec:forAgent       ex:Meditator ;
-    rec:borneBy        ex:Meditator ;     # agent-borne...
-    rec:directedToward ex:SunsetSeen ;    # ...but directed elsewhere
-    rec:hasWarrant     rec:Empirical .    # ...and defeasible -> NOT a cogito
+    rec:directedToward ex:SunsetSeen ;
+    rec:hasProvenance  ex:PastPerception ;
+    rec:hasLocus       ex:InMemory ;
+    rec:hasWarrant     rec:Empirical .
+ex:PastPerception a owl:NamedIndividual , rec:Record .
+ex:InMemory       a owl:NamedIndividual , rec:Record .
+
+# An EXTERNAL record: the carrier dissolved into provenance + locus (no class).
+ex:NoteOnWax a owl:NamedIndividual , rec:Record ;
+    rdfs:label "a note pressed into wax"@en ;
+    rec:forAgent      ex:Meditator ;
+    rec:hasProvenance ex:Inscribed ;
+    rec:hasLocus      ex:WaxTablet ;
+    rec:hasWarrant    rec:Empirical .
+ex:Inscribed a owl:NamedIndividual , rec:Record .
+ex:WaxTablet a owl:NamedIndividual , rec:Record .

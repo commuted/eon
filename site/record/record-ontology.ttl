@@ -29,8 +29,8 @@
     dc:title "The Record Ontology"@en ;
     dc:creator "Ron Hinchley / epistemic-ontology.net" ;
     dc:license <http://creativecommons.org/licenses/by/4.0/> ;
-    owl:versionInfo "0.4.0 — warrant triad: + self-verifying; cogito tightened" ;
-    rdfs:comment "A base ontology of the Record, constrained to agents. One class (Record); formal/empirical is an attribute (warrant), not a kind; two excluded limits (world-in-itself, form-in-itself) are never instantiated. See ROOT.md for the full rationale."@en .
+    owl:versionInfo "0.5.0 — carrier dissolved into provenance + locus; cogito is a self-verifying pattern, not a class" ;
+    rdfs:comment "A base ontology of the Record, constrained to agents. One class (Record); warrant (formal/empirical/self-verifying) is an attribute, not a kind; the carrier dissolves into provenance + locus (no Carrier class); two excluded limits (world-in-itself, form-in-itself) are never instantiated. See ROOT.md for the full rationale."@en .
 
 
 # ----------------------------------------------------------------------------
@@ -86,57 +86,22 @@ rec:forAgent a owl:ObjectProperty ;
 
 
 # ----------------------------------------------------------------------------
-# CARRIER  --  the support that bears a record's form (ROOT.md §11)
+# CARRIER  --  DISSOLVED (ROOT.md §11)
 # ----------------------------------------------------------------------------
-# A record needs a carrier. Regress: what carries the carrier? For EXTERNAL
-# records the carrier is an excision from the Continuum (defeasible; the cut is
-# part of the support, never severed -- §5). The regress is halted by the COGITO:
-# the one record whose carrier is the act of recording itself. Its carrier is the
-# AGENT. So Carrier is a distinct relatum with TWO grounding modes -- a
-# Continuum-excision (the many) or the Agent (the one, self-supporting). Note an
-# Agent may also SERVE as a carrier; Agent and Carrier are not disjoint.
-
-rec:Carrier a owl:Class ;
-    rdfs:label "Carrier"@en ;
-    rdfs:comment "The support that bears a record's form. Two grounding modes: an excision from the Continuum (external records) or the Agent itself (the cogito; ROOT.md §11)."@en .
-
-rec:borneBy a owl:ObjectProperty ;
-    rdfs:label "borne by"@en ;
-    rdfs:domain rec:Record ;
-    rdfs:range  rec:Carrier ;
-    rdfs:comment "The carrier that bears this record's form."@en .
-
-# The COGITO -- a DEFINED class (not a primitive kind): a Record borne by an
-# AGENT (carrier = agent, not a Continuum-excision) AND held with SELF-VERIFYING
-# warrant. The warrant clause is what tightens it: "borne by an agent" alone is
-# too loose -- a MEMORY is also agent-borne yet empirical/defeasible; requiring
-# self-verifying warrant excludes it. Self-verifying warrant is broader than the
-# cogito (performatives like "I promise" share it), so this DL class captures the
-# self-verifying-agent-borne FAMILY; the cogito-proper (bare existence, the
-# for=by=of coincidence on one agent) is asserted on instances and graph-checked.
-# Credit DESCARTES -- for the FIXED POINT (existence, the "I am"), NOT the res
-# cogitans (nature), which would be a self-knowledge apple (ROOT.md §11).
-rec:Cogito a owl:Class ;
-    rdfs:label "Cogito"@en ;
-    dc:source "Descartes, Discourse on the Method (1637); Meditations on First Philosophy (1641)" ;
-    rdfs:seeAlso <https://en.wikipedia.org/wiki/Cogito,_ergo_sum> ;
-    rdfs:comment "DEFINED: a Record borne by an Agent and held with self-verifying warrant. The self-supporting record that grounds the carrier regress. Certifies the agent's EXISTENCE, not its nature."@en ;
-    owl:equivalentClass [ a owl:Class ;
-        owl:intersectionOf (
-            rec:Record
-            [ a owl:Restriction ; owl:onProperty rec:borneBy ; owl:someValuesFrom rec:Agent ]
-            [ a owl:Restriction ; owl:onProperty rec:hasWarrant ; owl:hasValue rec:SelfVerifying ]
-        ) ] .
-
-# The FOUNDATIONAL CARRIER -- a DEFINED class: a Carrier that is an Agent (the
-# agent qua carrier, the self-supporting mode). The direct answer to "is the
-# agent-as-carrier defined or stipulated?" -- defined, in keeping with the
-# no-primitive-kinds discipline.
-rec:FoundationalCarrier a owl:Class ;
-    rdfs:label "Foundational Carrier"@en ;
-    rdfs:comment "DEFINED: Carrier AND Agent. The self-supporting carrier that bears the cogito and halts the regress."@en ;
-    owl:equivalentClass [ a owl:Class ;
-        owl:intersectionOf ( rec:Carrier rec:Agent ) ] .
+# There is NO Carrier class. A record needs support, and "what carries the
+# carrier?" is a regress -- but rather than reify a Carrier relatum (which would
+# break the one-class / attributes-not-kinds discipline), the carrier dissolves
+# into two attributes: rec:hasProvenance (WHENCE -- genealogy of individuation
+# from the Continuum) and rec:hasLocus (WHERE/WHEN -- both below in Attributes).
+#
+# The regress halts not in a thing but in the SELF-VERIFYING warrant: the COGITO
+# is the record whose warrant is rec:SelfVerifying and whose provenance is the
+# agent's own act (reflexive) -- its support IS the act, which is more faithful
+# to Descartes than a carrier-substance. The cogito is therefore a PATTERN
+# (self-verifying warrant + reflexive provenance + self-directedness), NOT a
+# class -- so it cannot over-capture performatives (a promise shares the warrant
+# but is not the cogito). Credit Descartes (existence, the "I am") and Hintikka
+# (the warrant); the res cogitans (nature) stays an excluded self-knowledge apple.
 
 
 # ----------------------------------------------------------------------------
@@ -227,10 +192,18 @@ rec:metadataOf a owl:ObjectProperty ;
     rdfs:comment "Role-relation: this record is held AS metadata of another record, at some level of abstraction. Not a class; LoA/purpose-relative and reversible."@en .
 
 # -- provenance: the genealogy (constitutive, not metadata) -------------------
+# Provenance (whence) + locus (where/when) are what the CARRIER dissolves into
+# (ROOT.md §11) -- there is no Carrier class.
 rec:hasProvenance a owl:ObjectProperty ;
     rdfs:label "has provenance"@en ;
     rdfs:domain rec:Record ;
-    rdfs:comment "The genealogy: observation -> formal mental paths -> traversal between agents -> social fixation. The excision is always part of the support, so provenance is CONSTITUTIVE, not strippable metadata. Range deferred."@en .
+    rdfs:comment "The genealogy (WHENCE): observation -> formal mental paths -> traversal between agents -> social fixation. The excision is always part of the support, so provenance is CONSTITUTIVE, not strippable metadata. With rec:hasLocus, this is what the carrier dissolves into. Range deferred."@en .
+
+# -- locus: where/when the form is borne (agent-relative) ---------------------
+rec:hasLocus a owl:ObjectProperty ;
+    rdfs:label "has locus"@en ;
+    rdfs:domain rec:Record ;
+    rdfs:comment "WHERE/WHEN this record's form is borne -- agent-relative (as experienced/individuated), NEVER a certified position in space-time-in-itself. The other half of the dissolved carrier (with rec:hasProvenance; ROOT.md §11). Range deferred."@en .
 
 # -- pragmatic adequacy: fitness for purpose ----------------------------------
 rec:pragmaticAdequacy a owl:ObjectProperty ;
@@ -311,8 +284,7 @@ rec:hasForce a owl:ObjectProperty ;
 # The permanently open gap between what the agent holds and these limits is our
 # finitude. Do NOT add owl:Class declarations for them.
 #
-# OPEN [carrier]: the Carrier (the marked locus that bears the form) is NOT yet
-# committed. Either it is a distinct relatum (Record = a form borne by a
-# Carrier) or it dissolves into the record's locus/provenance in the Continuum.
-# Left undecided in this base.
+# CARRIER [resolved, ROOT.md §11]: DISSOLVED into rec:hasProvenance (whence) +
+# rec:hasLocus (where/when) -- no Carrier class. The cogito's foundation lives in
+# the rec:SelfVerifying warrant + reflexive provenance (a pattern, not a class).
 # ============================================================================

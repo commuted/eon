@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Record Ontology — Epistemic Ontology</title>
-  <meta name="description" content="A domain-neutral OWL 2 DL ontology of warranted record-structure: one class (Record), a warrant triad, inference as a derivation DAG, and the cogito as the foundational carrier.">
+  <meta name="description" content="A domain-neutral OWL 2 DL ontology of warranted record-structure: one class (Record), a warrant triad, inference as a derivation DAG, and the cogito as a self-verifying pattern.">
   <link rel="stylesheet" href="/style.css">
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -47,7 +47,7 @@
         <pre><code>https://www.epistemic-ontology.net/record#</code></pre>
         <p>
           A hash namespace: dereferencing any term — for example
-          <code>…/record#Cogito</code> — returns the whole ontology document.
+          <code>…/record#SelfVerifying</code> — returns the whole ontology document.
           The recommended prefix is <code>rec:</code>.
         </p>
       </section>
@@ -74,8 +74,8 @@
         <table>
           <tr><th>Term</th><th>Meaning</th></tr>
           <tr><td><code>rec:Record</code></td><td>The single class — a form, in a carrier, for an agent, at a level of abstraction. Records are made of Records.</td></tr>
-          <tr><td><code>rec:Continuum</code></td><td>The one thing that is <em>not</em> a record: the undivided ground carriers are individuated from (<code>rec:TheContinuum</code>; disjoint from <code>rec:Record</code>).</td></tr>
-          <tr><td><code>rec:Agent</code></td><td>A person or an AI — the one a record is <em>for</em>, and the one who individuates carriers.</td></tr>
+          <tr><td><code>rec:Continuum</code></td><td>The one thing that is <em>not</em> a record: the undivided ground a record's support (its locus) is individuated from (<code>rec:TheContinuum</code>; disjoint from <code>rec:Record</code>).</td></tr>
+          <tr><td><code>rec:Agent</code></td><td>A person or an AI — the one a record is <em>for</em>, and the one who individuates a record's support from the Continuum.</td></tr>
         </table>
 
         <h3 style="margin-bottom:.3rem">Warrant — a triad, one value per limit</h3>
@@ -85,11 +85,11 @@
           <tr><td><code>rec:SelfVerifying</code></td><td>True in virtue of the act of recording (the cogito); reaches the Agent-in-itself — the one limit <em>not</em> excluded.</td></tr>
         </table>
 
-        <h3 style="margin-bottom:.3rem">Inference, carrier, metadata</h3>
+        <h3 style="margin-bottom:.3rem">Inference, support, metadata</h3>
         <table>
           <tr><td><code>rec:Inference</code></td><td>Defined: a Record with <code>rec:hasPremise</code> and <code>rec:concludes</code>. Carries a <code>rec:hasForce</code> — truth-preserving or ampliative. Chains form a derivation DAG.</td></tr>
-          <tr><td><code>rec:Cogito</code></td><td>Defined: a self-verifying Record <code>rec:borneBy</code> an Agent. The foundational carrier that halts the regress (credit Descartes — for existence, not nature).</td></tr>
-          <tr><td><code>rec:borneBy</code></td><td>The carrier that bears a record's form — a distinct relatum, grounded at the Agent via the cogito.</td></tr>
+          <tr><td><code>rec:hasProvenance</code> · <code>rec:hasLocus</code></td><td>The dissolved <em>carrier</em>: provenance (whence) + locus (where/when, agent-relative). There is no <code>Carrier</code> class.</td></tr>
+          <tr><td>the cogito</td><td>Not a class but a <em>pattern</em>: self-verifying warrant + reflexive provenance + self-directedness. It halts the support-regress in the warrant (credit Descartes for existence, Hintikka for the warrant — not the <em>res cogitans</em>).</td></tr>
           <tr><td><code>rec:metadataOf</code></td><td>A record about a record (sub-property of <code>rec:directedToward</code>). There is no metadata layer — only records directed at records.</td></tr>
         </table>
 

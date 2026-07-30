@@ -1,0 +1,253 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix arith: <https://www.epistemic-ontology.net/arith#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/arith-properties#> .
+
+# ============================================================================
+# Fundamental Arithmetic Properties
+# ============================================================================
+# Demonstrates the sidecar pattern for algebraic properties:
+#   - Turtle defines structure (what depends on what)
+#   - Python sidecar (engine/arith_properties.py) provides executable content
+#   - Validation proves consistency between structure and execution
+#
+# Properties covered:
+#   - Associativity (addition, multiplication)
+#   - Commutativity (addition, multiplication)
+#   - Distributivity (multiplication over addition)
+#   - Identity elements (additive, multiplicative)
+#   - Inverse elements (additive)
+#   - Zero property (multiplicative)
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/arith-properties>
+    a owl:Ontology ;
+    rdfs:comment "Fundamental arithmetic properties for the Record Ontology."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> ,
+                <https://www.epistemic-ontology.net/arith> .
+
+# -- Agent --------------------------------------------------------------------
+ex:Mathematician a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "The Mathematician"@en .
+
+# -- Foundational Definitions (Grounds) ---------------------------------------
+
+ex:PeanoAxioms a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Peano axioms"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:formulation "Natural numbers with successor function and induction"^^xsd:string ;
+    rdfs:comment "Foundational axioms - the ground of arithmetic."@en .
+
+ex:AdditionDefinition a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Definition of addition"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:PeanoAxioms ;
+    rec:concludedBy ex:Inf_DefineAddition ;
+    rec:formulation "a + 0 = a; a + S(b) = S(a + b)"^^xsd:string ;
+    rdfs:comment "Addition defined recursively from successor."@en .
+
+ex:Inf_DefineAddition a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Define addition from Peano axioms"@en ;
+    rec:hasPremise ex:PeanoAxioms ;
+    rec:concludes ex:AdditionDefinition ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:MultiplicationDefinition a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Definition of multiplication"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludedBy ex:Inf_DefineMultiplication ;
+    rec:formulation "a × 0 = 0; a × S(b) = a + (a × b)"^^xsd:string ;
+    rdfs:comment "Multiplication defined as repeated addition."@en .
+
+ex:Inf_DefineMultiplication a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Define multiplication from addition"@en ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludes ex:MultiplicationDefinition ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- Associativity ------------------------------------------------------------
+
+ex:AdditionAssociativity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Associativity of addition: (a + b) + c = a + (b + c)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludedBy ex:Inf_ProveAdditionAssociativity ;
+    rec:formulation "(a + b) + c = a + (b + c)"^^xsd:string .
+
+ex:Inf_ProveAdditionAssociativity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Prove addition associativity by induction"@en ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludes ex:AdditionAssociativity ;
+    rec:hasForce rec:TruthPreserving ;
+    rdfs:comment "Proof by induction on c."@en .
+
+ex:MultiplicationAssociativity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Associativity of multiplication: (a × b) × c = a × (b × c)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:MultiplicationDefinition ;
+    rec:hasPremise ex:AdditionAssociativity ;
+    rec:concludedBy ex:Inf_ProveMultiplicationAssociativity ;
+    rec:formulation "(a × b) × c = a × (b × c)"^^xsd:string .
+
+ex:Inf_ProveMultiplicationAssociativity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Prove multiplication associativity by induction"@en ;
+    rec:hasPremise ex:MultiplicationDefinition ;
+    rec:hasPremise ex:AdditionAssociativity ;
+    rec:concludes ex:MultiplicationAssociativity ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- Commutativity ------------------------------------------------------------
+
+ex:AdditionCommutativity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Commutativity of addition: a + b = b + a"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludedBy ex:Inf_ProveAdditionCommutativity ;
+    rec:formulation "a + b = b + a"^^xsd:string .
+
+ex:Inf_ProveAdditionCommutativity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Prove addition commutativity by induction"@en ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludes ex:AdditionCommutativity ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:MultiplicationCommutativity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Commutativity of multiplication: a × b = b × a"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:MultiplicationDefinition ;
+    rec:hasPremise ex:AdditionCommutativity ;
+    rec:concludedBy ex:Inf_ProveMultiplicationCommutativity ;
+    rec:formulation "a × b = b × a"^^xsd:string .
+
+ex:Inf_ProveMultiplicationCommutativity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Prove multiplication commutativity by induction"@en ;
+    rec:hasPremise ex:MultiplicationDefinition ;
+    rec:hasPremise ex:AdditionCommutativity ;
+    rec:concludes ex:MultiplicationCommutativity ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- Distributivity -----------------------------------------------------------
+
+ex:LeftDistributivity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Left distributivity: a × (b + c) = (a × b) + (a × c)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:MultiplicationDefinition ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludedBy ex:Inf_ProveLeftDistributivity ;
+    rec:formulation "a × (b + c) = (a × b) + (a × c)"^^xsd:string .
+
+ex:Inf_ProveLeftDistributivity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Prove left distributivity by induction"@en ;
+    rec:hasPremise ex:MultiplicationDefinition ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludes ex:LeftDistributivity ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:RightDistributivity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Right distributivity: (a + b) × c = (a × c) + (b × c)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:LeftDistributivity ;
+    rec:hasPremise ex:MultiplicationCommutativity ;
+    rec:concludedBy ex:Inf_DeriveRightDistributivity ;
+    rec:formulation "(a + b) × c = (a × c) + (b × c)"^^xsd:string .
+
+ex:Inf_DeriveRightDistributivity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Derive right from left distributivity using commutativity"@en ;
+    rec:hasPremise ex:LeftDistributivity ;
+    rec:hasPremise ex:MultiplicationCommutativity ;
+    rec:concludes ex:RightDistributivity ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- Identity Elements --------------------------------------------------------
+
+ex:AdditiveIdentity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Additive identity: a + 0 = a"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludedBy ex:Inf_ProveAdditiveIdentity ;
+    rec:formulation "a + 0 = a"^^xsd:string ;
+    rdfs:comment "Follows directly from addition definition."@en .
+
+ex:Inf_ProveAdditiveIdentity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Prove additive identity from definition"@en ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludes ex:AdditiveIdentity ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:MultiplicativeIdentity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Multiplicative identity: a × 1 = a"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:MultiplicationDefinition ;
+    rec:concludedBy ex:Inf_ProveMultiplicativeIdentity ;
+    rec:formulation "a × 1 = a"^^xsd:string .
+
+ex:Inf_ProveMultiplicativeIdentity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Prove multiplicative identity by induction"@en ;
+    rec:hasPremise ex:MultiplicationDefinition ;
+    rec:concludes ex:MultiplicativeIdentity ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- Zero Property ------------------------------------------------------------
+
+ex:MultiplicativeZero a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Multiplicative zero: a × 0 = 0"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:MultiplicationDefinition ;
+    rec:concludedBy ex:Inf_ProveMultiplicativeZero ;
+    rec:formulation "a × 0 = 0"^^xsd:string ;
+    rdfs:comment "Follows directly from multiplication definition."@en .
+
+ex:Inf_ProveMultiplicativeZero a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Prove multiplicative zero from definition"@en ;
+    rec:hasPremise ex:MultiplicationDefinition ;
+    rec:concludes ex:MultiplicativeZero ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- Inverse Elements (requires integers, not just naturals) ------------------
+
+ex:IntegerExtension a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Extension to integers"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:PeanoAxioms ;
+    rec:concludedBy ex:Inf_ExtendToIntegers ;
+    rec:formulation "Integers = naturals + negatives + zero"^^xsd:string ;
+    rdfs:comment "Extend natural numbers to include negatives."@en .
+
+ex:Inf_ExtendToIntegers a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Extend naturals to integers"@en ;
+    rec:hasPremise ex:PeanoAxioms ;
+    rec:concludes ex:IntegerExtension ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:AdditiveInverse a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Additive inverse: a + (-a) = 0"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:IntegerExtension ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludedBy ex:Inf_ProveAdditiveInverse ;
+    rec:formulation "a + (-a) = 0"^^xsd:string .
+
+ex:Inf_ProveAdditiveInverse a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Prove additive inverse exists for integers"@en ;
+    rec:hasPremise ex:IntegerExtension ;
+    rec:hasPremise ex:AdditionDefinition ;
+    rec:concludes ex:AdditiveInverse ;
+    rec:hasForce rec:TruthPreserving .

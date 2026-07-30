@@ -10,7 +10,7 @@
 set -euo pipefail
 
 SRC="${1:-$HOME/claude/record-harm-ontology}"
-DEST="$(cd "$(dirname "$0")" && pwd)/site/record-harm"
+DEST="$(cd "$(dirname "$0")" && pwd)/ontology-dist/record-harm"
 
 OLD='http://example.org/record-harm-ontology#'
 NEW='https://www.epistemic-ontology.net/record-harm#'

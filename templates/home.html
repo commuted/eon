@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block page_title %}{{ site.title }} — {{ site.tagline }}{% endblock %}
+{% block body_class %}home{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="wrap hero-inner">
+    <img class="hero-logo" src="/logo.png" width="300" height="300"
+         alt="Epistemic Ontology" decoding="async">
+    <div class="hero-copy">
+      <p class="eyebrow">A namespace for formal vocabularies</p>
+      <h1>{{ page.headline }}</h1>
+      <p class="lead">{{ page.lead }}</p>
+      <p class="cta-row">
+        <a class="btn btn-primary" href="#ontologies">Browse the ontologies</a>
+        <a class="btn" href="/blog/">Read the notes</a>
+      </p>
+      <p class="hero-ns mono">https://epistemic-ontology.net/</p>
+    </div>
+  </div>
+</section>
+
+<section id="ontologies" class="band">
+  <div class="wrap">
+    <h2 class="section-title">Published ontologies</h2>
+    <p class="section-note">
+      Each is dereferenceable: the namespace IRI returns human documentation or
+      machine RDF according to the <code>Accept</code> header.
+    </p>
+    <div class="cards">
+      {% for onto in ontologies %}
+      <article class="card{% if onto.companion %} card-companion{% endif %}">
+        <div class="card-head">
+          <h3><a href="{{ onto.url }}">{{ onto.title }}</a></h3>
+          {% if onto.rdf.version %}<span class="badge badge-version">v{{ onto.rdf.version }}</span>{% endif %}
+        </div>
+        <p class="ns mono">{{ onto.namespace }}</p>
+        <p class="card-body">{{ onto.summary }}</p>
+        <dl class="card-stats">
+          <div><dt>Prefix</dt><dd class="mono">{{ onto.prefix }}:</dd></div>
+          {% if onto.rdf.counts %}
+          <div><dt>Classes</dt><dd>{{ onto.rdf.counts.classes }}</dd></div>
+          <div><dt>Properties</dt><dd>{{ onto.rdf.counts.properties }}</dd></div>
+          {% endif %}
+        </dl>
+        <div class="meta">
+          {% for badge in onto.badges %}<span class="badge">{{ badge }}</span>{% endfor %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="band band-alt">
+  <div class="wrap">
+    <h2 class="section-title">How the pieces fit</h2>
+    <p class="section-note">
+      One core vocabulary, one companion that plugs into it, and one sibling that
+      reads the same web from the other side.
+    </p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 250" role="img" aria-labelledby="diagram-title diagram-desc">
+        <title id="diagram-title">Relationships between the published ontologies</title>
+        <desc id="diagram-desc">
+          The Arithmetic Companion imports the Record Ontology. The Record Harm
+          Ontology names the act and the actor; the Record Ontology computes the
+          incoherence. Both are readings of the same record web.
+        </desc>
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" class="d-arrow"/>
+          </marker>
+        </defs>
+
+        <rect class="d-box d-core" x="255" y="95" width="210" height="62" rx="10"/>
+        <text class="d-label" x="360" y="120" text-anchor="middle">Record Ontology</text>
+        <text class="d-sub" x="360" y="139" text-anchor="middle">rec: — the one class</text>
+
+        <rect class="d-box" x="25" y="95" width="180" height="62" rx="10"/>
+        <text class="d-label" x="115" y="120" text-anchor="middle">Arithmetic Companion</text>
+        <text class="d-sub" x="115" y="139" text-anchor="middle">arith: — the formal object face</text>
+
+        <rect class="d-box" x="515" y="95" width="180" height="62" rx="10"/>
+        <text class="d-label" x="605" y="120" text-anchor="middle">Record Harm</text>
+        <text class="d-sub" x="605" y="139" text-anchor="middle">rho: — act-shaped damage</text>
+
+        <line class="d-edge" x1="207" y1="126" x2="251" y2="126" marker-end="url(#arrow)"/>
+        <text class="d-edge-label" x="229" y="112" text-anchor="middle">imports</text>
+
+        <line class="d-edge d-dashed" x1="469" y1="126" x2="511" y2="126"
+              marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+        <text class="d-edge-label" x="490" y="112" text-anchor="middle">dictionary</text>
+
+        <text class="d-caption" x="360" y="196" text-anchor="middle">
+          attached, never absorbed — a domain vocabulary plugs in through warrant
+        </text>
+        <text class="d-caption" x="360" y="216" text-anchor="middle">
+          this web computes the incoherence; record-harm names the act and the actor
+        </text>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+{% if posts %}
+<section class="band">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="section-title">Latest notes</h2>
+      <a class="more" href="/blog/">All notes <span aria-hidden="true">→</span></a>
+    </div>
+    <ul class="post-list">
+      {% for post in posts[:3] %}
+      <li class="post-item">
+        <time datetime="{{ post.date | isodate }}">{{ post.date | datefmt }}</time>
+        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+        <p>{{ post.summary }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+<section class="band band-alt">
+  <div class="wrap prose">
+    {{ page.body | safe }}
+  </div>
+</section>
+{% endblock %}

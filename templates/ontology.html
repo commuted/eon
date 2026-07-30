@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block body_class %}doc{% endblock %}
+
+{% block head_extra %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": onto.title,
+  "description": onto.summary,
+  "url": onto.url | absurl,
+  "version": onto.rdf.version,
+  "license": onto.rdf.license or "https://creativecommons.org/licenses/by/4.0/",
+  "creator": {"@type": "Person", "name": site.author.name},
+  "encodingFormat": "text/turtle",
+  "identifier": onto.namespace
+} | tojson }}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="wrap doc-head">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">Ontologies</a> <span aria-hidden="true">/</span> <span>{{ onto.title }}</span>
+  </nav>
+  <h1>{{ onto.title }}</h1>
+  <p class="lead">{{ onto.summary }}</p>
+  <div class="meta">
+    {% if onto.rdf.version %}<span class="badge badge-version">v{{ onto.rdf.version }}</span>{% endif %}
+    {% for badge in onto.badges %}<span class="badge">{{ badge }}</span>{% endfor %}
+  </div>
+  {% if onto.rdf.version_note %}
+  <p class="version-note"><strong>This release:</strong> {{ onto.rdf.version_note }}</p>
+  {% endif %}
+</div>
+
+<div class="wrap doc-layout">
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <h2 class="sidebar-title">At a glance</h2>
+      <dl class="facts">
+        <dt>Namespace</dt><dd class="mono wrap-anywhere">{{ onto.namespace }}</dd>
+        <dt>Prefix</dt><dd class="mono">{{ onto.prefix }}:</dd>
+        {% if onto.rdf.counts %}
+        <dt>Classes</dt><dd>{{ onto.rdf.counts.classes }}</dd>
+        <dt>Properties</dt>
+        <dd>{{ onto.rdf.counts.properties }}
+          <span class="dim">({{ onto.rdf.counts.object_properties }} object,
+          {{ onto.rdf.counts.datatype_properties }} data)</span></dd>
+        <dt>Individuals</dt><dd>{{ onto.rdf.counts.individuals }}</dd>
+        <dt>Triples</dt><dd>{{ onto.rdf.triples }}</dd>
+        {% endif %}
+        {% if onto.rdf.imports %}
+        <dt>Imports</dt>
+        <dd>{% for imp in onto.rdf.imports %}<a class="mono wrap-anywhere" href="{{ imp }}">{{ imp }}</a>{% endfor %}</dd>
+        {% endif %}
+        {% if onto.repo %}
+        <dt>Source</dt>
+        <dd><a href="{{ onto.repo }}">{{ onto.repo | replace('https://github.com/', '') }}</a></dd>
+        {% endif %}
+        {% if onto.license %}
+        <dt>Licence</dt><dd><a href="{{ onto.license.url }}">{{ onto.license.name }}</a></dd>
+        {% endif %}
+      </dl>
+    </div>
+
+    {% if onto.toc %}
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        <li><a href="#downloads">Downloads</a></li>
+        {% for item in onto.toc %}
+        <li class="toc-l{{ item.level }}"><a href="#{{ item.id }}">{{ item.title }}</a></li>
+        {% endfor %}
+        <li><a href="#cite">Cite</a></li>
+      </ol>
+    </nav>
+    {% endif %}
+  </aside>
+
+  <article class="doc-body prose">
+    <section id="downloads">
+      <h2>Downloads</h2>
+      <p>
+        The namespace IRI content-negotiates: <code>Accept: text/html</code> returns
+        this page, any RDF media type returns the Turtle. Files are also served
+        directly, with CORS enabled so browser-based tooling can fetch them.
+      </p>
+      <div class="table-scroll">
+        <table class="files">
+          <thead>
+            <tr><th>Resource</th><th>File</th><th>Type</th><th>Size</th></tr>
+          </thead>
+          <tbody>
+            {% for entry in onto.files %}
+            <tr>
+              <td>{{ entry.label }}</td>
+              <td><a class="mono" href="/{{ onto.slug }}/{{ entry.file }}">{{ entry.file }}</a></td>
+              <td class="mono dim">{{ entry.type | default('text/turtle', true) }}</td>
+              <td class="dim">{{ entry.bytes | kb }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <pre class="language-bash"><code><span class="t-k">curl</span> -H <span class="t-s">"Accept: text/turtle"</span> {{ base_url }}/{{ onto.slug }}</code></pre>
+    </section>
+
+    {{ onto.body | safe }}
+
+    <section id="cite">
+      <h2>Cite</h2>
+      <p>
+        Cite the namespace IRI, not a file path: the IRI is the permanent
+        identifier and will keep resolving as serializations change.
+      </p>
+      <pre class="language-bibtex"><code><span class="t-k">@misc</span>{{ '{' }}{{ onto.cite_key }},
+  <span class="t-p">title</span>   = <span class="t-s">{{ '{' }}{{ onto.cite_title }}{{ '}' }}</span>,
+  <span class="t-p">author</span>  = <span class="t-s">{{ '{' }}Hinchley, Ron{{ '}' }}</span>,
+  <span class="t-p">year</span>    = <span class="t-s">{{ '{' }}{{ onto.cite_year }}{{ '}' }}</span>,
+  <span class="t-p">version</span> = <span class="t-s">{{ '{' }}{{ onto.rdf.version }}{{ '}' }}</span>,
+  <span class="t-p">url</span>     = <span class="t-s">{{ '{' }}{{ base_url }}/{{ onto.slug }}{{ '}' }}</span>
+{{ '}' }}</code></pre>
+    </section>
+  </article>
+</div>
+{% endblock %}

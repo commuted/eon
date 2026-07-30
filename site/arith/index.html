@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arithmetic Companion — Epistemic Ontology</title>
+<meta name="description" content="The formal object face, at representative scope: arithmetic operations in a definitional hierarchy bottoming at Peano, and expressions as formal Records composed of Records. A companion to the Record Ontology — attached, never absorbed.">
+<link rel="canonical" href="https://epistemic-ontology.net/arith/">
+<meta name="author" content="Ron Hinchley">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Epistemic Ontology">
+<meta property="og:title" content="Arithmetic Companion">
+<meta property="og:description" content="The formal object face, at representative scope: arithmetic operations in a definitional hierarchy bottoming at Peano, and expressions as formal Records composed of Records. A companion to the Record Ontology — attached, never absorbed.">
+<meta property="og:url" content="https://epistemic-ontology.net/arith/">
+<meta property="og:image" content="https://epistemic-ontology.net/logo.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Epistemic Ontology — Notes" href="/feed.xml">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Dataset", "creator": {"@type": "Person", "name": "Ron Hinchley"}, "description": "The formal object face, at representative scope: arithmetic operations in a definitional hierarchy bottoming at Peano, and expressions as formal Records composed of Records. A companion to the Record Ontology \u2014 attached, never absorbed.", "encodingFormat": "text/turtle", "identifier": "https://www.epistemic-ontology.net/arith#", "license": "http://creativecommons.org/licenses/by/4.0/", "name": "Arithmetic Companion", "url": "https://epistemic-ontology.net/arith/", "version": "0.1.0"}
+</script>
+<script>
+  // Set the theme before first paint so there is no flash. Progressive: with
+  // JS off the page falls back to prefers-color-scheme in the stylesheet.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body class="doc">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="/apple-touch-icon.png" alt="" width="32" height="32" decoding="async">
+      <span class="brand-text">Epistemic<span class="brand-accent">Ontology</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/#ontologies">Ontologies</a>
+      <a href="/blog/">Notes</a>
+      <a href="/using/">Using</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4Z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap doc-head">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">Ontologies</a> <span aria-hidden="true">/</span> <span>Arithmetic Companion</span>
+  </nav>
+  <h1>Arithmetic Companion</h1>
+  <p class="lead">The formal object face, at representative scope: arithmetic operations in a definitional hierarchy bottoming at Peano, and expressions as formal Records composed of Records. A companion to the Record Ontology — attached, never absorbed.</p>
+  <div class="meta">
+<span class="badge badge-version">v0.1.0</span><span class="badge">OWL 2 DL</span><span class="badge">companion</span><span class="badge">representative</span>  </div>
+  <p class="version-note"><strong>This release:</strong> representative arithmetic: operations in a definitional hierarchy; expressions as formal Records</p>
+</div>
+
+<div class="wrap doc-layout">
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <h2 class="sidebar-title">At a glance</h2>
+      <dl class="facts">
+        <dt>Namespace</dt><dd class="mono wrap-anywhere">https://www.epistemic-ontology.net/arith#</dd>
+        <dt>Prefix</dt><dd class="mono">arith:</dd>
+        <dt>Classes</dt><dd>6</dd>
+        <dt>Properties</dt>
+        <dd>10
+          <span class="dim">(8 object,
+          2 data)</span></dd>
+        <dt>Individuals</dt><dd>5</dd>
+        <dt>Triples</dt><dd>120</dd>
+        <dt>Imports</dt>
+        <dd><a class="mono wrap-anywhere" href="https://www.epistemic-ontology.net/record">https://www.epistemic-ontology.net/record</a></dd>
+        <dt>Source</dt>
+        <dd><a href="https://github.com/commuted/record-ontology">commuted/record-ontology</a></dd>
+        <dt>Licence</dt><dd><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></dd>
+      </dl>
+    </div>
+
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        <li><a href="#downloads">Downloads</a></li>
+        <li class="toc-l2"><a href="#namespace">Namespace</a></li>
+        <li class="toc-l2"><a href="#why-a-companion-rather-than-an-extension">Why a companion rather than an extension</a></li>
+        <li class="toc-l2"><a href="#two-disciplines">Two disciplines</a></li>
+        <li class="toc-l2"><a href="#the-definitional-hierarchy">The definitional hierarchy</a></li>
+        <li class="toc-l2"><a href="#exercise-compiled-from-the-description">Exercise, compiled from the description</a></li>
+        <li><a href="#cite">Cite</a></li>
+      </ol>
+    </nav>
+  </aside>
+
+  <article class="doc-body prose">
+    <section id="downloads">
+      <h2>Downloads</h2>
+      <p>
+        The namespace IRI content-negotiates: <code>Accept: text/html</code> returns
+        this page, any RDF media type returns the Turtle. Files are also served
+        directly, with CORS enabled so browser-based tooling can fetch them.
+      </p>
+      <div class="table-scroll">
+        <table class="files">
+          <thead>
+            <tr><th>Resource</th><th>File</th><th>Type</th><th>Size</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Companion ontology</td>
+              <td><a class="mono" href="/arith/arith.ttl">arith.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">8.5 kB</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <pre class="language-bash"><code><span class="t-k">curl</span> -H <span class="t-s">"Accept: text/turtle"</span> https://epistemic-ontology.net/arith</code></pre>
+    </section>
+
+    <h2 id="namespace">Namespace</h2>
+<pre class="language-turtle"><code><span class="t-k">@prefix</span> <span class="t-p">arith:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/arith#&gt;</span> .
+</code></pre>
+<p>The companion <code>owl:imports</code> the <a href="/record/">Record Ontology</a>, so a reasoner
+fetching this document will resolve <code>https://www.epistemic-ontology.net/record</code>
+and get the base vocabulary back.</p>
+<h2 id="why-a-companion-rather-than-an-extension">Why a companion rather than an extension</h2>
+<p>The Record Ontology owns the <strong>operation</strong> face of the formal: <code>rec:Inference</code>,
+premises, conclusions, force. What it never had was the <strong>object</strong> face — the
+things inferences are about. This companion supplies that at representative
+scope, and it is deliberately <em>attached, never absorbed</em>: the same pattern the
+base ontology applies to every domain vocabulary. A domain plugs in through
+warrant; it does not get merged into the core.</p>
+<p>Scope is representative on purpose: integers, variables, the four operations,
+equality. Not analysis, not set theory, not proofs-as-objects. Names align with
+the OpenMath <code>arith1</code> content dictionary by <code>dc:source</code> pointer — never by
+import, which is the SKOS lesson applied again.</p>
+<h2 id="two-disciplines">Two disciplines</h2>
+<p><strong>The reasoner checks shape, never value.</strong> <code>2 + 2 = 4</code> is not a DL entailment;
+OWL 2 DL is decidable precisely because it excludes nearly all mathematics.
+Evaluation and exercise live in the engine, which <em>compiles</em> a described record
+into a computer-algebra system and runs it.</p>
+<p><strong>Expressions are Records composed of Records.</strong> <code>arith:Expression</code> is a
+subclass of <code>rec:Record</code>, and operands are <code>rec:composedOf</code> parts. So the
+patchwork structure the base ontology already models carries mathematical
+content without any new mereology.</p>
+<h2 id="the-definitional-hierarchy">The definitional hierarchy</h2>
+<p>The four operations sit in a hierarchy that bottoms out at the Peano ground —
+mathematics' own derivation web, formal all the way down. That makes it the
+limiting case of the knowledge-automaton argument: a web whose interior is
+entirely derivable, and therefore entirely puncturable, regenerating from the
+ground by deduction alone.</p>
+<h2 id="exercise-compiled-from-the-description">Exercise, compiled from the description</h2>
+<p>The point of describing a formal record in full — sides, angles, relationships,
+the whole thing coming together — is that the description can be <em>run</em>. A
+compiler walks the expression subgraph into sympy, so the exercise is <em>derived
+from</em> the description rather than hand-written beside it. Two consequences:</p>
+<ul>
+<li>Closed-world well-formedness is a compile error. A missing operand is caught
+by the compiler, because OWL cannot see absence.</li>
+<li><strong>Performative provenance</strong>: every exercise act is logged at a moment, so
+earned warrant has a genealogy, and each record carries a lifecycle standing —
+unexercised → confirmed / failed → exorcised.</li>
+</ul>
+<p>The worked pair lives with the <a href="/record/#downloads">Record Ontology examples</a>:
+the 3-4-5 triangle, described and exercised from its description, and the 2 = 1
+pseudo-proof, which fails at its hidden division by zero and is expelled.</p>
+
+
+    <section id="cite">
+      <h2>Cite</h2>
+      <p>
+        Cite the namespace IRI, not a file path: the IRI is the permanent
+        identifier and will keep resolving as serializations change.
+      </p>
+      <pre class="language-bibtex"><code><span class="t-k">@misc</span>{arithcompanion2026,
+  <span class="t-p">title</span>   = <span class="t-s">{The Arithmetic Companion to the Record Ontology}</span>,
+  <span class="t-p">author</span>  = <span class="t-s">{Hinchley, Ron}</span>,
+  <span class="t-p">year</span>    = <span class="t-s">{2026}</span>,
+  <span class="t-p">version</span> = <span class="t-s">{0.1.0}</span>,
+  <span class="t-p">url</span>     = <span class="t-s">{https://epistemic-ontology.net/arith}</span>
+}</code></pre>
+    </section>
+  </article>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-brand">Epistemic Ontology</p>
+      <p class="footer-note">Formal vocabularies for knowledge and record.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Secondary">
+      <a href="/feed.xml">Atom feed</a>
+      <a href="/sitemap.xml">Sitemap</a>
+      <a href="https://github.com/commuted/record-ontology">Source</a>
+    </nav>
+    <p class="footer-copy">© 2026 Ron Hinchley</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.theme-toggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var dark = getComputedStyle(root).getPropertyValue('--is-dark').trim() === '1';
+    var next = dark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>
+</body>
+</html>

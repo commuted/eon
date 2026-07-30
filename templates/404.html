@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block body_class %}doc{% endblock %}
+
+{% block content %}
+<div class="wrap doc-head">
+  <p class="eyebrow">404</p>
+  <h1>No record here</h1>
+  <p class="lead">
+    That address does not resolve. If you followed a term IRI, note that this
+    namespace uses <strong>hash</strong> fragments — every term of an ontology
+    lives in one document, so <code>…/record#Inference</code> is served by
+    <code>/record</code> and the fragment is resolved by your client.
+  </p>
+</div>
+
+<div class="wrap prose">
+  <h2>Try one of these</h2>
+  <ul>
+    <li><a href="/">The ontology index</a></li>
+    {% for onto in ontologies %}
+    <li><a href="{{ onto.url }}">{{ onto.title }}</a> — <code>{{ onto.namespace }}</code></li>
+    {% endfor %}
+    <li><a href="/blog/">Notes</a></li>
+    <li><a href="/using/">Using a vocabulary</a></li>
+  </ul>
+</div>
+{% endblock %}

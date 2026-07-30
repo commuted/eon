@@ -1,0 +1,6 @@
+# Build dependencies for the static site generator (build.py).
+# All pure Python; no compiler, no Node, no system packages.
+Jinja2>=3.1
+markdown-it-py>=3.0
+PyYAML>=6.0
+rdflib>=7.0

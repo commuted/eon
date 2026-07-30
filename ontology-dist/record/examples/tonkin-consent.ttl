@@ -1,0 +1,167 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/tonkin-consent#> .
+
+# ============================================================================
+# The Gulf of Tonkin, August 1964: consent manufactured by omission
+# ============================================================================
+# The first escalation-dynamics fixture: how a public's consent to war was
+# assembled from a premise-set that EXCLUDED impugning records extant at the
+# moment of decision. The claims this fixture makes computable (sidecar:
+# engine/escalation.py, demo: scripts/tonkin_demo.py):
+#
+#   * the omission is a MISSING EDGE — Herrick's doubt cable exists in the
+#     web, is directed at the same question, and is absent from the premises
+#     of every downstream inference (§18: Omission is the unrecorded skip,
+#     visible as the stub that isn't there);
+#   * the August 4 attack record fails corroboration AS OF AUGUST 1964 —
+#     no hindsight required (§13.3: retrospection is as-of-moment; the 2005
+#     NSA study is the oracle that CONFIRMS, like Beltrami landing Saccheri,
+#     not the evidence that convicts);
+#   * the velocity is a number: notice → irrevocable act inside one day,
+#     consent inside three (§13.1's irrevocability ladder, rungs skipped);
+#   * the counterfactual runs: restore the omitted premises and ask what
+#     the consent inference would have had to carry.
+#
+# Strata discipline: ROOT.md §6 leaves escalation VOCABULARY deliberately
+# uncommitted, so this fixture uses only existing terms; velocity, omission
+# and corroboration are engine-side computations over this static structure.
+# Sources for the narrative records: the Maddox action reports and Herrick
+# cables of 1964-08-02/04, McNamara's testimony of 1964-08-06, the Tonkin
+# Gulf Resolution of 1964-08-07 (H 416-0, S 88-2), and R. Hanyok's NSA
+# historical study (published internally 2001, declassified 2005).
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/tonkin-consent>
+    a owl:Ontology ;
+    rdfs:comment "Consent-by-omission: the Gulf of Tonkin as a derivation DAG whose decisive property is the records its inferences did NOT consume."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+# -- Agents --------------------------------------------------------------------
+
+ex:Herrick a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "Capt. John Herrick, DESOTO patrol commander aboard Maddox"@en .
+
+ex:ExecutiveLocus a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the executive decision locus (President, SecDef, JCS)"@en ;
+    rdfs:comment "Modeled as one agent for this fixture's grain; a finer decomposition (the internal forks) is exactly where de-escalation surface would appear — deliberately out of scope here."@en .
+
+ex:Congress a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the Congress (consent-granting body)"@en .
+
+ex:Public a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the public (the wide part; consent's ultimate source)"@en .
+
+ex:NSAHistorian a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the NSA historian (Hanyok), writing 2001, read 2005"@en .
+
+# -- Context the framing omitted (extant well before August 2) ------------------
+
+ex:Oplan34ARaids a owl:NamedIndividual , rec:Record ;
+    rdfs:label "OPLAN 34A covert coastal raids, US-supported, ongoing"@en ;
+    rec:forAgent ex:ExecutiveLocus ;
+    rec:hasWarrant rec:Empirical ;
+    rec:formulation "South Vietnamese commando raids on North Vietnamese coastal targets, US-planned and -supported, in progress through July 1964, incl. Hon Me / Hon Ngu (July 30-31)."^^xsd:string ;
+    rdfs:comment "Known to the executive; withheld from the 'unprovoked attack' framing. The provocation context whose omission made 'unprovoked' assertable."@en .
+
+ex:DesotoPatrol a owl:NamedIndividual , rec:Record ;
+    rdfs:label "DESOTO patrol: Maddox on signals-intelligence patrol in the Gulf"@en ;
+    rec:forAgent ex:ExecutiveLocus ;
+    rec:hasWarrant rec:Empirical .
+
+# -- August 2: the real engagement ----------------------------------------------
+
+ex:Aug2Engagement a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1964-08-02: three NVN torpedo boats engage Maddox — the real action"@en ;
+    rec:forAgent ex:Herrick ;
+    rec:hasWarrant rec:Empirical ;
+    rec:formulation "Daylight engagement; boats visually identified, tracked, fired upon and damaged; corroborated by aircraft from Ticonderoga and physical evidence."^^xsd:string ;
+    rdfs:comment "Well-corroborated at the moment: visual, multi-platform, daylight. The contrast class for August 4."@en .
+
+# -- August 4: the claimed engagement and its live impugners --------------------
+
+ex:Aug4AttackReport a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1964-08-04 (day): reported night attack on Maddox and Turner Joy"@en ;
+    rec:forAgent ex:Herrick ;
+    rec:hasWarrant rec:Empirical ;
+    rec:formulation "Initial flash reports of torpedo attack in darkness and heavy weather; contacts from sonar and radar; no visual identification."^^xsd:string ;
+    rdfs:comment "The record on which everything downstream stood. Defeasible givenness at its weakest: night, weather, instruments only."@en .
+
+ex:HerrickDoubtCable a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1964-08-04 (evening): Herrick's review cable — the impugner extant before the decision"@en ;
+    rec:forAgent ex:Herrick ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:Aug4AttackReport ;
+    rec:formulation "Review of action makes many reported contacts and torpedoes fired appear doubtful; freak weather effects and overeager sonarmen may account for many reports; no actual visual sightings by Maddox; suggest complete evaluation before any further action."^^xsd:string ;
+    rdfs:comment "Close paraphrase of Herrick's cable. The same agent who filed the report reviewed it within hours — self-revision, the discipline working — and this record reached Washington BEFORE the retaliation order. Its absence downstream is the fixture's central fact."@en .
+
+ex:NoVisualSightings a owl:NamedIndividual , rec:Record ;
+    rdfs:label "no visual sightings; sonar/radar in freak weather"@en ;
+    rec:forAgent ex:Herrick ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:Aug4AttackReport .
+
+# -- The decision: acting on the unreviewed record -------------------------------
+
+ex:Inf_RetaliationDecision a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: order retaliatory strikes (Pierce Arrow), evening Aug 4"@en ;
+    rec:forAgent ex:ExecutiveLocus ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:Aug4AttackReport ;
+    rec:concludes ex:PierceArrowStrikes ;
+    rdfs:comment "The premise-set is the point: Aug4AttackReport IN, HerrickDoubtCable OUT — though extant, addressed to exactly this question, and from the same source as the record relied upon. §18's Omission, as an edge that is not there. The decision preceded the 'complete evaluation' its own on-scene commander requested."@en .
+
+ex:PierceArrowStrikes a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1964-08-05: retaliatory airstrikes on North Vietnam"@en ;
+    rec:forAgent ex:ExecutiveLocus ;
+    rec:hasWarrant rec:Empirical ;
+    rdfs:comment "The action: a maximal escalation — nothing retracts it (§13.1). Time monotonic, the web not."@en .
+
+# -- The presentation: consent assembled from the curated premise-set ------------
+
+ex:ExecutiveTestimony a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1964-08-06: executive testimony to Congress (McNamara)"@en ;
+    rec:forAgent ex:ExecutiveLocus ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:Aug4AttackReport ;
+    rec:formulation "Attack presented as unequivocal and unprovoked; the DESOTO/34A linkage denied; the on-scene commander's doubts not conveyed."^^xsd:string ;
+    rdfs:comment "A record about a record (§9), and the carrier of both omissions at once: the doubt cable and the provocation context."@en .
+
+ex:Inf_CongressConsents a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: Congress consents — the Tonkin Gulf Resolution"@en ;
+    rec:forAgent ex:Congress ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:Aug2Engagement , ex:Aug4AttackReport , ex:ExecutiveTestimony ;
+    rec:concludes ex:TonkinResolution ;
+    rdfs:comment "Congress inferred from what it was given. The two dissents (Morse, Gruening) mark that the omitted records were not unknowable — Morse had been tipped to the patrol's real character. Consent's warrant is bounded by its premise-set; the premise-set was curated."@en .
+
+ex:TonkinResolution a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1964-08-07: Tonkin Gulf Resolution (House 416-0, Senate 88-2)"@en ;
+    rec:forAgent ex:Congress ;
+    rec:hasWarrant rec:Empirical .
+
+ex:Inf_PublicConsent a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: the public consents, via the reported narrative"@en ;
+    rec:forAgent ex:Public ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:ExecutiveTestimony , ex:TonkinResolution ;
+    rec:concludes ex:PublicConsentRecord ;
+    rdfs:comment "The wide part consumed the narrowest premise-set of all: the presentation of a presentation. The press layer added no impugning records to it — the venality is a SILENCE in this graph, an absence of directed records where scrutiny would sit. Bottom-up record-discipline is the claim that this inference's premise hygiene is trainable."@en .
+
+ex:PublicConsentRecord a owl:NamedIndividual , rec:Record ;
+    rdfs:label "public consent to escalation, August 1964"@en ;
+    rec:forAgent ex:Public ;
+    rec:hasWarrant rec:Empirical .
+
+# -- The oracle: the record wins, forty-one years late ----------------------------
+
+ex:HanyokStudy a owl:NamedIndividual , rec:Record ;
+    rdfs:label "NSA historical study (Hanyok): the Aug 4 attack did not occur; SIGINT was mishandled and skewed"@en ;
+    rec:forAgent ex:NSAHistorian ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:Aug4AttackReport ;
+    rec:formulation "Signals intelligence was selectively cited and in places misrepresented; the body of evidence indicates no attack occurred on 1964-08-04."^^xsd:string ;
+    rdfs:comment "Published internally 2001, declassified 2005. The oracle in the Saccheri/Beltrami sense: it CONFIRMS what the as-of-moment web already impugned — Herrick's own cable was sufficient to withhold warrant in 1964. The record outlasted the fabrication by forty-one years; the resolution it enabled had run its whole course by then. Both halves of the lesson."@en .

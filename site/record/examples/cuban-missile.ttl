@@ -1,0 +1,220 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/cuban-missile#> .
+
+# ============================================================================
+# The Cuban Missile Crisis, October 1962: the slow ladder
+# ============================================================================
+# The contrast fixture to tonkin-consent.ttl — the same engine computations
+# (engine/escalation.py, demo: scripts/cuban_missile_demo.py) with every
+# meaning inverted by the discipline of the agents:
+#
+#   * the REVIEW RUNG was inhabited, not climbed over: four days of recorded
+#     deliberation between notice and decision (Tonkin granted six hours to
+#     a review its own commander requested);
+#   * the MAXIMAL RUNG exists in the web as a ranked option with NO act edge
+#     — the same missing-edge machinery that convicted Tonkin's omission
+#     here preserves RESTRAINT, visibly; the web shows what was not done;
+#   * the internal FORK was recorded, not suppressed: the airstrike option
+#     stands impugned by a dissent note from inside the decision locus;
+#   * RECORD SELECTION (the Trollope ploy) is curation that the engine can
+#     distinguish from Tonkin's: the skipped record impugns nothing — it is
+#     a rival OFFER, not a defeater — and the selection was visible to the
+#     counterparty, who retained override authority;
+#   * EVIDENCE WAS DISPLAYED, not asserted: the photographs impugn the
+#     Soviet denial in public, and consent (OAS, unanimous) was obtained
+#     BEFORE the act took effect, on inspectable premises — Tonkin's exact
+#     inversion on both counts;
+#   * the ladder exists at every grain: one flag officer aboard B-59
+#     declining one authorization is the same rung-refusal as the President
+#     declining a pre-committed retaliation.
+#
+# Strata discipline as in the Tonkin fixture: no escalation vocabulary
+# (ROOT §6 leaves it deliberately uncommitted); velocity, selection,
+# restraint and publicity are engine-side computations. Times, engine-side,
+# are fractional days from 1962-10-01, hour-approximate where sources allow.
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/cuban-missile>
+    a owl:Ontology ;
+    rdfs:comment "The slow ladder: thirteen days in which the maximal escalation was ranked, recorded, impugned from within — and never taken."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+# -- Agents --------------------------------------------------------------------
+
+ex:Excomm a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the Executive Committee (Kennedy and advisers)"@en ;
+    rdfs:comment "Modeled as one agent whose INTERNAL forks are nevertheless visible as records — the dissent note below. The disaggregation the Tonkin fixture deferred, begun."@en .
+
+ex:Khrushchev a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the Soviet decision locus (Khrushchev)"@en .
+
+ex:NPIC a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the photo interpreters (NPIC)"@en .
+
+ex:OAS a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the Organization of American States (consent-granting body)"@en .
+
+ex:Arkhipov a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "Vasili Arkhipov, flotilla commander aboard B-59"@en .
+
+# -- The evidence: leaves, then identification -----------------------------------
+
+ex:U2Photographs a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-14: U-2 photographs of San Cristóbal"@en ;
+    rec:forAgent ex:NPIC ;
+    rec:hasWarrant rec:Empirical ;
+    rec:formulation "Overflight imagery; the empirical leaves everything downstream stands on — and, unusually for statecraft, later DISPLAYED for independent inspection rather than merely asserted."^^xsd:string .
+
+ex:Inf_PhotoInterpretation a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: MRBM sites identified from the imagery"@en ;
+    rec:forAgent ex:NPIC ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:U2Photographs ;
+    rec:concludes ex:MissileSiteIdentification .
+
+ex:MissileSiteIdentification a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-15/16: Soviet MRBM sites under construction in Cuba"@en ;
+    rec:forAgent ex:NPIC ;
+    rec:hasWarrant rec:Empirical ;
+    rdfs:comment "Briefed to the President the morning of Oct 16 — the notice rung."@en .
+
+# -- The adversary's record, and what impugns it ----------------------------------
+
+ex:SovietDenial a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-18: Soviet assurance (Gromyko) — defensive weapons only"@en ;
+    rec:forAgent ex:Khrushchev ;
+    rec:hasWarrant rec:Empirical ;
+    rdfs:comment "The fabricated record in this web sits on the OTHER side — and is answered not with a counter-assertion but with displayed evidence (see StevensonDisplay). Kennedy held the photographs through this meeting: evidence banked, not spent."@en .
+
+# -- Deliberation: the record rung, inhabited -------------------------------------
+
+ex:ExcommDeliberations a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-16..20: EXCOMM deliberation records"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasWarrant rec:Empirical ;
+    rec:formulation "Four days of recorded argument between notice and decision: options enumerated, ranked, and — decisively — written down."^^xsd:string .
+
+ex:AirstrikeOption a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the airstrike option: the maximal rung, ranked and recorded"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasWarrant rec:Empirical ;
+    rdfs:comment "The initially-favored course. It remains in the web as a ranked option that NO inference ever consumes into action — the missing edge as RESTRAINT. The same absence that convicted Tonkin's curation here preserves the thing not done."@en .
+
+ex:PearlHarborDissent a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the dissent from within: a surprise strike would be 'a Pearl Harbor in reverse'"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:AirstrikeOption ;
+    rdfs:comment "Robert Kennedy's recorded objection (the sentiment as documented; close paraphrase). The internal fork, ON the record — the locus arguing with itself in writing is what the record rung looks like when inhabited."@en .
+
+ex:Inf_QuarantineDecision a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: choose the quarantine — the lower, retractable rung (Oct 20)"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:MissileSiteIdentification , ex:ExcommDeliberations , ex:PearlHarborDissent ;
+    rec:concludes ex:QuarantineProclamation ;
+    rdfs:comment "The dissent is IN the premise-set — the impugner of the rejected option was consumed, not omitted. Compare Inf_RetaliationDecision at Tonkin, whose premise-set excluded its impugner. Even the word was velocity control: 'quarantine', because 'blockade' is an act of war."@en .
+
+ex:QuarantineProclamation a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-23: quarantine proclaimed (effective Oct 24) — a retractable act"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasWarrant rec:Empirical ;
+    rdfs:comment "The chosen act is the one that can be UNDONE — ships recalled, lines moved. Acting at the lowest sufficient rung keeps retraction reachable; §13.1's 'retraction reaches records, never the world' is exactly why the rung mattered."@en .
+
+# -- Consent BEFORE the act, on inspectable premises -------------------------------
+
+ex:Inf_OASConsents a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: OAS consents, unanimously, Oct 23 — before the act takes effect"@en ;
+    rec:forAgent ex:OAS ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:U2Photographs , ex:MissileSiteIdentification , ex:QuarantineProclamation ;
+    rec:concludes ex:OASResolution ;
+    rdfs:comment "Consent obtained on the EVIDENCE — allies shown the photographs themselves, not a testimony about them — and obtained before the quarantine line was enforced. Tonkin inverted on both counts: consent there followed the act by two days and stood on a presentation of a presentation."@en .
+
+ex:OASResolution a owl:NamedIndividual , rec:Record ;
+    rdfs:label "OAS resolution, unanimous"@en ;
+    rec:forAgent ex:OAS ;
+    rec:hasWarrant rec:Empirical .
+
+ex:StevensonDisplay a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-25: the photographs displayed at the UN Security Council"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:SovietDenial ;
+    rdfs:comment "Evidence made public against the adversary's denial, in front of the world and the counterparty at once — record agreement offered on inspectable terms ('prepared to wait for my answer until hell freezes over', and the easels). The wide part shown the leaves, not told the conclusion."@en .
+
+# -- Black Saturday: rung refusals at two grains ------------------------------------
+
+ex:U2Shootdown a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-27: U-2 shot down over Cuba (Maj. Anderson killed)"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasWarrant rec:Empirical .
+
+ex:PreCommittedRetaliation a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the standing pre-commitment: SAM sites to be struck if a U-2 is downed"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasWarrant rec:Empirical ;
+    rdfs:comment "An automatic rung, armed in advance. On the day, Kennedy DECLINED to execute it — the pre-commitment stands in the web with the shootdown beside it and no action concluded from either. Breaking one's own automatic escalator is the hardest rung refusal there is."@en .
+
+ex:ArkhipovRefusal a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-27, B-59: Arkhipov withholds consent to the nuclear torpedo"@en ;
+    rec:forAgent ex:Arkhipov ;
+    rec:hasWarrant rec:Empirical ;
+    rec:formulation "Under depth charges, out of contact, two officers authorizing: the third said no."^^xsd:string ;
+    rdfs:comment "The ladder exists at every grain. One agent, one rung, declined — the single-agent case the whole framework claims is always available: you can only fix your own records, and sometimes that is enough."@en .
+
+# -- Record selection: the Trollope ploy ---------------------------------------------
+
+ex:KhrushchevLetter1 a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-26: Khrushchev's first letter (private) — withdrawal for a non-invasion pledge"@en ;
+    rec:forAgent ex:Khrushchev ;
+    rec:hasWarrant rec:Empirical .
+
+ex:KhrushchevLetter2 a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-27: the second letter (public) — adds the Jupiters in Turkey"@en ;
+    rec:forAgent ex:Khrushchev ;
+    rec:hasWarrant rec:Empirical ;
+    rdfs:comment "A rival OFFER, not a defeater: it impugns nothing in the first letter. The selection between them is therefore fork-choice, not concealment — the engine computes the difference from the impugnment structure (see the demo)."@en .
+
+ex:Inf_TrollopeReply a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: answer the first letter, as if the second had not arrived"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:KhrushchevLetter1 ;
+    rec:concludes ex:ReplyLetter ;
+    rdfs:comment "Curation FOR de-escalation, and openly: the reply was public, so the counterparty could see exactly which of his records was being stood on — the skipped record's author retained override authority. Compare Tonkin, where the curation was concealed FROM the parties it bound and the omitted record was a defeater."@en .
+
+ex:ReplyLetter a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-27: the reply accepting the first letter's terms"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasWarrant rec:Empirical .
+
+ex:DobryninChannel a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-27 evening: the private assurance on the Jupiters (RFK–Dobrynin)"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasWarrant rec:Empirical ;
+    rdfs:comment "Concealed from the public — but an honest INTER-PARTY record: both principals held it, and it bound. The nuance the Tonkin contrast sharpens: secrecy WITH a shared record between the affected parties is a communication edge; secrecy AGAINST the record — withholding the defeater from the party whose consent it would alter — is the harm. What made the Jupiters deal legitimate is exactly what made the Tonkin omissions not."@en .
+
+# -- Resolution, and the institutionalized edge --------------------------------------
+
+ex:Inf_SovietStanddown a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: withdraw the missiles (Oct 28)"@en ;
+    rec:forAgent ex:Khrushchev ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:ReplyLetter , ex:DobryninChannel , ex:QuarantineProclamation ;
+    rec:concludes ex:Withdrawal .
+
+ex:Withdrawal a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1962-10-28: Khrushchev announces withdrawal"@en ;
+    rec:forAgent ex:Khrushchev ;
+    rec:hasWarrant rec:Empirical .
+
+ex:HotlineAgreement a owl:NamedIndividual , rec:Record ;
+    rdfs:label "1963-06: the Moscow–Washington hotline"@en ;
+    rec:forAgent ex:Excomm ;
+    rec:hasWarrant rec:Empirical ;
+    rdfs:comment "The aftermath institutionalized the lesson: de-escalation is edge-creation (§13.3 — two agents' moments are incomparable until a communication record exists), so build the edge infrastructure BEFORE the next crisis. A standing machine for making moments comparable."@en .

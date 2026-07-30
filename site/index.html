@@ -1,130 +1,258 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="auto">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Epistemic Ontology — a home for ontologies of knowledge and record</title>
-  <meta name="description" content="Epistemic Ontology publishes formal, dereferenceable OWL/SKOS vocabularies for reasoning about knowledge, records, and the ways they can be harmed.">
-  <link rel="stylesheet" href="/style.css">
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Epistemic Ontology — Formal vocabularies for knowledge and record.</title>
+<meta name="description" content="Epistemic Ontology publishes formal, dereferenceable OWL 2 DL and SKOS vocabularies for reasoning about knowledge, records, and the ways they can be harmed.">
+<link rel="canonical" href="https://epistemic-ontology.net/">
+<meta name="author" content="Ron Hinchley">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Epistemic Ontology">
+<meta property="og:title" content="Formal vocabularies for knowledge and record">
+<meta property="og:description" content="Epistemic Ontology publishes formal, dereferenceable OWL 2 DL and SKOS vocabularies for reasoning about knowledge, records, and the ways they can be harmed.">
+<meta property="og:url" content="https://epistemic-ontology.net/">
+<meta property="og:image" content="https://epistemic-ontology.net/logo.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Epistemic Ontology — Notes" href="/feed.xml">
+<script>
+  // Set the theme before first paint so there is no flash. Progressive: with
+  // JS off the page falls back to prefers-color-scheme in the stylesheet.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
 </head>
-<body>
-  <header class="site-header">
-    <div class="wrap">
-      <div class="brand"><img class="brand-mark" src="/apple-touch-icon.png" alt="" width="30" height="30">Epistemic<span>Ontology</span></div>
-      <nav class="nav">
-        <a href="/">Ontologies</a>
-        <a href="/#about">About</a>
-        <a href="/#use">Use</a>
-      </nav>
+<body class="home">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="/apple-touch-icon.png" alt="" width="32" height="32" decoding="async">
+      <span class="brand-text">Epistemic<span class="brand-accent">Ontology</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/#ontologies">Ontologies</a>
+      <a href="/blog/">Notes</a>
+      <a href="/using/">Using</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4Z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="wrap hero-inner">
+    <img class="hero-logo" src="/logo.png" width="300" height="300"
+         alt="Epistemic Ontology" decoding="async">
+    <div class="hero-copy">
+      <p class="eyebrow">A namespace for formal vocabularies</p>
+      <h1>Formal vocabularies for knowledge and record.</h1>
+      <p class="lead">A small, curated namespace for OWL 2 DL and SKOS vocabularies that model how information is structured, warranted, and damaged. Every term has a stable, dereferenceable IRI.</p>
+      <p class="cta-row">
+        <a class="btn btn-primary" href="#ontologies">Browse the ontologies</a>
+        <a class="btn" href="/blog/">Read the notes</a>
+      </p>
+      <p class="hero-ns mono">https://epistemic-ontology.net/</p>
     </div>
-  </header>
+  </div>
+</section>
 
-  <main>
-    <div class="wrap">
-      <section class="hero">
-        <img class="hero-logo" src="/logo.png" width="280"
-             alt="Epistemic Ontology — records, structure, meaning">
-        <h1>Formal vocabularies for knowledge&nbsp;and record.</h1>
-        <p class="lead">
-          Epistemic Ontology is a small, curated namespace for OWL&nbsp;2&nbsp;DL and SKOS
-          vocabularies that model how information is structured, trusted, and damaged.
-          Every term has a stable, dereferenceable IRI under
-          <code>https://www.epistemic-ontology.net/</code>.
-        </p>
-      </section>
-
-      <section id="ontologies">
-        <h2>Published ontologies</h2>
-        <div class="cards">
-
-          <article class="card">
-            <h3><a href="/record-harm/">Record Harm Ontology</a></h3>
-            <p class="ns mono">https://www.epistemic-ontology.net/record-harm#</p>
-            <p>
-              A taxonomy of the ways an informational record can be damaged —
-              prime harms (destruction, fabrication, alteration, omission, denial)
-              and the composite harms built upon them — with SHACL validation and
-              an event layer for specific occurrences.
-            </p>
-            <div class="meta">
-              <span class="badge">OWL 2 DL</span>
-              <span class="badge">SKOS</span>
-              <span class="badge">SHACL</span>
-              <span class="badge muted">v2.3</span>
-            </div>
-          </article>
-
-          <article class="card">
-            <h3><a href="/record/">Record Ontology</a></h3>
-            <p class="ns mono">https://www.epistemic-ontology.net/record#</p>
-            <p>
-              A domain-neutral ontology of warranted record-structure: one class
-              (Record), a warrant triad (formal · empirical · self-verifying),
-              inference as a derivation DAG, and the cogito as the foundational
-              carrier. It models how agents warrant, compose, and ground records —
-              not the things recorded.
-            </p>
-            <div class="meta">
-              <span class="badge">OWL 2 DL</span>
-              <span class="badge">reasoner-validated</span>
-              <span class="badge muted">v0.5.0</span>
-            </div>
-          </article>
-
-          <article class="card placeholder">
-            <h3>Next ontology</h3>
-            <p>
-              This namespace is built to grow. A further vocabulary —
-              on provenance, evidence, or epistemic trust — will live here under
-              its own slug, with the same stable-IRI and content-negotiation guarantees.
-            </p>
-            <div class="meta"><span class="badge muted">reserved</span></div>
-          </article>
-
-        </div>
-      </section>
-
-      <section id="about">
-        <h2>About</h2>
-        <p>
-          The goal is narrow and durable: a handful of carefully engineered,
-          inter-operable vocabularies, each published at a permanent address so it
-          can be cited, imported, and dereferenced for decades. Vocabularies here
-          favour OWL&nbsp;2&nbsp;DL where reasoning matters, SKOS where a controlled
-          vocabulary is enough, and SHACL for closed-world validation.
-        </p>
-        <p>
-          Maintained by Ron Hinchley. Source and issue trackers are linked from each
-          ontology's page.
-        </p>
-      </section>
-
-      <section id="use">
-        <h2>Using a vocabulary</h2>
-        <p>Each term IRI resolves to both human documentation and machine RDF, by content negotiation:</p>
-        <pre><code># Human-readable documentation
-curl -H "Accept: text/html" https://www.epistemic-ontology.net/record-harm
-
-# Turtle (also: application/rdf+xml, application/ld+json)
-curl -H "Accept: text/turtle" https://www.epistemic-ontology.net/record-harm</code></pre>
-        <p>
-          IRIs use hash namespaces (e.g.
-          <code>…/record-harm#Destruction</code>), so dereferencing any term fetches
-          the whole vocabulary document.
-        </p>
-      </section>
+<section id="ontologies" class="band">
+  <div class="wrap">
+    <h2 class="section-title">Published ontologies</h2>
+    <p class="section-note">
+      Each is dereferenceable: the namespace IRI returns human documentation or
+      machine RDF according to the <code>Accept</code> header.
+    </p>
+    <div class="cards">
+      <article class="card">
+        <div class="card-head">
+          <h3><a href="/record/">Record Ontology</a></h3>
+<span class="badge badge-version">v0.6.0</span>        </div>
+        <p class="ns mono">https://www.epistemic-ontology.net/record#</p>
+        <p class="card-body">A domain-neutral ontology of warranted record-structure — how agents warrant, compose, ground and revise records. It models the connective grammar of knowledge, not the things known.</p>
+        <dl class="card-stats">
+          <div><dt>Prefix</dt><dd class="mono">rec:</dd></div>
+          <div><dt>Classes</dt><dd>6</dd></div>
+          <div><dt>Properties</dt><dd>14</dd></div>
+        </dl>
+        <div class="meta">
+<span class="badge">OWL 2 DL</span><span class="badge">reasoner-validated</span><span class="badge">one class</span>        </div>
+      </article>
+      <article class="card card-companion">
+        <div class="card-head">
+          <h3><a href="/arith/">Arithmetic Companion</a></h3>
+<span class="badge badge-version">v0.1.0</span>        </div>
+        <p class="ns mono">https://www.epistemic-ontology.net/arith#</p>
+        <p class="card-body">The formal object face, at representative scope: arithmetic operations in a definitional hierarchy bottoming at Peano, and expressions as formal Records composed of Records. A companion to the Record Ontology — attached, never absorbed.</p>
+        <dl class="card-stats">
+          <div><dt>Prefix</dt><dd class="mono">arith:</dd></div>
+          <div><dt>Classes</dt><dd>6</dd></div>
+          <div><dt>Properties</dt><dd>10</dd></div>
+        </dl>
+        <div class="meta">
+<span class="badge">OWL 2 DL</span><span class="badge">companion</span><span class="badge">representative</span>        </div>
+      </article>
+      <article class="card">
+        <div class="card-head">
+          <h3><a href="/record-harm/">Record Harm Ontology</a></h3>
+<span class="badge badge-version">v2.3</span>        </div>
+        <p class="ns mono">https://www.epistemic-ontology.net/record-harm#</p>
+        <p class="card-body">A taxonomy of the ways an informational record can be damaged — prime harms (destruction, fabrication, alteration, omission, denial) and the composites built upon them — with SKOS vocabularies, SHACL validation and an event layer for specific occurrences.</p>
+        <dl class="card-stats">
+          <div><dt>Prefix</dt><dd class="mono">rho:</dd></div>
+          <div><dt>Classes</dt><dd>7</dd></div>
+          <div><dt>Properties</dt><dd>10</dd></div>
+        </dl>
+        <div class="meta">
+<span class="badge">OWL 2 DL</span><span class="badge">SKOS</span><span class="badge">SHACL</span>        </div>
+      </article>
     </div>
-  </main>
+  </div>
+</section>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <span>© 2026 Ron Hinchley · Epistemic Ontology</span>
-      <span><a href="/">epistemic-ontology.net</a></span>
+<section class="band band-alt">
+  <div class="wrap">
+    <h2 class="section-title">How the pieces fit</h2>
+    <p class="section-note">
+      One core vocabulary, one companion that plugs into it, and one sibling that
+      reads the same web from the other side.
+    </p>
+    <figure class="diagram">
+      <svg viewBox="0 0 720 250" role="img" aria-labelledby="diagram-title diagram-desc">
+        <title id="diagram-title">Relationships between the published ontologies</title>
+        <desc id="diagram-desc">
+          The Arithmetic Companion imports the Record Ontology. The Record Harm
+          Ontology names the act and the actor; the Record Ontology computes the
+          incoherence. Both are readings of the same record web.
+        </desc>
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+                  markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" class="d-arrow"/>
+          </marker>
+        </defs>
+
+        <rect class="d-box d-core" x="255" y="95" width="210" height="62" rx="10"/>
+        <text class="d-label" x="360" y="120" text-anchor="middle">Record Ontology</text>
+        <text class="d-sub" x="360" y="139" text-anchor="middle">rec: — the one class</text>
+
+        <rect class="d-box" x="25" y="95" width="180" height="62" rx="10"/>
+        <text class="d-label" x="115" y="120" text-anchor="middle">Arithmetic Companion</text>
+        <text class="d-sub" x="115" y="139" text-anchor="middle">arith: — the formal object face</text>
+
+        <rect class="d-box" x="515" y="95" width="180" height="62" rx="10"/>
+        <text class="d-label" x="605" y="120" text-anchor="middle">Record Harm</text>
+        <text class="d-sub" x="605" y="139" text-anchor="middle">rho: — act-shaped damage</text>
+
+        <line class="d-edge" x1="207" y1="126" x2="251" y2="126" marker-end="url(#arrow)"/>
+        <text class="d-edge-label" x="229" y="112" text-anchor="middle">imports</text>
+
+        <line class="d-edge d-dashed" x1="469" y1="126" x2="511" y2="126"
+              marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+        <text class="d-edge-label" x="490" y="112" text-anchor="middle">dictionary</text>
+
+        <text class="d-caption" x="360" y="196" text-anchor="middle">
+          attached, never absorbed — a domain vocabulary plugs in through warrant
+        </text>
+        <text class="d-caption" x="360" y="216" text-anchor="middle">
+          this web computes the incoherence; record-harm names the act and the actor
+        </text>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 class="section-title">Latest notes</h2>
+      <a class="more" href="/blog/">All notes <span aria-hidden="true">→</span></a>
     </div>
-  </footer>
+    <ul class="post-list">
+      <li class="post-item">
+        <time datetime="2026-07-30">30 July 2026</time>
+        <h3><a href="/blog/born-at-a-permanent-address/">Born at a permanent address</a></h3>
+        <p>Why the Record Ontology never had an example.org placeholder, what the redirect chain under this site actually does, and why a 303 is the right answer to a namespace IRI.</p>
+      </li>
+      <li class="post-item">
+        <time datetime="2026-07-30">30 July 2026</time>
+        <h3><a href="/blog/the-carrier-dissolved/">The carrier, dissolved</a></h3>
+        <p>v0.5.0 removed a class rather than adding one. What carries the carrier turned out to be the wrong question — the regress halts in a warrant, not in a thing, and the cogito is a pattern rather than a class.</p>
+      </li>
+      <li class="post-item">
+        <time datetime="2026-07-30">30 July 2026</time>
+        <h3><a href="/blog/exercise-or-exorcise/">Exercise or exorcise</a></h3>
+        <p>v0.6.0 added one datatype property and a discipline that goes with it. Formal warrant is a claim, not a credential: run the description or hold the record testimonially — and be honest about which.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="band band-alt">
+  <div class="wrap prose">
+    <h2 id="a-narrow-durable-goal">A narrow, durable goal</h2>
+<p>A handful of carefully engineered, inter-operable vocabularies, each published at
+a permanent address so it can be cited, imported and dereferenced for decades.
+Vocabularies here favour OWL 2 DL where reasoning matters, SKOS where a
+controlled vocabulary is enough, and SHACL for closed-world validation.</p>
+<p>Two commitments shape everything published under this namespace:</p>
+<p><strong>IRIs are permanent from birth.</strong> No <code>example.org</code> placeholder that has to be
+migrated later, taking every downstream adopter with it. The cost of that lesson
+is visible on this very site — the Record Harm Ontology is still served through a
+rewrite because it was drafted under a placeholder, while the Record Ontology,
+born at its final address, is byte-identical to its source.</p>
+<p><strong>Documentation and RDF live at the same address.</strong> Every namespace IRI
+content-negotiates: a browser gets a page, a reasoner gets Turtle, and the
+fragment identifiers resolve client-side out of one document.</p>
+<p><a href="/using/">How to use a vocabulary →</a> · <a href="/about/">About this namespace →</a></p>
+
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-brand">Epistemic Ontology</p>
+      <p class="footer-note">Formal vocabularies for knowledge and record.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Secondary">
+      <a href="/feed.xml">Atom feed</a>
+      <a href="/sitemap.xml">Sitemap</a>
+      <a href="https://github.com/commuted/record-ontology">Source</a>
+    </nav>
+    <p class="footer-copy">© 2026 Ron Hinchley</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.theme-toggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var dark = getComputedStyle(root).getPropertyValue('--is-dark').trim() === '1';
+    var next = dark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>
 </body>
 </html>

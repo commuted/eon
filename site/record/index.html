@@ -1,131 +1,437 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="auto">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Record Ontology — Epistemic Ontology</title>
-  <meta name="description" content="A domain-neutral OWL 2 DL ontology of warranted record-structure: one class (Record), a warrant triad, inference as a derivation DAG, and the cogito as a self-verifying pattern.">
-  <link rel="stylesheet" href="/style.css">
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Record Ontology — Epistemic Ontology</title>
+<meta name="description" content="A domain-neutral ontology of warranted record-structure — how agents warrant, compose, ground and revise records. It models the connective grammar of knowledge, not the things known.">
+<link rel="canonical" href="https://epistemic-ontology.net/record/">
+<meta name="author" content="Ron Hinchley">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Epistemic Ontology">
+<meta property="og:title" content="Record Ontology">
+<meta property="og:description" content="A domain-neutral ontology of warranted record-structure — how agents warrant, compose, ground and revise records. It models the connective grammar of knowledge, not the things known.">
+<meta property="og:url" content="https://epistemic-ontology.net/record/">
+<meta property="og:image" content="https://epistemic-ontology.net/logo.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Epistemic Ontology — Notes" href="/feed.xml">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Dataset", "creator": {"@type": "Person", "name": "Ron Hinchley"}, "description": "A domain-neutral ontology of warranted record-structure \u2014 how agents warrant, compose, ground and revise records. It models the connective grammar of knowledge, not the things known.", "encodingFormat": "text/turtle", "identifier": "https://www.epistemic-ontology.net/record#", "license": "http://creativecommons.org/licenses/by/4.0/", "name": "Record Ontology", "url": "https://epistemic-ontology.net/record/", "version": "0.6.0"}
+</script>
+<script>
+  // Set the theme before first paint so there is no flash. Progressive: with
+  // JS off the page falls back to prefers-color-scheme in the stylesheet.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
 </head>
-<body>
-  <header class="site-header">
-    <div class="wrap">
-      <div class="brand"><a href="/" style="color:inherit"><img class="brand-mark" src="/apple-touch-icon.png" alt="" width="30" height="30">Epistemic<span>Ontology</span></a></div>
-      <nav class="nav">
-        <a href="/">Ontologies</a>
-        <a href="#download">Download</a>
-        <a href="#terms">Terms</a>
-      </nav>
+<body class="doc">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="/apple-touch-icon.png" alt="" width="32" height="32" decoding="async">
+      <span class="brand-text">Epistemic<span class="brand-accent">Ontology</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/#ontologies">Ontologies</a>
+      <a href="/blog/">Notes</a>
+      <a href="/using/">Using</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4Z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap doc-head">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">Ontologies</a> <span aria-hidden="true">/</span> <span>Record Ontology</span>
+  </nav>
+  <h1>Record Ontology</h1>
+  <p class="lead">A domain-neutral ontology of warranted record-structure — how agents warrant, compose, ground and revise records. It models the connective grammar of knowledge, not the things known.</p>
+  <div class="meta">
+<span class="badge badge-version">v0.6.0</span><span class="badge">OWL 2 DL</span><span class="badge">reasoner-validated</span><span class="badge">one class</span>  </div>
+  <p class="version-note"><strong>This release:</strong> rec:formulation (the form as held, first datatype property); exercise-or-exorcise discipline recorded (ROOT.md §15)</p>
+</div>
+
+<div class="wrap doc-layout">
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <h2 class="sidebar-title">At a glance</h2>
+      <dl class="facts">
+        <dt>Namespace</dt><dd class="mono wrap-anywhere">https://www.epistemic-ontology.net/record#</dd>
+        <dt>Prefix</dt><dd class="mono">rec:</dd>
+        <dt>Classes</dt><dd>6</dd>
+        <dt>Properties</dt>
+        <dd>14
+          <span class="dim">(13 object,
+          1 data)</span></dd>
+        <dt>Individuals</dt><dd>6</dd>
+        <dt>Triples</dt><dd>135</dd>
+        <dt>Source</dt>
+        <dd><a href="https://github.com/commuted/record-ontology">commuted/record-ontology</a></dd>
+        <dt>Licence</dt><dd><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></dd>
+      </dl>
     </div>
-  </header>
 
-  <main>
-    <div class="wrap">
-      <a class="back" href="/">← All ontologies</a>
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        <li><a href="#downloads">Downloads</a></li>
+        <li class="toc-l2"><a href="#namespace">Namespace</a></li>
+        <li class="toc-l2"><a href="#the-founding-constraint">The founding constraint</a></li>
+        <li class="toc-l2"><a href="#the-one-class-and-the-one-non-record">The one class, and the one non-record</a></li>
+        <li class="toc-l2"><a href="#warrant-a-triad-one-value-per-limit">Warrant — a triad, one value per limit</a></li>
+        <li class="toc-l2"><a href="#inference-support-metadata">Inference, support, metadata</a></li>
+        <li class="toc-l2"><a href="#exercise-or-exorcise">Exercise or exorcise</a></li>
+        <li class="toc-l2"><a href="#the-engine-dynamics-over-the-statics">The engine — dynamics over the statics</a></li>
+        <li class="toc-l2"><a href="#stance-between-the-owldl-and-skos-camps">Stance: between the OWL/DL and SKOS camps</a></li>
+        <li class="toc-l2"><a href="#validation">Validation</a></li>
+        <li class="toc-l2"><a href="#status-and-open-items">Status and open items</a></li>
+        <li><a href="#cite">Cite</a></li>
+      </ol>
+    </nav>
+  </aside>
 
-      <section class="hero" style="padding-top:1rem">
-        <h1>Record Ontology</h1>
-        <p class="lead">
-          A domain-neutral ontology of <em>warranted record-structure</em> — how
-          agents warrant, compose, ground, and revise records. It models the
-          connective grammar of knowledge, <em>not</em> the things known.
-        </p>
-        <p style="margin-top:1rem">
-          <span class="badge">OWL 2 DL</span>
-          <span class="badge">reasoner-validated</span>
-          <span class="badge muted">version 0.5.0</span>
-        </p>
-      </section>
-
-      <section>
-        <h2>Namespace</h2>
-        <p>The base IRI for all terms is:</p>
-        <pre><code>https://www.epistemic-ontology.net/record#</code></pre>
-        <p>
-          A hash namespace: dereferencing any term — for example
-          <code>…/record#SelfVerifying</code> — returns the whole ontology document.
-          The recommended prefix is <code>rec:</code>.
-        </p>
-      </section>
-
-      <section id="download">
-        <h2>Download &amp; content negotiation</h2>
-        <p>
-          The namespace IRI serves human documentation or machine RDF depending on the
-          <code>Accept</code> header. The serializations are also available directly:
-        </p>
-        <table>
-          <tr><th>Resource</th><th>Media type</th><th>URL</th></tr>
-          <tr><td>Ontology</td><td><code>text/turtle</code></td><td><a href="/record/record-ontology.ttl">record-ontology.ttl</a></td></tr>
-          <tr><td>Example — narrative</td><td><code>text/turtle</code></td><td><a href="/record/historical-narrative.ttl">historical-narrative.ttl</a></td></tr>
-          <tr><td>Example — cogito</td><td><code>text/turtle</code></td><td><a href="/record/cogito.ttl">cogito.ttl</a></td></tr>
+  <article class="doc-body prose">
+    <section id="downloads">
+      <h2>Downloads</h2>
+      <p>
+        The namespace IRI content-negotiates: <code>Accept: text/html</code> returns
+        this page, any RDF media type returns the Turtle. Files are also served
+        directly, with CORS enabled so browser-based tooling can fetch them.
+      </p>
+      <div class="table-scroll">
+        <table class="files">
+          <thead>
+            <tr><th>Resource</th><th>File</th><th>Type</th><th>Size</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ontology</td>
+              <td><a class="mono" href="/record/record-ontology.ttl">record-ontology.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">18.3 kB</td>
+            </tr>
+            <tr>
+              <td>Example — the cogito</td>
+              <td><a class="mono" href="/record/examples/cogito.ttl">examples/cogito.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">3.5 kB</td>
+            </tr>
+            <tr>
+              <td>Example — narrative DAG</td>
+              <td><a class="mono" href="/record/examples/historical-narrative.ttl">examples/historical-narrative.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">5.6 kB</td>
+            </tr>
+            <tr>
+              <td>Example — Neptune</td>
+              <td><a class="mono" href="/record/examples/neptune-discovery.ttl">examples/neptune-discovery.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">15.6 kB</td>
+            </tr>
+            <tr>
+              <td>Example — the atom, 1885–1927</td>
+              <td><a class="mono" href="/record/examples/bohr-atom.ttl">examples/bohr-atom.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">21.3 kB</td>
+            </tr>
+            <tr>
+              <td>Example — triangle described</td>
+              <td><a class="mono" href="/record/examples/triangle-described.ttl">examples/triangle-described.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">5.3 kB</td>
+            </tr>
+            <tr>
+              <td>Example — the promontory</td>
+              <td><a class="mono" href="/record/examples/saccheri.ttl">examples/saccheri.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">7.7 kB</td>
+            </tr>
+            <tr>
+              <td>Example — the war on Mars</td>
+              <td><a class="mono" href="/record/examples/kepler-mars.ttl">examples/kepler-mars.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">9.8 kB</td>
+            </tr>
+            <tr>
+              <td>Example — escalation</td>
+              <td><a class="mono" href="/record/examples/cuban-missile.ttl">examples/cuban-missile.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">13.7 kB</td>
+            </tr>
+            <tr>
+              <td>Example — consent by omission</td>
+              <td><a class="mono" href="/record/examples/tonkin-consent.ttl">examples/tonkin-consent.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">10.8 kB</td>
+            </tr>
+            <tr>
+              <td>Example — arithmetic properties</td>
+              <td><a class="mono" href="/record/examples/arith-properties.ttl">examples/arith-properties.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">11.1 kB</td>
+            </tr>
+            <tr>
+              <td>Example — trigonometry</td>
+              <td><a class="mono" href="/record/examples/trig-basics.ttl">examples/trig-basics.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">7.2 kB</td>
+            </tr>
+            <tr>
+              <td>Example — orbital mechanics</td>
+              <td><a class="mono" href="/record/examples/orbital-mechanics.ttl">examples/orbital-mechanics.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">11.3 kB</td>
+            </tr>
+          </tbody>
         </table>
-        <pre><code>curl -H "Accept: text/turtle" https://www.epistemic-ontology.net/record</code></pre>
-      </section>
+      </div>
+      <pre class="language-bash"><code><span class="t-k">curl</span> -H <span class="t-s">"Accept: text/turtle"</span> https://epistemic-ontology.net/record</code></pre>
+    </section>
 
-      <section id="terms">
-        <h2>Core terms</h2>
+    <h2 id="namespace">Namespace</h2>
+<p>A <strong>hash namespace</strong>: dereferencing any term — say <code>…/record#SelfVerifying</code> —
+returns the whole ontology document, and your client resolves the fragment. The
+recommended prefix is <code>rec:</code>.</p>
+<pre class="language-turtle"><code><span class="t-k">@prefix</span> <span class="t-p">rec:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record#&gt;</span> .
+</code></pre>
+<p>Every worked example is dereferenceable too, under a systematic IRI:</p>
+<pre class="language-turtle"><code><span class="t-k">@prefix</span> <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record/examples/neptune-discovery#&gt;</span> .
+</code></pre>
+<h2 id="the-founding-constraint">The founding constraint</h2>
+<blockquote>
+<p>No class may be defined by a relation to an object that lies outside all
+records.</p>
+</blockquote>
+<p>This is the rule the whole ontology is shaped by. Records are named by what the
+agent holds — form, warrant, givenness, relations to other records, pragmatic
+adequacy — never by a certified correspondence to a thing-in-itself. It is built
+<strong>for an agent</strong> (a person or an AI) and never steps outside one.</p>
+<h2 id="the-one-class-and-the-one-non-record">The one class, and the one non-record</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rec:Record</code></td>
+<td>The single class — a form, in a carrier, for an agent, at a level of abstraction. Records are made of Records.</td>
+</tr>
+<tr>
+<td><code>rec:Continuum</code></td>
+<td>The one thing that is <em>not</em> a record: the undivided ground a record's support is individuated from (<code>rec:TheContinuum</code>; disjoint from <code>rec:Record</code>).</td>
+</tr>
+<tr>
+<td><code>rec:Agent</code></td>
+<td>A person or an AI — the one a record is <em>for</em>, and the one who individuates a record's support from the Continuum.</td>
+</tr>
+</tbody>
+</table>
+<p>There is deliberately <strong>no <code>Form</code> class</strong>. The form-in-itself is no more
+available to an agent than the thing-in-itself; a <code>Form</code> class would be the
+<em>formal apple</em>. Everything an agent holds is a Record.</p>
+<h2 id="warrant-a-triad-one-value-per-limit">Warrant — a triad, one value per limit</h2>
+<p>Warrant is an <strong>attribute, not a kind</strong>, so patchworks decompose: a real
+artifact is formal at some joints and conventional at others.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>True in virtue of</th>
+<th>Reaches toward</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rec:Formal</code></td>
+<td>form — deductive; the triangle verifies itself</td>
+<td>the form-in-itself <em>(excluded)</em></td>
+</tr>
+<tr>
+<td><code>rec:Empirical</code></td>
+<td>givenness — the senses, an instrument; defeasible</td>
+<td>the world-in-itself <em>(excluded)</em></td>
+</tr>
+<tr>
+<td><code>rec:SelfVerifying</code></td>
+<td>the act of recording — the cogito</td>
+<td>the Agent-in-itself — <strong>not</strong> excluded</td>
+</tr>
+</tbody>
+</table>
+<p>Two limits are excluded and never instantiated as classes. The third is not:
+the Agent is the one thing given to itself, and self-verifying warrant is
+exactly the warrant that reaches it.</p>
+<h2 id="inference-support-metadata">Inference, support, metadata</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rec:Inference</code></td>
+<td><strong>Defined</strong>, never a primitive kind: a Record with <code>rec:hasPremise</code> and <code>rec:concludes</code>. Carries a <code>rec:hasForce</code> — truth-preserving or ampliative. Chains form a derivation DAG.</td>
+</tr>
+<tr>
+<td><code>rec:hasProvenance</code> · <code>rec:hasLocus</code></td>
+<td>The dissolved <em>carrier</em>: provenance (whence) plus locus (where/when, agent-relative). There is no <code>Carrier</code> class.</td>
+</tr>
+<tr>
+<td><code>rec:formulation</code></td>
+<td><strong>The form as held</strong> — the first datatype property (new in v0.6.0): a formula, a constraint list, a text. Opaque to the reasoner by design.</td>
+</tr>
+<tr>
+<td><code>rec:metadataOf</code></td>
+<td>A record about a record (sub-property of <code>rec:directedToward</code>). There is no metadata layer — only records directed at records.</td>
+</tr>
+<tr>
+<td>the cogito</td>
+<td>Not a class but a <strong>pattern</strong>: self-verifying warrant + reflexive provenance + self-directedness. It halts the support-regress in the <em>warrant</em>, not in a thing.</td>
+</tr>
+</tbody>
+</table>
+<p>The regress &quot;what carries the carrier?&quot; is not answered with another entity. It
+stops at a warrant. Credit Descartes for the existence, Hintikka for the
+warrant — and not the <em>res cogitans</em>: the cogito certifies <em>that</em> the agent is,
+never <em>what</em> it is.</p>
+<h2 id="exercise-or-exorcise">Exercise or exorcise</h2>
+<p><code>hasWarrant rec:Formal</code> is a <strong>claim</strong>, not a credential. A formally warranted
+record's <code>formulation</code> should be a <em>description</em> that can be run:</p>
+<blockquote>
+<p>claim → <strong>exercise</strong> (run the description) → confirmed <em>or</em> <strong>exorcised</strong></p>
+</blockquote>
+<p>Never exercised means testimonially held — which is how most mathematics is in
+fact carried. A failed exercise expels the <em>pretender</em>, not the record: the
+document survives, records about it survive, but it can no longer transmit
+support, and everything resting on it cascades away. Kempe's 1879 &quot;proof&quot; of the
+four-colour theorem stood eleven years until Heawood exercised it; as of 1885,
+trusting it was justified.</p>
+<h2 id="the-engine-dynamics-over-the-statics">The engine — dynamics over the statics</h2>
+<p>OWL DL is <strong>monotonic</strong>: it cannot retract. So all dynamics live in a
+computational layer <em>over</em> the static ontology — the <code>engine/</code> package in the
+source repository, never axioms in the Turtle. The same rule strikes twice, and
+symmetrically: <em>dynamics</em> live over the statics because DL is monotonic;
+<em>computation</em> lives over the statics because DL is decidable.</p>
+<ul>
+<li><strong>Revision log as the carrier of moments</strong> — an append-only stream of ground
+assertions, retractions and decisions. Log position is order-derived time, and
+any state is computable <em>as of any moment</em>. Derived records never enter the
+log; they regenerate by replay.</li>
+<li><strong>Forks and corroboration</strong> — structural detection deliberately over-detects,
+so rivalry is <em>declared</em>, as a logged decision. Corroboration is <strong>temporal</strong>:
+only empirical evidence first asserted <em>after</em> a fork opened can collapse it.
+The losing branch is eclipsed, never deleted.</li>
+<li><strong>Fidelity</strong> — not probability-of-truth (that would be the apple in numeric
+dress) but invariance under the web's own dynamics, computed from the ATMS
+label: a record's minimal environments. Scalars are purpose-relative
+projections.</li>
+<li><strong>Identification</strong> — rivals proven equivalent make the fork <em>dissolve</em> rather
+than collapse, and their environments pool. Matrix versus wave mechanics
+(1926) is the type case.</li>
+</ul>
+<h2 id="stance-between-the-owldl-and-skos-camps">Stance: between the OWL/DL and SKOS camps</h2>
+<p><strong>DL-in-form, ecumenical-in-content.</strong> Every concrete choice here is the DL
+choice: defined classes, reasoner re-derivation, <code>owl:disjointWith</code> with a
+consistency check, <code>rdfs:label</code> rather than <code>skos:prefLabel</code>, and a deliberate
+refusal to import SKOS because it is OWL Full.</p>
+<p>But the standing schism is demoted from a <em>choice of framework</em> to the
+<code>rec:hasWarrant</code> attribute: a DL hierarchy is a record warranted <strong>formally</strong>
+(subsumption); a thesaurus is one warranted <strong>empirically</strong> (community-fixed,
+defeasible — <code>skos:broader</code> is a curatorial edge, not a deductive one). A real
+scientific taxonomy is both. The ontology does not take a side; it represents
+the axis the camps fight over.</p>
+<h2 id="validation">Validation</h2>
+<pre class="language-bash"><code><span class="t-k">pip</span> install <span class="t-l">-r</span> requirements-dev.txt
+python scripts/validate.py
+</code></pre>
+<p>A pure-Python OWL 2 RL reasoner (<code>owlrl</code>, no Java) checks four things:</p>
+<ol>
+<li><strong>Defined-class entailment</strong> — strip the asserted <code>Inference</code> type and confirm
+the <em>definition</em> re-derives it, with a negative control.</li>
+<li><strong>Cogito pattern</strong> — the pattern holds, and a self-verifying <em>promise</em> is
+correctly <strong>not</strong> conflated with it.</li>
+<li><strong>Consistency</strong> — no individual is both <code>Record</code> and <code>Continuum</code>.</li>
+<li><strong>Sub-property entailment</strong> — every <code>metadataOf</code> edge entails <code>directedToward</code>.</li>
+</ol>
+<h2 id="status-and-open-items">Status and open items</h2>
+<p>The conceptual source of truth is <a href="https://github.com/commuted/record-ontology/blob/main/ROOT.md"><code>ROOT.md</code></a>
+in the source repository; this page summarises what is settled. Three markers
+run through it — <strong>settled</strong> (encoded in the Turtle), <strong>prototyped</strong> (working
+code in <code>engine/</code>), <strong>unbuilt</strong> (recorded as horizon).</p>
+<p>Known open items: composition transitivity is left off on purpose; the
+escalation and formation layer is recorded as horizon, not vocabulary; the
+knowledge-automaton — a groomed web whose formal interior regenerates by
+deduction — is an engine/asset question with no vocabulary proposed.</p>
 
-        <h3 style="margin-bottom:.3rem">The one class, and the one non-record</h3>
-        <table>
-          <tr><th>Term</th><th>Meaning</th></tr>
-          <tr><td><code>rec:Record</code></td><td>The single class — a form, in a carrier, for an agent, at a level of abstraction. Records are made of Records.</td></tr>
-          <tr><td><code>rec:Continuum</code></td><td>The one thing that is <em>not</em> a record: the undivided ground a record's support (its locus) is individuated from (<code>rec:TheContinuum</code>; disjoint from <code>rec:Record</code>).</td></tr>
-          <tr><td><code>rec:Agent</code></td><td>A person or an AI — the one a record is <em>for</em>, and the one who individuates a record's support from the Continuum.</td></tr>
-        </table>
 
-        <h3 style="margin-bottom:.3rem">Warrant — a triad, one value per limit</h3>
-        <table>
-          <tr><td><code>rec:Formal</code></td><td>True in virtue of form (deductive — the triangle verifies itself); reaches toward the form-in-itself.</td></tr>
-          <tr><td><code>rec:Empirical</code></td><td>True by givenness (the senses, an instrument); defeasible; reaches toward the world-in-itself.</td></tr>
-          <tr><td><code>rec:SelfVerifying</code></td><td>True in virtue of the act of recording (the cogito); reaches the Agent-in-itself — the one limit <em>not</em> excluded.</td></tr>
-        </table>
-
-        <h3 style="margin-bottom:.3rem">Inference, support, metadata</h3>
-        <table>
-          <tr><td><code>rec:Inference</code></td><td>Defined: a Record with <code>rec:hasPremise</code> and <code>rec:concludes</code>. Carries a <code>rec:hasForce</code> — truth-preserving or ampliative. Chains form a derivation DAG.</td></tr>
-          <tr><td><code>rec:hasProvenance</code> · <code>rec:hasLocus</code></td><td>The dissolved <em>carrier</em>: provenance (whence) + locus (where/when, agent-relative). There is no <code>Carrier</code> class.</td></tr>
-          <tr><td>the cogito</td><td>Not a class but a <em>pattern</em>: self-verifying warrant + reflexive provenance + self-directedness. It halts the support-regress in the warrant (credit Descartes for existence, Hintikka for the warrant — not the <em>res cogitans</em>).</td></tr>
-          <tr><td><code>rec:metadataOf</code></td><td>A record about a record (sub-property of <code>rec:directedToward</code>). There is no metadata layer — only records directed at records.</td></tr>
-        </table>
-
-        <h3 style="margin-bottom:.3rem">Stance</h3>
-        <p style="margin-top:.2rem">
-          DL-in-form, ecumenical-in-content: the OWL/DL ↔ SKOS schism is demoted to
-          the <code>rec:Warrant</code> attribute (formal = subsumption; empirical =
-          convention), not a choice of framework. The conceptual source of truth is
-          <code>ROOT.md</code> in the source repository.
-        </p>
-      </section>
-
-      <section>
-        <h2>Source &amp; citation</h2>
-        <p>
-          Source, rationale (<code>ROOT.md</code>), and issue tracker:
-          <a href="https://github.com/commuted/record-ontology">github.com/commuted/record-ontology</a>.
-          Released under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-          (ontology &amp; docs); scripts under MIT.
-        </p>
-        <pre><code>@misc{recordontology2026,
-  title   = {The Record Ontology: A Domain-Neutral Model of Warranted Record-Structure},
-  author  = {Hinchley, Ron},
-  year    = {2026},
-  version = {0.5.0},
-  url     = {https://www.epistemic-ontology.net/record}
+    <section id="cite">
+      <h2>Cite</h2>
+      <p>
+        Cite the namespace IRI, not a file path: the IRI is the permanent
+        identifier and will keep resolving as serializations change.
+      </p>
+      <pre class="language-bibtex"><code><span class="t-k">@misc</span>{recordontology2026,
+  <span class="t-p">title</span>   = <span class="t-s">{The Record Ontology: A Domain-Neutral Model of Warranted Record-Structure}</span>,
+  <span class="t-p">author</span>  = <span class="t-s">{Hinchley, Ron}</span>,
+  <span class="t-p">year</span>    = <span class="t-s">{2026}</span>,
+  <span class="t-p">version</span> = <span class="t-s">{0.6.0}</span>,
+  <span class="t-p">url</span>     = <span class="t-s">{https://epistemic-ontology.net/record}</span>
 }</code></pre>
-      </section>
-    </div>
-  </main>
+    </section>
+  </article>
+</div>
+</main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <span>© 2026 Ron Hinchley · Epistemic Ontology</span>
-      <span><a href="/record/">record</a></span>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-brand">Epistemic Ontology</p>
+      <p class="footer-note">Formal vocabularies for knowledge and record.</p>
     </div>
-  </footer>
+    <nav class="footer-nav" aria-label="Secondary">
+      <a href="/feed.xml">Atom feed</a>
+      <a href="/sitemap.xml">Sitemap</a>
+      <a href="https://github.com/commuted/record-ontology">Source</a>
+    </nav>
+    <p class="footer-copy">© 2026 Ron Hinchley</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.theme-toggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var dark = getComputedStyle(root).getPropertyValue('--is-dark').trim() === '1';
+    var next = dark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>
 </body>
 </html>

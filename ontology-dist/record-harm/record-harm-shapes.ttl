@@ -1,0 +1,120 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record-harm#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+
+# ============================================
+# Record Harm Ontology -- SHACL Validation Shapes
+# ============================================
+# Kept as a separate graph from the ontology itself (standard
+# practice: shapes are a validation concern, the ontology is a
+# modeling concern, and not every consumer of the ontology wants
+# or needs the shapes). Run against the ontology graph with any
+# SHACL engine, e.g. pyshacl.
+#
+# These shapes give CLOSED-WORLD, hard validation for things the
+# ontology can only express as OPEN-WORLD OWL axioms that a non-DL
+# tool may never evaluate -- e.g. ex:CompositeHarm's
+# owl:equivalentClass restriction documents the buildsUpon-cardinality
+# rule, but only a DL reasoner checks it. The shapes below check the
+# same rule (and a few more) as plain validation, which is exactly
+# what would have caught the v1 ex:Denial inconsistency without
+# needing a reasoner at all.
+
+ex:PrimeHarmShape a sh:NodeShape ;
+    sh:targetClass ex:PrimeHarm ;
+    sh:property [
+        sh:path ex:buildsUpon ;
+        sh:maxCount 0 ;
+        sh:message "A PrimeHarm must not build upon any other harm -- if it did, it would no longer be irreducible and belongs in CompositeHarm instead." ;
+    ] .
+
+ex:CompositeHarmShape a sh:NodeShape ;
+    sh:targetClass ex:CompositeHarm ;
+    sh:property [
+        sh:path ex:buildsUpon ;
+        sh:minCount 1 ;
+        sh:message "Every CompositeHarm must build upon at least one other harm (this is the exact rule v1's ex:Denial silently violated)." ;
+    ] .
+
+ex:RecordHarmAspectShape a sh:NodeShape ;
+    sh:targetClass ex:RecordHarm ;
+    sh:property [
+        sh:path ex:targetsAspect ;
+        sh:minCount 1 ;
+        sh:message "Every RecordHarm must target at least one RecordAspect -- a harm that attacks nothing isn't a harm." ;
+    ] .
+
+ex:RecordHarmClassificationShape a sh:NodeShape ;
+    sh:targetClass ex:RecordHarm ;
+    sh:xone (
+        [ sh:class ex:PrimeHarm ]
+        [ sh:class ex:CompositeHarm ]
+    ) ;
+    sh:message "Every RecordHarm must be classified as exactly one of PrimeHarm or CompositeHarm. The CompositeHarmShape/PrimeHarmShape above only fire once that classification has already happened -- this shape catches a RecordHarm that was typed but never classified at all, which neither of those shapes can see on its own." .
+
+ex:BuildsUponEndpointTypeShape a sh:NodeShape ;
+    sh:targetSubjectsOf ex:buildsUpon ;
+    sh:targetObjectsOf ex:buildsUpon ;
+    sh:class ex:RecordHarm ;
+    sh:message "Anything appearing as either side of buildsUpon must itself be typed RecordHarm. sh:targetClass-based shapes (everything above this one) only ever look at nodes already correctly typed; this shape instead starts from property USAGE, so it also catches a node that uses buildsUpon but was never given any RecordHarm typing in the first place." .
+
+ex:HarmEventShape a sh:NodeShape ;
+    sh:targetClass ex:HarmEvent ;
+    sh:property [
+        sh:path ex:ofType ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class ex:RecordHarm ;
+        sh:message "A HarmEvent must instantiate exactly one harm type." ;
+    ] ;
+    sh:property [
+        sh:path ex:harms ;
+        sh:minCount 1 ;
+        sh:class ex:Record ;
+        sh:message "A HarmEvent must harm at least one actual Record." ;
+    ] ;
+    sh:property [
+        sh:path ex:severity ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 10 ;
+        sh:maxCount 1 ;
+        sh:message "severity, if present, must be an integer from 1 to 10." ;
+    ] ;
+    sh:property [
+        sh:path dc:date ;
+        sh:datatype xsd:date ;
+        sh:maxCount 1 ;
+        sh:message "date, if present, must be a single xsd:date." ;
+    ] ;
+    sh:property [
+        sh:path ex:perpetrator ;
+        sh:minCount 0 ;
+        sh:name "perpetrator" ;
+        sh:description "Encouraged but not required. Deliberately uncapped (no sh:maxCount): joint actors, organization-plus-signer, and conspiracies are common real-world cases, so a hard maxCount 1 here would reject legitimate multi-perpetrator events." ;
+    ] .
+
+ex:HarmPatternShape a sh:NodeShape ;
+    sh:targetClass ex:HarmPattern ;
+    sh:property [
+        sh:path ex:includesHarm ;
+        sh:minCount 2 ;
+        sh:class ex:RecordHarm ;
+        sh:message "A HarmPattern must bundle at least two harm types -- a pattern of one thing is just that thing." ;
+    ] .
+
+ex:DetectabilityShape a sh:NodeShape ;
+    sh:targetClass ex:RecordHarm ;
+    sh:property [
+        sh:path ex:detectability ;
+        sh:maxCount 1 ;
+        sh:in ( ex:EasilyDetectable ex:ModeratelyDetectable ex:DifficultToDetect ) ;
+        sh:message "detectability, if present, must be exactly one of the three DetectabilityScheme concepts." ;
+    ] ;
+    sh:property [
+        sh:path ex:reversibility ;
+        sh:maxCount 1 ;
+        sh:in ( ex:Reversible ex:PartiallyReversible ex:Irreversible ) ;
+        sh:message "reversibility, if present, must be exactly one of the three ReversibilityScheme concepts." ;
+    ] .

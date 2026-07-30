@@ -1,127 +1,290 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="auto">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Record Harm Ontology — Epistemic Ontology</title>
-  <meta name="description" content="An OWL 2 DL ontology of the ways an informational record can be damaged: prime and composite harms, with SKOS vocabularies and SHACL validation.">
-  <link rel="stylesheet" href="/style.css">
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Record Harm Ontology — Epistemic Ontology</title>
+<meta name="description" content="A taxonomy of the ways an informational record can be damaged — prime harms (destruction, fabrication, alteration, omission, denial) and the composites built upon them — with SKOS vocabularies, SHACL validation and an event layer for specific occurrences.">
+<link rel="canonical" href="https://epistemic-ontology.net/record-harm/">
+<meta name="author" content="Ron Hinchley">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Epistemic Ontology">
+<meta property="og:title" content="Record Harm Ontology">
+<meta property="og:description" content="A taxonomy of the ways an informational record can be damaged — prime harms (destruction, fabrication, alteration, omission, denial) and the composites built upon them — with SKOS vocabularies, SHACL validation and an event layer for specific occurrences.">
+<meta property="og:url" content="https://epistemic-ontology.net/record-harm/">
+<meta property="og:image" content="https://epistemic-ontology.net/logo.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Epistemic Ontology — Notes" href="/feed.xml">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Dataset", "creator": {"@type": "Person", "name": "Ron Hinchley"}, "description": "A taxonomy of the ways an informational record can be damaged \u2014 prime harms (destruction, fabrication, alteration, omission, denial) and the composites built upon them \u2014 with SKOS vocabularies, SHACL validation and an event layer for specific occurrences.", "encodingFormat": "text/turtle", "identifier": "https://www.epistemic-ontology.net/record-harm#", "license": "http://creativecommons.org/licenses/by/4.0/", "name": "Record Harm Ontology", "url": "https://epistemic-ontology.net/record-harm/", "version": "2.3"}
+</script>
+<script>
+  // Set the theme before first paint so there is no flash. Progressive: with
+  // JS off the page falls back to prefers-color-scheme in the stylesheet.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
 </head>
-<body>
-  <header class="site-header">
-    <div class="wrap">
-      <div class="brand"><a href="/" style="color:inherit"><img class="brand-mark" src="/apple-touch-icon.png" alt="" width="30" height="30">Epistemic<span>Ontology</span></a></div>
-      <nav class="nav">
-        <a href="/">Ontologies</a>
-        <a href="#download">Download</a>
-        <a href="#terms">Terms</a>
-      </nav>
+<body class="doc">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="/apple-touch-icon.png" alt="" width="32" height="32" decoding="async">
+      <span class="brand-text">Epistemic<span class="brand-accent">Ontology</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/#ontologies">Ontologies</a>
+      <a href="/blog/">Notes</a>
+      <a href="/using/">Using</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4Z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap doc-head">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">Ontologies</a> <span aria-hidden="true">/</span> <span>Record Harm Ontology</span>
+  </nav>
+  <h1>Record Harm Ontology</h1>
+  <p class="lead">A taxonomy of the ways an informational record can be damaged — prime harms (destruction, fabrication, alteration, omission, denial) and the composites built upon them — with SKOS vocabularies, SHACL validation and an event layer for specific occurrences.</p>
+  <div class="meta">
+<span class="badge badge-version">v2.3</span><span class="badge">OWL 2 DL</span><span class="badge">SKOS</span><span class="badge">SHACL</span>  </div>
+</div>
+
+<div class="wrap doc-layout">
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <h2 class="sidebar-title">At a glance</h2>
+      <dl class="facts">
+        <dt>Namespace</dt><dd class="mono wrap-anywhere">https://www.epistemic-ontology.net/record-harm#</dd>
+        <dt>Prefix</dt><dd class="mono">rho:</dd>
+        <dt>Classes</dt><dd>7</dd>
+        <dt>Properties</dt>
+        <dd>10
+          <span class="dim">(9 object,
+          1 data)</span></dd>
+        <dt>Individuals</dt><dd>0</dd>
+        <dt>Triples</dt><dd>310</dd>
+        <dt>Source</dt>
+        <dd><a href="https://github.com/commuted/record-harm-ontology">commuted/record-harm-ontology</a></dd>
+        <dt>Licence</dt><dd><a href="https://opensource.org/licenses/MIT">MIT</a></dd>
+      </dl>
     </div>
-  </header>
 
-  <main>
-    <div class="wrap">
-      <a class="back" href="/">← All ontologies</a>
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        <li><a href="#downloads">Downloads</a></li>
+        <li class="toc-l2"><a href="#namespace">Namespace</a></li>
+        <li class="toc-l2"><a href="#prime-harms">Prime harms</a></li>
+        <li class="toc-l2"><a href="#composite-harms">Composite harms</a></li>
+        <li class="toc-l2"><a href="#layers">Layers</a></li>
+        <li class="toc-l2"><a href="#relation-to-the-record-ontology">Relation to the Record Ontology</a></li>
+        <li><a href="#cite">Cite</a></li>
+      </ol>
+    </nav>
+  </aside>
 
-      <section class="hero" style="padding-top:1rem">
-        <h1>Record Harm Ontology</h1>
-        <p class="lead">
-          A formal taxonomy of the ways an informational record can be damaged,
-          destroyed, or corrupted — distinguishing <em>prime</em> harms from the
-          <em>composite</em> harms that build upon them.
-        </p>
-        <p style="margin-top:1rem">
-          <span class="badge">OWL 2 DL</span>
-          <span class="badge">SKOS</span>
-          <span class="badge">SHACL</span>
-          <span class="badge muted">version 2.3</span>
-        </p>
-      </section>
-
-      <section>
-        <h2>Namespace</h2>
-        <p>The base IRI for all terms is:</p>
-        <pre><code>https://www.epistemic-ontology.net/record-harm#</code></pre>
-        <p>
-          A hash namespace: dereferencing any term — for example
-          <code>…/record-harm#Destruction</code> — returns the whole ontology
-          document. The recommended prefix is <code>rho:</code>.
-        </p>
-      </section>
-
-      <section id="download">
-        <h2>Download &amp; content negotiation</h2>
-        <p>
-          The namespace IRI serves human documentation or machine RDF depending on the
-          <code>Accept</code> header. The serializations are also available directly:
-        </p>
-        <table>
-          <tr><th>Format</th><th>Media type</th><th>URL</th></tr>
-          <tr><td>Turtle</td><td><code>text/turtle</code></td><td><a href="/record-harm/record-harm-ontology.ttl">record-harm-ontology.ttl</a></td></tr>
-          <tr><td>SHACL shapes</td><td><code>text/turtle</code></td><td><a href="/record-harm/record-harm-shapes.ttl">record-harm-shapes.ttl</a></td></tr>
-          <tr><td>Examples</td><td><code>text/turtle</code></td><td><a href="/record-harm/example-harm-events.ttl">example-harm-events.ttl</a></td></tr>
+  <article class="doc-body prose">
+    <section id="downloads">
+      <h2>Downloads</h2>
+      <p>
+        The namespace IRI content-negotiates: <code>Accept: text/html</code> returns
+        this page, any RDF media type returns the Turtle. Files are also served
+        directly, with CORS enabled so browser-based tooling can fetch them.
+      </p>
+      <div class="table-scroll">
+        <table class="files">
+          <thead>
+            <tr><th>Resource</th><th>File</th><th>Type</th><th>Size</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ontology</td>
+              <td><a class="mono" href="/record-harm/record-harm-ontology.ttl">record-harm-ontology.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">28.5 kB</td>
+            </tr>
+            <tr>
+              <td>SHACL shapes</td>
+              <td><a class="mono" href="/record-harm/record-harm-shapes.ttl">record-harm-shapes.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">5.1 kB</td>
+            </tr>
+            <tr>
+              <td>Example events</td>
+              <td><a class="mono" href="/record-harm/example-harm-events.ttl">example-harm-events.ttl</a></td>
+              <td class="mono dim">text/turtle</td>
+              <td class="dim">5.8 kB</td>
+            </tr>
+          </tbody>
         </table>
-        <pre><code>curl -H "Accept: text/turtle" https://www.epistemic-ontology.net/record-harm</code></pre>
-      </section>
+      </div>
+      <pre class="language-bash"><code><span class="t-k">curl</span> -H <span class="t-s">"Accept: text/turtle"</span> https://epistemic-ontology.net/record-harm</code></pre>
+    </section>
 
-      <section id="terms">
-        <h2>Core terms</h2>
+    <h2 id="namespace">Namespace</h2>
+<pre class="language-turtle"><code><span class="t-k">@prefix</span> <span class="t-p">rho:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span> .
+</code></pre>
+<p>A hash namespace: dereferencing any term — for example <code>…/record-harm#Destruction</code>
+— returns the whole ontology document.</p>
+<blockquote>
+<p><strong>Migration note.</strong> This vocabulary was drafted under the placeholder
+<code>http://example.org/record-harm-ontology#</code>. The copies served here are
+rewritten to the permanent base at staging time, and the build fails if any
+<code>example.org</code> IRI survives. Adopting the permanent base <em>in the source
+repository</em> is that ontology's own v3.0 decision.</p>
+</blockquote>
+<h2 id="prime-harms">Prime harms</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rho:Destruction</code></td>
+<td>Annihilation of the record — removes its existence.</td>
+</tr>
+<tr>
+<td><code>rho:Fabrication</code></td>
+<td>Creation of a record that never legitimately existed.</td>
+</tr>
+<tr>
+<td><code>rho:Alteration</code></td>
+<td>Modification of a genuine record's content or metadata.</td>
+</tr>
+<tr>
+<td><code>rho:Omission</code></td>
+<td>Deliberate exclusion of elements that should be present.</td>
+</tr>
+<tr>
+<td><code>rho:Denial</code></td>
+<td>Refusing to acknowledge a record's existence or validity.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="composite-harms">Composite harms</h2>
+<p>Built from primes via <code>rho:buildsUpon</code> — <code>rho:Repudiation</code>, for instance, builds
+upon <code>rho:Denial</code> and <code>rho:Fabrication</code>. Composite membership is
+reasoner-derivable: any harm with a <code>buildsUpon</code> edge. Note that <code>buildsUpon</code> is
+<strong>presupposition, not subsumption</strong>; transitivity was dropped deliberately to
+stay inside OWL 2 DL.</p>
+<h2 id="layers">Layers</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rho:RecordHarm</code></td>
+<td>The harm-type taxonomy (Prime / Composite).</td>
+</tr>
+<tr>
+<td><code>rho:HarmEvent</code></td>
+<td>A specific occurrence against a real record — date, perpetrator, severity.</td>
+</tr>
+<tr>
+<td><code>rho:HarmPattern</code></td>
+<td>A recurring bundle of co-occurring harms, such as a cover-up.</td>
+</tr>
+<tr>
+<td><code>rho:RecordAspect</code></td>
+<td>SKOS scheme of attacked aspects: existence, authenticity, integrity, accessibility, context, trustworthiness.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="relation-to-the-record-ontology">Relation to the Record Ontology</h2>
+<p>The two vocabularies are <strong>two readings of the same web</strong>, and the translation
+between them is written out in full as the harm dictionary in <code>ROOT.md</code> §18.</p>
+<p>Record-harm's primes are <strong>act-shaped</strong> — what a perpetrator does to an artifact.
+The Record Ontology's cuts are <strong>warrant-shaped</strong> — where in the web the
+incoherence lands. The spine of the dictionary is a single claim:</p>
+<blockquote>
+<p>Every prime harm is a legitimate web operation with its escalation record
+removed.</p>
+</blockquote>
+<p>Puncturing is a storage decision; destruction is the non-regenerable residue
+lost. Supposition is worn openly; fabrication is the pretender transmitting
+unearned warrant. Retraction appends a new moment; alteration rewrites an old
+one. A stub is a skip that became a record; omission is the skip left
+unrecorded. Exorcism withdraws standing by a verdict; denial refuses standing
+without one. The act was never the harm — concealment is.</p>
+<p>That is also why both survive. This web <strong>computes the incoherence</strong>;
+record-harm <strong>names the act and the actor</strong>. A <code>HarmEvent</code> has a perpetrator, a
+date and a severity — attribution content a court or an archive genuinely needs,
+and which the Record Ontology deliberately refuses to compute: there, harm is
+detected, never charged.</p>
+<p><a href="/blog/harm-is-an-operation-minus-its-record/">Read the note on the harm dictionary →</a></p>
 
-        <h3 style="margin-bottom:.3rem">Prime harms</h3>
-        <table>
-          <tr><th>Term</th><th>Meaning</th></tr>
-          <tr><td><code>rho:Destruction</code></td><td>Annihilation of the record — removes its existence.</td></tr>
-          <tr><td><code>rho:Fabrication</code></td><td>Creation of a record that never legitimately existed.</td></tr>
-          <tr><td><code>rho:Alteration</code></td><td>Modification of a genuine record's content or metadata.</td></tr>
-          <tr><td><code>rho:Omission</code></td><td>Deliberate exclusion of elements that should be present.</td></tr>
-          <tr><td><code>rho:Denial</code></td><td>Refusing to acknowledge a record's existence or validity.</td></tr>
-        </table>
 
-        <h3 style="margin-bottom:.3rem">Composite harms</h3>
-        <p style="margin-top:.2rem">
-          Built from primes via <code>rho:buildsUpon</code> — e.g.
-          <code>rho:Repudiation</code> builds upon <code>rho:Denial</code> and
-          <code>rho:Fabrication</code>. Composite membership is reasoner-derivable
-          (any harm with a <code>buildsUpon</code> edge). Note that
-          <code>buildsUpon</code> is presupposition, <em>not</em> subsumption.
-        </p>
-
-        <h3 style="margin-bottom:.3rem">Layers</h3>
-        <table>
-          <tr><td><code>rho:RecordHarm</code></td><td>The harm-type taxonomy (Prime / Composite).</td></tr>
-          <tr><td><code>rho:HarmEvent</code></td><td>A specific occurrence against a real record (date, perpetrator, severity).</td></tr>
-          <tr><td><code>rho:HarmPattern</code></td><td>A recurring bundle of co-occurring harms (e.g. a cover-up).</td></tr>
-          <tr><td><code>rho:RecordAspect</code></td><td>SKOS scheme of attacked aspects: existence, authenticity, integrity, accessibility, context, trustworthiness.</td></tr>
-        </table>
-      </section>
-
-      <section>
-        <h2>Source &amp; citation</h2>
-        <p>
-          Source, changelog, and issue tracker:
-          <a href="https://github.com/commuted/record-harm-ontology">github.com/commuted/record-harm-ontology</a>.
-          Released under the MIT License.
-        </p>
-        <pre><code>@misc{recordharmontology2026,
-  title   = {Record Harm Ontology: A Formal Model of Ontological Attacks on Information},
-  author  = {Hinchley, Ron},
-  year    = {2026},
-  version = {2.3},
-  url     = {https://www.epistemic-ontology.net/record-harm}
+    <section id="cite">
+      <h2>Cite</h2>
+      <p>
+        Cite the namespace IRI, not a file path: the IRI is the permanent
+        identifier and will keep resolving as serializations change.
+      </p>
+      <pre class="language-bibtex"><code><span class="t-k">@misc</span>{recordharmontology2026,
+  <span class="t-p">title</span>   = <span class="t-s">{Record Harm Ontology: A Formal Model of Ontological Attacks on Information}</span>,
+  <span class="t-p">author</span>  = <span class="t-s">{Hinchley, Ron}</span>,
+  <span class="t-p">year</span>    = <span class="t-s">{2026}</span>,
+  <span class="t-p">version</span> = <span class="t-s">{2.3}</span>,
+  <span class="t-p">url</span>     = <span class="t-s">{https://epistemic-ontology.net/record-harm}</span>
 }</code></pre>
-      </section>
-    </div>
-  </main>
+    </section>
+  </article>
+</div>
+</main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <span>© 2026 Ron Hinchley · Epistemic Ontology</span>
-      <span><a href="/record-harm/">record-harm</a></span>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-brand">Epistemic Ontology</p>
+      <p class="footer-note">Formal vocabularies for knowledge and record.</p>
     </div>
-  </footer>
+    <nav class="footer-nav" aria-label="Secondary">
+      <a href="/feed.xml">Atom feed</a>
+      <a href="/sitemap.xml">Sitemap</a>
+      <a href="https://github.com/commuted/record-ontology">Source</a>
+    </nav>
+    <p class="footer-copy">© 2026 Ron Hinchley</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.theme-toggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var dark = getComputedStyle(root).getPropertyValue('--is-dark').trim() === '1';
+    var next = dark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>
 </body>
 </html>

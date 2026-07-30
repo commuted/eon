@@ -1,0 +1,160 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/trig-basics#> .
+
+# ============================================================================
+# Basic Trigonometry: Fundamental identities and derivations
+# ============================================================================
+# Demonstrates the sidecar pattern for mathematical content:
+#   - Turtle defines structure (what depends on what)
+#   - Python sidecar (engine/trig_basics.py) provides executable content
+#   - Validation proves consistency between structure and execution
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/trig-basics>
+    a owl:Ontology ;
+    rdfs:comment "Basic trigonometry examples for the Record Ontology."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+# -- Agent --------------------------------------------------------------------
+ex:Mathematician a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "The Mathematician"@en .
+
+# -- Foundational Definitions (Grounds) ---------------------------------------
+
+ex:UnitCircleDefinition a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Unit circle definition of sine and cosine"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:formulation "For angle θ: sin(θ) = y-coordinate, cos(θ) = x-coordinate on unit circle"^^xsd:string ;
+    rdfs:comment "Foundational definition - a ground, not derived."@en .
+
+ex:TangentDefinition a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Definition of tangent"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:UnitCircleDefinition ;
+    rec:concludedBy ex:Inf_DefineTangent ;
+    rec:formulation "tan(θ) = sin(θ) / cos(θ)"^^xsd:string .
+
+ex:Inf_DefineTangent a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Define tangent from sine and cosine"@en ;
+    rec:hasPremise ex:UnitCircleDefinition ;
+    rec:concludes ex:TangentDefinition ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- Pythagorean Identity -----------------------------------------------------
+
+ex:PythagoreanIdentity a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Pythagorean identity: sin²(θ) + cos²(θ) = 1"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:UnitCircleDefinition ;
+    rec:concludedBy ex:Inf_DerivePythagorean ;
+    rec:formulation "sin²(θ) + cos²(θ) = 1"^^xsd:string ;
+    rdfs:comment "Follows from x² + y² = 1 on the unit circle."@en .
+
+ex:Inf_DerivePythagorean a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Derive Pythagorean identity from unit circle"@en ;
+    rec:hasPremise ex:UnitCircleDefinition ;
+    rec:concludes ex:PythagoreanIdentity ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- Addition Formulas --------------------------------------------------------
+
+ex:SineAdditionFormula a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Sine addition formula"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:UnitCircleDefinition ;
+    rec:concludedBy ex:Inf_DeriveSineAddition ;
+    rec:formulation "sin(α + β) = sin(α)cos(β) + cos(α)sin(β)"^^xsd:string .
+
+ex:Inf_DeriveSineAddition a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Derive sine addition formula"@en ;
+    rec:hasPremise ex:UnitCircleDefinition ;
+    rec:concludes ex:SineAdditionFormula ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:CosineAdditionFormula a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Cosine addition formula"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:UnitCircleDefinition ;
+    rec:concludedBy ex:Inf_DeriveCosineAddition ;
+    rec:formulation "cos(α + β) = cos(α)cos(β) - sin(α)sin(β)"^^xsd:string .
+
+ex:Inf_DeriveCosineAddition a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Derive cosine addition formula"@en ;
+    rec:hasPremise ex:UnitCircleDefinition ;
+    rec:concludes ex:CosineAdditionFormula ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- Double Angle Formulas (Derived from Addition) ---------------------------
+
+ex:SineDoubleAngle a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Sine double angle: sin(2θ) = 2sin(θ)cos(θ)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:SineAdditionFormula ;
+    rec:concludedBy ex:Inf_DeriveSineDoubleAngle ;
+    rec:formulation "sin(2θ) = 2sin(θ)cos(θ)"^^xsd:string .
+
+ex:Inf_DeriveSineDoubleAngle a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Derive sin(2θ) from addition formula"@en ;
+    rec:hasPremise ex:SineAdditionFormula ;
+    rec:concludes ex:SineDoubleAngle ;
+    rec:hasForce rec:TruthPreserving ;
+    rdfs:comment "Set α = β = θ in sin(α + β)."@en .
+
+ex:CosineDoubleAngle a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Cosine double angle: cos(2θ) = cos²(θ) - sin²(θ)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:CosineAdditionFormula ;
+    rec:concludedBy ex:Inf_DeriveCosineDoubleAngle ;
+    rec:formulation "cos(2θ) = cos²(θ) - sin²(θ)"^^xsd:string .
+
+ex:Inf_DeriveCosineDoubleAngle a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Derive cos(2θ) from addition formula"@en ;
+    rec:hasPremise ex:CosineAdditionFormula ;
+    rec:concludes ex:CosineDoubleAngle ;
+    rec:hasForce rec:TruthPreserving ;
+    rdfs:comment "Set α = β = θ in cos(α + β)."@en .
+
+# -- Alternative Forms (Using Pythagorean Identity) ---------------------------
+
+ex:CosineDoubleAngleAlt1 a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Cosine double angle (alt 1): cos(2θ) = 2cos²(θ) - 1"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:CosineDoubleAngle ;
+    rec:hasPremise ex:PythagoreanIdentity ;
+    rec:concludedBy ex:Inf_DeriveCosineDoubleAngleAlt1 ;
+    rec:formulation "cos(2θ) = 2cos²(θ) - 1"^^xsd:string .
+
+ex:Inf_DeriveCosineDoubleAngleAlt1 a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Derive alternative form using sin²(θ) = 1 - cos²(θ)"@en ;
+    rec:hasPremise ex:CosineDoubleAngle ;
+    rec:hasPremise ex:PythagoreanIdentity ;
+    rec:concludes ex:CosineDoubleAngleAlt1 ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:CosineDoubleAngleAlt2 a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Cosine double angle (alt 2): cos(2θ) = 1 - 2sin²(θ)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:CosineDoubleAngle ;
+    rec:hasPremise ex:PythagoreanIdentity ;
+    rec:concludedBy ex:Inf_DeriveCosineDoubleAngleAlt2 ;
+    rec:formulation "cos(2θ) = 1 - 2sin²(θ)"^^xsd:string .
+
+ex:Inf_DeriveCosineDoubleAngleAlt2 a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Derive alternative form using cos²(θ) = 1 - sin²(θ)"@en ;
+    rec:hasPremise ex:CosineDoubleAngle ;
+    rec:hasPremise ex:PythagoreanIdentity ;
+    rec:concludes ex:CosineDoubleAngleAlt2 ;
+    rec:hasForce rec:TruthPreserving .

@@ -1,0 +1,34 @@
+# Global site configuration. Everything here is prose or policy; nothing that
+# can be read off the RDF belongs in this file (build.py extracts versions,
+# titles, licences and term counts from ontology-dist/*.ttl directly).
+
+title: Epistemic Ontology
+short_title: EpistemicOntology
+tagline: Formal vocabularies for knowledge and record.
+base_url: https://epistemic-ontology.net
+description: >-
+  Epistemic Ontology publishes formal, dereferenceable OWL 2 DL and SKOS
+  vocabularies for reasoning about knowledge, records, and the ways they can
+  be harmed. Every term has a stable IRI under epistemic-ontology.net.
+
+author:
+  name: Ron Hinchley
+  url: https://github.com/commuted
+
+blog_title: Notes
+blog_description: >-
+  Working notes on the ontologies published here — design decisions, the
+  reasoning behind them, and what breaks when they are wrong.
+
+repo: https://github.com/commuted/record-ontology
+
+nav:
+  - { title: Ontologies, url: /#ontologies }
+  - { title: Notes, url: /blog/ }
+  - { title: Using, url: /using/ }
+  - { title: About, url: /about/ }
+
+footer_links:
+  - { title: Atom feed, url: /feed.xml }
+  - { title: Sitemap, url: /sitemap.xml }
+  - { title: Source, url: "https://github.com/commuted/record-ontology" }

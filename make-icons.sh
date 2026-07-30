@@ -4,7 +4,8 @@
 # The master (./logo.png) is the full lockup: the disc emblem (vinyl + node
 # graph) over the "epistemic-ontology.net" wordmark and tagline. This script
 # crops the emblem (the non-text mark) for the favicons and produces a
-# web-sized, palette-optimised logo for the pages.
+# web-sized, palette-optimised logo for the pages. Output lands in static/,
+# which build.py copies into the site tree (site/ is disposable build output).
 #
 # Re-run after changing logo.png. Needs Pillow + numpy.
 set -euo pipefail
@@ -36,9 +37,9 @@ emblem = im.crop((max(0, cx - half), max(0, cy - half),
 
 for sz, name in [(16, 'favicon-16.png'), (32, 'favicon-32.png'),
                  (180, 'apple-touch-icon.png')]:
-    emblem.resize((sz, sz), Image.LANCZOS).save(f'site/{name}')
+    emblem.resize((sz, sz), Image.LANCZOS).save(f'static/{name}')
 emblem.resize((64, 64), Image.LANCZOS).save(
-    'site/favicon.ico', sizes=[(16, 16), (32, 32), (48, 48)])
+    'static/favicon.ico', sizes=[(16, 16), (32, 32), (48, 48)])
 
 # web logo: trim to content, downscale, palette-optimise
 inv = Image.eval(im.convert('L'), lambda p: 255 - p)
@@ -46,6 +47,6 @@ bx = inv.getbbox(); m = 24
 logo = im.crop((max(0, bx[0] - m), max(0, bx[1] - m),
                 min(W, bx[2] + m), min(H, bx[3] + m)))
 logo.thumbnail((700, 700), Image.LANCZOS)
-logo.convert('P', palette=Image.ADAPTIVE, colors=64).save('site/logo.png', optimize=True)
-print('regenerated: site/{logo,favicon-16,favicon-32,apple-touch-icon}.png, site/favicon.ico')
+logo.convert('P', palette=Image.ADAPTIVE, colors=64).save('static/logo.png', optimize=True)
+print('regenerated: static/{logo,favicon-16,favicon-32,apple-touch-icon}.png, static/favicon.ico')
 PY

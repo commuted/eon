@@ -1,0 +1,155 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record-harm#> .
+@prefix dc:   <http://purl.org/dc/terms/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# ============================================
+# Example Harm Events
+# ============================================
+# Demonstrates how to model specific occurrences of harms
+# against actual records using the HarmEvent class.
+
+# ---- Example Records ----
+
+ex:AuditLog2026Q2 a ex:Record ;
+    rdfs:label "Q2 2026 Financial Audit Log" ;
+    dc:created "2026-04-01"^^xsd:date ;
+    dc:description "Quarterly financial audit trail for April-June 2026" .
+
+ex:EmailThread47 a ex:Record ;
+    rdfs:label "Email Thread #47: Project Alpha Discussion" ;
+    dc:created "2026-03-15"^^xsd:date ;
+    dc:description "Email correspondence regarding Project Alpha budget allocation" .
+
+ex:MeetingMinutes2026_05_10 a ex:Record ;
+    rdfs:label "Board Meeting Minutes - May 10, 2026" ;
+    dc:created "2026-05-10"^^xsd:date ;
+    dc:description "Official minutes from quarterly board meeting" .
+
+# ---- Example Agents ----
+
+ex:JohnDoe a ex:Agent ;
+    rdfs:label "John Doe" ;
+    rdfs:comment "Former IT administrator" .
+
+ex:JaneSmith a ex:Agent ;
+    rdfs:label "Jane Smith" ;
+    rdfs:comment "External consultant" .
+
+ex:UnknownAgent a ex:Agent ;
+    rdfs:label "Unknown Agent" ;
+    rdfs:comment "Identity not determined" .
+
+# ---- Example Harm Events ----
+
+ex:Event001_Destruction a ex:HarmEvent ;
+    rdfs:label "Destruction of Q2 Audit Log" ;
+    ex:ofType ex:Destruction ;
+    ex:harms ex:AuditLog2026Q2 ;
+    dc:date "2026-06-15"^^xsd:date ;
+    ex:perpetrator ex:JohnDoe ;
+    ex:severity 9 ;
+    rdfs:comment "Audit log was permanently deleted from backup systems during investigation period. High severity due to regulatory implications." .
+
+ex:Event002_Alteration a ex:HarmEvent ;
+    rdfs:label "Alteration of Email Thread" ;
+    ex:ofType ex:Alteration ;
+    ex:harms ex:EmailThread47 ;
+    dc:date "2026-03-20"^^xsd:date ;
+    ex:perpetrator ex:JaneSmith ;
+    ex:severity 6 ;
+    rdfs:comment "Budget figures in email thread were modified after initial send. Detected through hash mismatch." .
+
+ex:Event003_Suppression a ex:HarmEvent ;
+    rdfs:label "Suppression of Meeting Minutes" ;
+    ex:ofType ex:Suppression ;
+    ex:harms ex:MeetingMinutes2026_05_10 ;
+    dc:date "2026-05-12"^^xsd:date ;
+    ex:perpetrator ex:UnknownAgent ;
+    ex:severity 7 ;
+    rdfs:comment "Meeting minutes were moved to restricted access folder, preventing normal circulation to stakeholders." .
+
+ex:Event004_Fabrication a ex:HarmEvent ;
+    rdfs:label "Fabrication of Approval Document" ;
+    ex:ofType ex:Fabrication ;
+    ex:harms ex:FakeApprovalDoc ;
+    dc:date "2026-04-05"^^xsd:date ;
+    ex:perpetrator ex:JaneSmith ;
+    ex:severity 8 ;
+    rdfs:comment "Forged approval document created with backdated signature. Discovered during routine audit." .
+
+ex:FakeApprovalDoc a ex:Record ;
+    rdfs:label "Fabricated Approval Document" ;
+    dc:created "2026-04-05"^^xsd:date ;
+    rdfs:comment "This record itself is fabricated - it never legitimately existed" .
+
+ex:Event005_Denial a ex:HarmEvent ;
+    rdfs:label "Denial of Email Thread Authenticity" ;
+    ex:ofType ex:Denial ;
+    ex:harms ex:EmailThread47 ;
+    dc:date "2026-03-25"^^xsd:date ;
+    ex:perpetrator ex:JaneSmith ;
+    ex:severity 4 ;
+    rdfs:comment "Consultant publicly denied sending the emails despite DKIM verification. Email remained accessible but legitimacy was contested." .
+
+ex:Event006_Contamination a ex:HarmEvent ;
+    rdfs:label "Contamination of Audit Log Backup" ;
+    ex:ofType ex:Contamination ;
+    ex:harms ex:AuditLog2026Q2 ;
+    dc:date "2026-06-10"^^xsd:date ;
+    ex:perpetrator ex:JohnDoe ;
+    ex:severity 8 ;
+    rdfs:comment "False entries injected into backup copy of audit log, making it difficult to distinguish genuine from fabricated records." .
+
+# ---- Multi-perpetrator Example ----
+
+ex:Event007_Repudiation a ex:HarmEvent ;
+    rdfs:label "Joint Repudiation of Contract Terms" ;
+    ex:ofType ex:Repudiation ;
+    ex:harms ex:ContractDoc2026 ;
+    dc:date "2026-05-20"^^xsd:date ;
+    ex:perpetrator ex:JaneSmith , ex:UnknownAgent ;
+    ex:severity 7 ;
+    rdfs:comment "Multiple parties jointly disavowed contract terms. Demonstrates multi-perpetrator scenario." .
+
+ex:ContractDoc2026 a ex:Record ;
+    rdfs:label "Service Contract 2026" ;
+    dc:created "2026-01-15"^^xsd:date .
+
+# ---- Pattern Example: Cover-up ----
+# Demonstrates how multiple harm events can form a pattern
+
+ex:Event008_Suppression_Coverup a ex:HarmEvent ;
+    rdfs:label "Suppression (part of cover-up)" ;
+    ex:ofType ex:Suppression ;
+    ex:harms ex:IncidentReport ;
+    dc:date "2026-05-01"^^xsd:date ;
+    ex:perpetrator ex:JohnDoe ;
+    ex:severity 6 .
+
+ex:Event009_Alteration_Coverup a ex:HarmEvent ;
+    rdfs:label "Alteration (part of cover-up)" ;
+    ex:ofType ex:Alteration ;
+    ex:harms ex:IncidentReport ;
+    dc:date "2026-05-02"^^xsd:date ;
+    ex:perpetrator ex:JohnDoe ;
+    ex:severity 7 .
+
+ex:Event010_Denial_Coverup a ex:HarmEvent ;
+    rdfs:label "Denial (part of cover-up)" ;
+    ex:ofType ex:Denial ;
+    ex:harms ex:IncidentReport ;
+    dc:date "2026-05-03"^^xsd:date ;
+    ex:perpetrator ex:JohnDoe ;
+    ex:severity 5 .
+
+ex:IncidentReport a ex:Record ;
+    rdfs:label "Security Incident Report - April 2026" ;
+    dc:created "2026-04-30"^^xsd:date ;
+    rdfs:comment "This record was subject to a coordinated cover-up pattern involving suppression, alteration, and denial" .
+
+# Note: The three events above (008, 009, 010) together instantiate
+# the ex:CoverUpPattern defined in the main ontology, though that
+# relationship would need to be modeled explicitly if you wanted to
+# track pattern instances as first-class entities.

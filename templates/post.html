@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block body_class %}doc post-page{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block head_extra %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": post.title,
+  "description": post.summary,
+  "url": post.url | absurl,
+  "datePublished": post.date | isodate,
+  "dateModified": post.updated | isodate,
+  "author": {"@type": "Person", "name": site.author.name},
+  "publisher": {"@type": "Organization", "name": site.title},
+  "keywords": post.tags | join(", ")
+} | tojson }}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="wrap doc-head">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/blog/">{{ site.blog_title }}</a> <span aria-hidden="true">/</span>
+    <span>{{ post.title }}</span>
+  </nav>
+  <h1>{{ post.title }}</h1>
+  <p class="lead">{{ post.summary }}</p>
+  <p class="meta-line">
+    <time datetime="{{ post.date | isodate }}">{{ post.date | datefmt }}</time>
+    {% if post.updated != post.date %}
+    · updated <time datetime="{{ post.updated | isodate }}">{{ post.updated | datefmt }}</time>
+    {% endif %}
+    · {{ post.reading_time }} min read
+    {% for tag in post.tags %}
+    · <a class="tag tag-sm" href="{{ tag | tagurl }}">{{ tag }}</a>
+    {% endfor %}
+  </p>
+</div>
+
+{% set has_sidebar = post.toc | length > 2 or post.reading %}
+<div class="wrap doc-layout{{ '' if has_sidebar else ' no-sidebar' }}">
+  {% if has_sidebar %}
+  <aside class="sidebar">
+    {% if post.toc | length > 2 %}
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        {% for item in post.toc %}
+        <li class="toc-l{{ item.level }}"><a href="#{{ item.id }}">{{ item.title }}</a></li>
+        {% endfor %}
+      </ol>
+    </nav>
+    {% endif %}
+    {% if post.reading %}
+    <div class="sidebar-card">
+      <h2 class="sidebar-title">In the source</h2>
+      <ul class="plain">
+        {% for item in post.reading %}
+        <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </aside>
+  {% endif %}
+
+  <article class="doc-body prose">
+    {{ post.body | safe }}
+  </article>
+</div>
+
+<div class="wrap">
+  <nav class="post-nav" aria-label="More notes">
+    {% if older %}
+    <a class="post-nav-link" href="{{ older.url }}">
+      <span class="dim">← Older</span><span>{{ older.title }}</span>
+    </a>
+    {% else %}<span></span>{% endif %}
+    {% if newer %}
+    <a class="post-nav-link post-nav-next" href="{{ newer.url }}">
+      <span class="dim">Newer →</span><span>{{ newer.title }}</span>
+    </a>
+    {% endif %}
+  </nav>
+</div>
+{% endblock %}

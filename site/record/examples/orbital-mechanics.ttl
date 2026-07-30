@@ -1,0 +1,202 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/orbital-mechanics#> .
+@prefix nep:  <https://www.epistemic-ontology.net/record/examples/neptune-discovery#> .
+
+# ============================================================================
+# Orbital mechanics: the physical mathematics between pure math and Neptune
+# ============================================================================
+# Layer 2 of the Neptune arc (the layering analysis is Bob's, from his
+# review of neptune-discovery): the machinery that fixture holds as a
+# premise-less formal object (nep:PerturbationMathematics) has a two-body
+# core that can be DERIVED, not just held. Sidecar:
+# engine/orbital_mechanics.py -- every inference below is re-run there
+# (dsolve on the Binet equation, substitution chains, cancellations
+# asserted), converting testimonial holding into formal holding (§15.2/3).
+# The perturbation expansion itself is the one STATED joint, declared as
+# such; its working content for the arc is numerical
+# (engine/perturbation.py: Bouvard's residuals and Le Verrier's fit, run).
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/orbital-mechanics>
+    a owl:Ontology ;
+    rdfs:comment "Two-body orbital mechanics, derived; the Layer-2 content of the Neptune arc's mathematical machinery."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+# -- Agent --------------------------------------------------------------------
+ex:Mathematician a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "The Mathematician (a modern grasping; the triangle has no birthday)"@en .
+
+# -- Grounds -------------------------------------------------------------------
+
+ex:NewtonGravitation a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Newton's law of universal gravitation"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Empirical ;
+    rec:formulation "F = G·M·m/r², attractive, central"^^xsd:string ;
+    rdfs:comment "Empirical ground: induced, never formally closed. Deduction downstream passes through only what this premise HAS (§2, force as the hinge) — which is why even Kepler's derived laws remain defeasible physics rather than mathematics."@en .
+
+ex:AngularMomentumDef a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Angular momentum about the force center"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:formulation "L = m·r²·θ̇ ; conserved under any central force"^^xsd:string .
+
+ex:EllipseGeometry a owl:NamedIndividual , rec:Record ;
+    rdfs:label "The ellipse as a geometric object"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:formulation "semi-axes a, b = a·√(1−e²); apsides r = a(1∓e); parametrization x = a(cosE − e), y = b·sinE"^^xsd:string .
+
+# -- The two-body problem, solved ----------------------------------------------
+
+ex:OrbitEquation a owl:NamedIndividual , rec:Record ;
+    rdfs:label "The orbit equation: r(θ) = p/(1 + e·cosθ)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:NewtonGravitation , ex:AngularMomentumDef ;
+    rec:concludedBy ex:Inf_SolveBinet ;
+    rec:formulation "r(θ) = p/(1 + e·cosθ), p = L²/(G·M·m²)"^^xsd:string ;
+    rdfs:comment "The conic, from dsolve on u'' + u = GMm²/L² — the sidecar runs the ODE, the docstring does not stand in for it."@en .
+
+ex:Inf_SolveBinet a owl:NamedIndividual , rec:Record ;
+    rdfs:label "solve the Binet equation (the two-body problem, run)"@en ;
+    rec:hasPremise ex:NewtonGravitation , ex:AngularMomentumDef ;
+    rec:concludes ex:OrbitEquation ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:SemiLatusRectum a owl:NamedIndividual , rec:Record ;
+    rdfs:label "The semi-latus rectum identified: p = a(1 − e²)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:OrbitEquation , ex:EllipseGeometry ;
+    rec:concludedBy ex:Inf_IdentifySemiLatus ;
+    rec:formulation "p = a(1 − e²)"^^xsd:string .
+
+ex:Inf_IdentifySemiLatus a owl:NamedIndividual , rec:Record ;
+    rdfs:label "equate the orbit's periapsis with the ellipse's (solved, not stated)"@en ;
+    rec:hasPremise ex:OrbitEquation , ex:EllipseGeometry ;
+    rec:concludes ex:SemiLatusRectum ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:KeplerFirstLaw a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Kepler I, derived: r(θ) = a(1−e²)/(1 + e·cosθ)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:OrbitEquation , ex:SemiLatusRectum ;
+    rec:concludedBy ex:Inf_AssembleKeplerFirst ;
+    rec:formulation "r(θ) = a(1−e²)/(1 + e·cosθ)"^^xsd:string ;
+    rdfs:comment "Historically INDUCED from Tycho's Mars (see kepler-mars, where the induction is exercised against the octants); here DERIVED from Newton — the same form reached along both warrant paths is the corroboration."@en .
+
+ex:Inf_AssembleKeplerFirst a owl:NamedIndividual , rec:Record ;
+    rdfs:label "substitute the identified p into the solved orbit"@en ;
+    rec:hasPremise ex:OrbitEquation , ex:SemiLatusRectum ;
+    rec:concludes ex:KeplerFirstLaw ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:KeplerSecondLaw a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Kepler II, derived: dA/dt = L/(2m)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:AngularMomentumDef ;
+    rec:concludedBy ex:Inf_DeriveArealLaw ;
+    rec:formulation "dA/dt = ½·r²·θ̇ = L/(2m)"^^xsd:string .
+
+ex:Inf_DeriveArealLaw a owl:NamedIndividual , rec:Record ;
+    rdfs:label "areal element with θ̇ = L/(m·r²); the r² must cancel (asserted in the sidecar)"@en ;
+    rec:hasPremise ex:AngularMomentumDef ;
+    rec:concludes ex:KeplerSecondLaw ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:AngularMomentumEllipse a owl:NamedIndividual , rec:Record ;
+    rdfs:label "L² = G·M·m²·a(1−e²): the dynamical and geometric faces equated"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:OrbitEquation , ex:SemiLatusRectum ;
+    rec:concludedBy ex:Inf_RecoverAngularMomentum ;
+    rec:formulation "L² = G·M·m²·a(1−e²)"^^xsd:string .
+
+ex:Inf_RecoverAngularMomentum a owl:NamedIndividual , rec:Record ;
+    rdfs:label "solve p = L²/(GMm²) against p = a(1−e²)"@en ;
+    rec:hasPremise ex:OrbitEquation , ex:SemiLatusRectum ;
+    rec:concludes ex:AngularMomentumEllipse ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:KeplerThirdLaw a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Kepler III, derived: P² = 4π²·a³/(G·M)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:KeplerSecondLaw , ex:AngularMomentumEllipse , ex:EllipseGeometry ;
+    rec:concludedBy ex:Inf_DeriveHarmonicLaw ;
+    rec:formulation "P² = 4π²·a³/(G·M)"^^xsd:string ;
+    rdfs:comment "P = area/areal-rate, squared; e and the test mass must both vanish, and the sidecar ASSERTS they do rather than trusting the page. Numerically corroborated on Earth's orbit to ~1e-6."@en .
+
+ex:Inf_DeriveHarmonicLaw a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the harmonic law, everything cancelling on its own"@en ;
+    rec:hasPremise ex:KeplerSecondLaw , ex:AngularMomentumEllipse , ex:EllipseGeometry ;
+    rec:concludes ex:KeplerThirdLaw ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:PositionFromAnomaly a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Position from the eccentric anomaly: r = a(1 − e·cosE)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:EllipseGeometry ;
+    rec:concludedBy ex:Inf_ParametrizeEllipse ;
+    rec:formulation "r(E) = a(1 − e·cosE)"^^xsd:string .
+
+ex:Inf_ParametrizeEllipse a owl:NamedIndividual , rec:Record ;
+    rdfs:label "collapse √(x² + y²) under b² = a²(1−e²), 0 < e < 1"@en ;
+    rec:hasPremise ex:EllipseGeometry ;
+    rec:concludes ex:PositionFromAnomaly ;
+    rec:hasForce rec:TruthPreserving .
+
+ex:PerihelionDistance a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Perihelion: r(0) = a(1 − e)"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:KeplerFirstLaw ;
+    rec:concludedBy ex:Inf_EvaluatePerihelion ;
+    rec:formulation "r(θ=0) = a(1 − e)"^^xsd:string .
+
+ex:Inf_EvaluatePerihelion a owl:NamedIndividual , rec:Record ;
+    rdfs:label "θ = 0 in the DERIVED first law (consumes the upstream derivation)"@en ;
+    rec:hasPremise ex:KeplerFirstLaw ;
+    rec:concludes ex:PerihelionDistance ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- The stated joint (the declared skip, §13.1) ---------------------------------
+
+ex:PerturbationExpansion a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the perturbation expansion r = r₀ + ε·r₁ + O(ε²) — STATED"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Formal ;
+    rec:hasPremise ex:NewtonGravitation , ex:KeplerFirstLaw ;
+    rec:concludedBy ex:Inf_StatePerturbation ;
+    rec:formulation "r(t) = r₀(t) + ε·r₁(t) + O(ε²)"^^xsd:string ;
+    rdfs:comment "Held TESTIMONIALLY and declared so (STATED_JOINTS in the sidecar): the expansion's symbolic development is the skip, recorded. Its working content for the Neptune arc is numerical — engine/perturbation.py integrates Uranus with and without Neptune (the anomaly peaks at the 1821.6 conjunction, the year of Bouvard's tables), and runs the coarse Le Verrier fit: the residuals refuse the circular Bode orbit and recover the discovery direction on an eccentric one."@en .
+
+ex:Inf_StatePerturbation a owl:NamedIndividual , rec:Record ;
+    rdfs:label "state the perturbation ansatz (testimonial; the honest stub)"@en ;
+    rec:hasPremise ex:NewtonGravitation , ex:KeplerFirstLaw ;
+    rec:concludes ex:PerturbationExpansion ;
+    rec:hasForce rec:TruthPreserving .
+
+# -- The link to the Neptune arc: a record directed at a record (§9) -------------
+# nep:PerturbationMathematics stays exactly as it is — premise-less, the
+# validator's negative control. The linkage is directedness, not identity:
+# Bouvard's 1845 holding and this fixture's derivations are two graspings
+# whose relation is corroboration. owl:sameAs would collapse provenance,
+# and the excision is constitutive (§5).
+
+ex:MachineryNote a owl:NamedIndividual , rec:Record ;
+    rdfs:label "note: the two-body core of the Neptune arc's machinery, derived here"@en ;
+    rec:forAgent ex:Mathematician ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward nep:PerturbationMathematics ;
+    rec:hasPremise ex:KeplerFirstLaw , ex:KeplerThirdLaw , ex:PerturbationExpansion ;
+    rec:formulation "What nep:PerturbationMathematics holds as a premise-less formal object is, in its two-body core, the content derived in this fixture; its perturbation face is exercised numerically in engine/perturbation.py."^^xsd:string ;
+    rdfs:comment "A record about a record — metadata is a role, not a class (§9). This note has premises but concludes nothing, so the reasoner must NOT classify it as an Inference (a second negative control, mirroring nep:PerturbationMathematics which concludes nothing and has no premises)."@en .

@@ -1,0 +1,70 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/cogito#> .
+
+# ============================================================================
+# Worked example: the cogito as a self-verifying PATTERN (ROOT.md §11)
+# ----------------------------------------------------------------------------
+# There is no Cogito class. The cogito is recognised by its PATTERN:
+#   self-verifying warrant + reflexive provenance (its support IS the act) +
+#   directedness at the agent's own existence (for-whom = of-what).
+#
+# The point of demoting it from a class to a pattern: a PROMISE shares the
+# self-verifying warrant but is NOT the cogito (it is directed elsewhere, and its
+# provenance is the utterance, not reflexive). The old defined Cogito class would
+# have wrongly captured the promise; the pattern does not.
+# Validate MERGED with the ontology.
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/cogito>
+    a owl:Ontology ;
+    rdfs:comment "Cogito-as-pattern example; merge with the ontology to validate."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+ex:Meditator a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the meditating agent"@en .
+
+# THE COGITO: self-verifying, reflexive provenance, directed at its own existence
+ex:Cogito a owl:NamedIndividual , rec:Record ;
+    rdfs:label "I think, therefore I am"@en ;
+    rec:forAgent       ex:Meditator ;     # for-whom  )  coincide
+    rec:directedToward ex:Meditator ;     # of-what   )  on the agent
+    rec:hasProvenance  ex:TheThinking ;   # whence: the act itself (reflexive)
+    rec:hasWarrant     rec:SelfVerifying .
+ex:TheThinking a owl:NamedIndividual , rec:Record ;
+    rec:forAgent ex:Meditator ; rec:hasWarrant rec:SelfVerifying .
+
+# A PERFORMATIVE that is NOT the cogito: self-verifying, but directed elsewhere
+# (a future act) and not reflexively provenanced. No conflation with the cogito.
+ex:IPromiseToHelp a owl:NamedIndividual , rec:Record ;
+    rdfs:label "I promise to help"@en ;
+    rec:forAgent       ex:Meditator ;
+    rec:directedToward ex:TheHelpingAct ;   # elsewhere -- for != of
+    rec:hasProvenance  ex:TheUtterance ;
+    rec:hasWarrant     rec:SelfVerifying .
+ex:TheHelpingAct a owl:NamedIndividual , rec:Record .
+ex:TheUtterance  a owl:NamedIndividual , rec:Record .
+
+# A MEMORY: agent's, but empirical/defeasible -> not the cogito.
+ex:SunsetSeen a owl:NamedIndividual , rec:Record .
+ex:MemoryOfSunset a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the agent's memory of a sunset"@en ;
+    rec:forAgent       ex:Meditator ;
+    rec:directedToward ex:SunsetSeen ;
+    rec:hasProvenance  ex:PastPerception ;
+    rec:hasLocus       ex:InMemory ;
+    rec:hasWarrant     rec:Empirical .
+ex:PastPerception a owl:NamedIndividual , rec:Record .
+ex:InMemory       a owl:NamedIndividual , rec:Record .
+
+# An EXTERNAL record: the carrier dissolved into provenance + locus (no class).
+ex:NoteOnWax a owl:NamedIndividual , rec:Record ;
+    rdfs:label "a note pressed into wax"@en ;
+    rec:forAgent      ex:Meditator ;
+    rec:hasProvenance ex:Inscribed ;
+    rec:hasLocus      ex:WaxTablet ;
+    rec:hasWarrant    rec:Empirical .
+ex:Inscribed a owl:NamedIndividual , rec:Record .
+ex:WaxTablet a owl:NamedIndividual , rec:Record .

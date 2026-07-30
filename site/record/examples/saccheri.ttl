@@ -1,0 +1,144 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/saccheri#> .
+
+# ============================================================================
+# Worked exemplar: SACCHERI (1733-1868) -- the promontory, both exits
+# ----------------------------------------------------------------------------
+# ROOT.md §17's type case. Saccheri erects two records he is CONVINCED are
+# false -- the obtuse and acute hypotheses on the summit angles of his
+# quadrilateral -- precisely to explode them and vindicate Euclid: false
+# records as promontories, falsification instrumental to discovery. The
+# engine runs both exits from one construction:
+#
+#   THE REFUTATION EXIT (obtuse) -- deduction from the scaffold yields
+#   BoundedLines (every straight closes on itself); exercised against the
+#   held axiom of indefinite prolongation, it FAILS, and because the path
+#   from scaffold to consequence is truth-preserving, modus tollens hands
+#   back a FORMAL verdict: the obtuse hypothesis is refuted with the
+#   certainty of the derivation. Cleanup: the scaffold is dismantled
+#   (retracted); the episode stays in the trail.
+#
+#   THE LANDING EXIT (acute) -- deduction yields AngleSumDeficit; exercised
+#   (the hyperbolic model, run), it PASSES -- which only CORROBORATES,
+#   defeasibly: confirmation is ampliative whatever the path's force. The
+#   force asymmetry, §2 cashed out: you learn more, at higher grade, from a
+#   scaffold's death than from its survival. Saccheri, needing the death,
+#   published a refutation anyway -- Proposition XXXIII, "repugnant to the
+#   nature of the straight line" -- whose own exercise fails at its own step
+#   (the limit treated as a point): THE CLEANUP WAS THE PRETENDER, and it is
+#   exorcised, not the scaffold. A hundred and thirty-five years later the
+#   guess lands: Beltrami's model arrives and the acute hypothesis CONVERTS
+#   -- the same record, re-asserted as held at a moment, provenance forever
+#   reading "born on the promontory". Within the agent's imperfection, what
+#   he was convinced was false was found true; his conviction was content
+#   (a note in the log), never framework.
+#
+# Validate MERGED with ontology/record-ontology.ttl, never alone.
+# NOTE for raw merges (validator, generated suites): the hypotheses are
+# grounds and a raw seed asserts them AS HELD; the demo defers them and
+# supposes them instead -- the register is the demo's point.
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/saccheri>
+    a owl:Ontology ;
+    rdfs:comment "Example individuals for the Record Ontology; merge with the ontology to validate."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+# -- agents --------------------------------------------------------------------
+
+ex:Saccheri a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "Giovanni Girolamo Saccheri"@en .
+
+ex:Beltrami a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "Eugenio Beltrami"@en .
+
+# ----------------------------------------------------------------------------
+# HELD GROUNDS -- the neutral base both scaffolds stand beside
+# ----------------------------------------------------------------------------
+
+ex:NeutralGeometry a owl:NamedIndividual , rec:Record ;
+    rdfs:label "neutral geometry: Euclid I.1-28, no parallel postulate"@en ;
+    rec:forAgent ex:Saccheri ;
+    rec:hasWarrant rec:Formal .
+
+ex:LineUnboundedness a owl:NamedIndividual , rec:Record ;
+    rdfs:label "a straight line admits indefinite prolongation (Euclid, postulate 2, as held)"@en ;
+    rec:forAgent ex:Saccheri .
+
+# ----------------------------------------------------------------------------
+# THE SCAFFOLDS -- two hypotheses erected to be exploded (the demo defers
+# these and SUPPOSES them: stood on, not held)
+# ----------------------------------------------------------------------------
+
+ex:HypObtuseAngle a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the hypothesis of the obtuse angle (summit angles > right)"@en ;
+    rec:forAgent ex:Saccheri ;
+    rec:formulation "the summit angles of the isosceles birectangular quadrilateral are obtuse" .
+
+ex:HypAcuteAngle a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the hypothesis of the acute angle (summit angles < right)"@en ;
+    rec:forAgent ex:Saccheri ;
+    rec:formulation "the summit angles of the isosceles birectangular quadrilateral are acute" .
+
+# ----------------------------------------------------------------------------
+# QUARANTINED CONSEQUENCES -- truth-preserving deductions from each scaffold
+# (visible from the promontory, exercisable, transmitting nothing held)
+# ----------------------------------------------------------------------------
+
+ex:Inf_ObtuseBoundsLines a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "deduction: on the obtuse hypothesis, straights close on themselves"@en ;
+    rec:forAgent ex:Saccheri ;
+    rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:HypObtuseAngle , ex:NeutralGeometry ;
+    rec:concludes ex:BoundedLines .
+
+ex:BoundedLines a owl:NamedIndividual , rec:Record ;
+    rdfs:label "every straight line closes on itself: prolongation is bounded"@en ;
+    rec:forAgent ex:Saccheri ;
+    rec:formulation "every straight, prolonged, returns to itself at a finite length" .
+
+ex:Inf_AcuteDeficit a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "deduction: on the acute hypothesis, triangle angle sums fall short"@en ;
+    rec:forAgent ex:Saccheri ;
+    rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:HypAcuteAngle , ex:NeutralGeometry ;
+    rec:concludes ex:AngleSumDeficit .
+
+ex:AngleSumDeficit a owl:NamedIndividual , rec:Record ;
+    rdfs:label "a triangle's angles sum below two rights; the deficit grows with the triangle"@en ;
+    rec:forAgent ex:Saccheri ;
+    rec:formulation "angle sum < two right angles, deficit proportional to area" .
+
+# ----------------------------------------------------------------------------
+# THE CLEANUP THAT FAILED -- Saccheri's published refutation of the acute:
+# a claimed formal proof whose own exercise fails (the pretender; §15.3).
+# Doubles as the validator's negative-control shape: formal + no premises.
+# ----------------------------------------------------------------------------
+
+ex:SaccheriRepugnance a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Prop. XXXIII: the acute hypothesis is 'repugnant to the nature of the straight line'"@en ;
+    rec:forAgent ex:Saccheri ;
+    rec:hasWarrant rec:Formal ;
+    rec:formulation "asymptotic straights meet at infinity and there share a common perpendicular; this is absurd; therefore the acute hypothesis falls" .
+
+# ----------------------------------------------------------------------------
+# THE LANDING'S GROUND -- arrives 1868 (deferred by the demo)
+# ----------------------------------------------------------------------------
+
+ex:BeltramiConsistency a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Beltrami's model (1868): the acute geometry is consistent if Euclid's is"@en ;
+    rec:forAgent ex:Beltrami ;
+    rec:hasWarrant rec:Formal .
+
+# ----------------------------------------------------------------------------
+# HISTORY KEEPS THE DOCUMENT (§9)
+# ----------------------------------------------------------------------------
+
+ex:EuclidesVindicatus a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Euclides ab omni naevo vindicatus (1733) — the book, refutation and all"@en ;
+    rec:forAgent ex:Saccheri ;
+    rec:hasWarrant rec:Empirical ;
+    rec:metadataOf ex:HypAcuteAngle .

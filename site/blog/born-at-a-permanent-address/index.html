@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Born at a permanent address — Epistemic Ontology</title>
+<meta name="description" content="Why the Record Ontology never had an example.org placeholder, what the redirect chain under this site actually does, and why a 303 is the right answer to a namespace IRI.">
+<link rel="canonical" href="https://epistemic-ontology.net/blog/born-at-a-permanent-address/">
+<meta name="author" content="Ron Hinchley">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Epistemic Ontology">
+<meta property="og:title" content="Born at a permanent address">
+<meta property="og:description" content="Why the Record Ontology never had an example.org placeholder, what the redirect chain under this site actually does, and why a 303 is the right answer to a namespace IRI.">
+<meta property="og:url" content="https://epistemic-ontology.net/blog/born-at-a-permanent-address/">
+<meta property="og:image" content="https://epistemic-ontology.net/logo.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Epistemic Ontology — Notes" href="/feed.xml">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BlogPosting", "author": {"@type": "Person", "name": "Ron Hinchley"}, "dateModified": "2026-07-30", "datePublished": "2026-07-30", "description": "Why the Record Ontology never had an example.org placeholder, what the redirect chain under this site actually does, and why a 303 is the right answer to a namespace IRI.", "headline": "Born at a permanent address", "keywords": "publishing, namespaces", "publisher": {"@type": "Organization", "name": "Epistemic Ontology"}, "url": "https://epistemic-ontology.net/blog/born-at-a-permanent-address/"}
+</script>
+<script>
+  // Set the theme before first paint so there is no flash. Progressive: with
+  // JS off the page falls back to prefers-color-scheme in the stylesheet.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body class="doc post-page">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="/apple-touch-icon.png" alt="" width="32" height="32" decoding="async">
+      <span class="brand-text">Epistemic<span class="brand-accent">Ontology</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/#ontologies">Ontologies</a>
+      <a href="/blog/">Notes</a>
+      <a href="/using/">Using</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4Z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap doc-head">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/blog/">Notes</a> <span aria-hidden="true">/</span>
+    <span>Born at a permanent address</span>
+  </nav>
+  <h1>Born at a permanent address</h1>
+  <p class="lead">Why the Record Ontology never had an example.org placeholder, what the redirect chain under this site actually does, and why a 303 is the right answer to a namespace IRI.</p>
+  <p class="meta-line">
+    <time datetime="2026-07-30">30 July 2026</time>
+    · 4 min read
+    · <a class="tag tag-sm" href="/blog/tag/publishing/">publishing</a>
+    · <a class="tag tag-sm" href="/blog/tag/namespaces/">namespaces</a>
+  </p>
+</div>
+
+<div class="wrap doc-layout">
+  <aside class="sidebar">
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        <li class="toc-l2"><a href="#why-303-and-not-302">Why 303 and not 302</a></li>
+        <li class="toc-l2"><a href="#the-redirect-chain-and-why-the-old-name-still-works">The redirect chain, and why the old name still works</a></li>
+        <li class="toc-l2"><a href="#what-follows-for-anyone-citing-this">What follows for anyone citing this</a></li>
+        <li class="toc-l2"><a href="#the-general-rule">The general rule</a></li>
+      </ol>
+    </nav>
+    <div class="sidebar-card">
+      <h2 class="sidebar-title">In the source</h2>
+      <ul class="plain">
+        <li><a href="/using/">Using a vocabulary</a></li>
+        <li><a href="/record/">Record Ontology</a></li>
+        <li><a href="/record-harm/">Record Harm Ontology</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <article class="doc-body prose">
+    <p>There is a debt you can take on in the first ten minutes of drafting an ontology
+and pay off for years. It looks like this:</p>
+<pre class="language-turtle"><code><span class="t-k">@prefix</span> <span class="t-p">rho:</span> <span class="t-i">&lt;http://example.org/record-harm-ontology#&gt;</span> .
+</code></pre>
+<p>Nobody means it permanently. It is a placeholder, to be replaced once the real
+address exists. But an ontology's IRIs are not a naming convenience; they are the
+identity of every term in it. The moment anyone imports your vocabulary, cites a
+term, or stores an annotation, the placeholder is load-bearing. Changing it later
+is not a rename — it is a breaking release that every downstream adopter has to
+be dragged through.</p>
+<p>The Record Harm Ontology was drafted that way, and it is still paying. What is
+served from this site is a <em>rewritten copy</em>: the staging script substitutes the
+permanent base and then refuses to finish if a single <code>example.org</code> IRI survives
+the rewrite.</p>
+<pre class="language-bash"><code>if grep <span class="t-l">-rInE</span> <span class="t-s">&quot;https?://[^ &lt;&gt;]*example\.org&quot;</span> <span class="t-s">&quot;$DEST&quot;</span>; then
+  echo <span class="t-s">&quot;error: an example.org IRI is present in staged output&quot;</span> &gt;&amp;2
+  exit 1
+fi
+</code></pre>
+<p>That check is not paranoia. A hosted copy that quietly drifted back to the
+placeholder would publish two different names for the same term, which is exactly
+the failure the ontology itself calls <strong>Forgery of Provenance</strong>.</p>
+<p>The Record Ontology was started later, and started at its final address:</p>
+<pre class="language-turtle"><code><span class="t-k">@prefix</span> <span class="t-p">rec:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record#&gt;</span> .
+</code></pre>
+<p>The consequence is small and pleasant. Its hosted copy is byte-identical to the
+source file in its repository. There is no rewrite step, nothing to verify, and
+no v3.0 migration waiting in its future. Its staging script only copies, and then
+asserts that the permanent namespace is present.</p>
+<h2 id="why-303-and-not-302">Why 303 and not 302</h2>
+<p>Ask this site for a namespace IRI and you get a <code>303 See Other</code>.</p>
+<pre class="language-bash"><code><span class="t-k">curl</span> <span class="t-l">-sI</span> <span class="t-l">-H</span> <span class="t-s">&quot;Accept: text/turtle&quot;</span> https://epistemic-ontology.net/record | head -2
+</code></pre>
+<p>The distinction matters more than it looks. <code>https://…/record</code> names <em>an
+ontology</em>. It does not name a document. There is no file that &quot;is&quot; the Record
+Ontology; there are serializations of it — Turtle today, possibly RDF/XML and
+JSON-LD tomorrow — and a documentation page, and none of them is the thing
+itself.</p>
+<p>A <code>302</code> would say &quot;the resource you asked for is temporarily over here&quot;, which
+asserts that the ontology <em>is</em> a document that has moved. A <code>303</code> says something
+weaker and true: the thing you asked about is not a document, but here is a
+document <em>about</em> it. That is the whole content of the httpRange-14 resolution,
+and it is one of the few places where a status code carries a genuine ontological
+commitment.</p>
+<p>The same document then serves every term, because the namespaces here are <strong>hash</strong>
+namespaces. <code>…/record#Inference</code> never sends the fragment to the server at all;
+you fetch the one document and your client resolves the fragment locally. One
+round trip gets you the complete vocabulary. For vocabularies of this size that
+is plainly the right trade; slash namespaces earn their keep at thousands of
+terms, not dozens.</p>
+<h2 id="the-redirect-chain-and-why-the-old-name-still-works">The redirect chain, and why the old name still works</h2>
+<p>The IRIs were minted at <code>www.epistemic-ontology.net</code>. The canonical host is now
+the apex, <code>epistemic-ontology.net</code>. Four names exist — the apex, <code>www</code>, and both
+<code>.org</code> variants — and three of them permanently redirect to the fourth, as does
+all plain HTTP.</p>
+<p>So a minted term IRI resolves through one <code>301</code> to the apex, and then the <code>303</code>
+negotiation. Two hops, both permanent, both cacheable.</p>
+<p>It would have been tidier to mint at the apex. It is not worth &quot;fixing&quot;. A
+permanent identifier that you rewrite whenever a tidier form occurs to you is not
+a permanent identifier — it is a mutable one with good intentions. The minted
+form stays valid forever, because that is the only thing &quot;permanent&quot; can mean.</p>
+<h2 id="what-follows-for-anyone-citing-this">What follows for anyone citing this</h2>
+<p>Cite the IRI, never the file path:</p>
+<pre class="language-bibtex"><code><span class="t-p">url</span> = <span class="t-s">{https://www.epistemic-ontology.net/record}</span>
+</code></pre>
+<p>not <code>…/record/record-ontology.ttl</code>. The IRI is what is promised. File layout is
+an implementation detail, and this site has already moved files once: the worked
+examples now live under <code>/record/examples/</code>, each at its own dereferenceable
+namespace, because every one of them declares an IRI of the form</p>
+<pre class="language-turtle"><code><span class="t-k">@prefix</span> <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record/examples/saccheri#&gt;</span> .
+</code></pre>
+<p>and an address that a file declares as its own name ought to be an address that
+answers. The old paths still redirect. They will keep redirecting.</p>
+<h2 id="the-general-rule">The general rule</h2>
+<p>Pick the permanent name before the first term is written. If you cannot — if the
+domain is not registered, if the project might be renamed — then you do not yet
+know what you are publishing, and it is cheaper to wait than to migrate.</p>
+<p>The alternative is what this site demonstrates in miniature: one vocabulary that
+is copied straight through, and one that is rewritten in flight, checked, and
+still carrying a breaking release on its horizon. Both work. Only one of them was
+free.</p>
+
+  </article>
+</div>
+
+<div class="wrap">
+  <nav class="post-nav" aria-label="More notes">
+    <a class="post-nav-link" href="/blog/the-carrier-dissolved/">
+      <span class="dim">← Older</span><span>The carrier, dissolved</span>
+    </a>
+  </nav>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-brand">Epistemic Ontology</p>
+      <p class="footer-note">Formal vocabularies for knowledge and record.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Secondary">
+      <a href="/feed.xml">Atom feed</a>
+      <a href="/sitemap.xml">Sitemap</a>
+      <a href="https://github.com/commuted/record-ontology">Source</a>
+    </nav>
+    <p class="footer-copy">© 2026 Ron Hinchley</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.theme-toggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var dark = getComputedStyle(root).getPropertyValue('--is-dark').trim() === '1';
+    var next = dark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>
+</body>
+</html>

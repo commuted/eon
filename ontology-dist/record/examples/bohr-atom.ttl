@@ -1,0 +1,360 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/bohr-atom#> .
+
+# ============================================================================
+# Worked exemplar: THE ATOM, 1885-1927 -- chained model succession
+# (Bohr 1913 -> Bohr-Sommerfeld 1916 -> quantum mechanics 1925-27)
+# ----------------------------------------------------------------------------
+# The second engine fixture. Neptune tested ONE fork and ONE decisive
+# observation; this arc tests what Neptune could not:
+#
+#   * EXPLANANDA (the second stub species): phenomena empirically supported
+#     the whole time yet unexplained -- Balmer's formula (until 1913), fine
+#     structure (until 1916), the anomalous Zeeman effect (until 1925-26).
+#     Each era resolves exactly one. Detection convention: a THEORETICAL
+#     environment carries a formally-warranted machinery leaf; an observation
+#     report does not.
+#   * ENVIRONMENT SWAP under a standing conclusion -- the Sommerfeld
+#     coincidence: the 1916 fine-structure derivation is numerically right
+#     with no spin in it; after 1926 the conclusion stands while its entire
+#     environment is replaced (spin + wave mechanics). Likewise the hydrogen
+#     energy levels survive the retraction of the Bohr postulates by
+#     re-derivation from quantum mechanics -- results outlive the models
+#     that first derived them.
+#   * FORK RESOLUTION BY EQUIVALENCE: matrix vs wave mechanics, declared
+#     rivals (early 1926), then IDENTIFIED (Schroedinger's equivalence
+#     proof) -- the fork dissolves, no winner, no eclipsed; and when
+#     Davisson-Germer arrives (1927) its corroboration accrues to the POOLED
+#     pair (without the identification, wave would have eclipsed matrix).
+#   * A RECORDED ESCALATION from the historical record itself: Bohr's 1913
+#     suspension of classical electrodynamics inside stationary states -- the
+#     trade-off is stated in the trilogy (ROOT.md §13, in the wild).
+#   * CORRESPONDENCE AS LEVEL OF ABSTRACTION: after the old quantum theory's
+#     postulates are retracted, the Bohr model persists as a limiting-case
+#     record at a coarser grain (rec:atLevelOfAbstraction, first real use).
+#
+# The revision log re-enacts 1885 -> 1927 in ORDER (moments, §13.3); clock
+# dates live in event notes and labels -- content, never the index. Era-level
+# chronology is solid; deliberately elided at this grain: the BKS episode
+# (1924-25), the Pickering-Fowler exchange's inner rounds (kept as one
+# inference + comment), and the tangled discovery of spin.
+# Validate MERGED with ontology/record-ontology.ttl, never alone.
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/bohr-atom>
+    a owl:Ontology ;
+    rdfs:comment "Example individuals for the Record Ontology; merge with the ontology to validate."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+# -- agents -------------------------------------------------------------------
+ex:Balmer       a owl:NamedIndividual , rec:Agent ; rdfs:label "Johann Balmer"@en .
+ex:Michelson    a owl:NamedIndividual , rec:Agent ; rdfs:label "Albert Michelson"@en .
+ex:Zeeman       a owl:NamedIndividual , rec:Agent ; rdfs:label "Pieter Zeeman"@en .
+ex:Fowler       a owl:NamedIndividual , rec:Agent ; rdfs:label "Alfred Fowler"@en .
+ex:Planck       a owl:NamedIndividual , rec:Agent ; rdfs:label "Max Planck"@en .
+ex:Rutherford   a owl:NamedIndividual , rec:Agent ; rdfs:label "Ernest Rutherford"@en .
+ex:Bohr         a owl:NamedIndividual , rec:Agent ; rdfs:label "Niels Bohr"@en .
+ex:Franck       a owl:NamedIndividual , rec:Agent ; rdfs:label "James Franck"@en .
+ex:Sommerfeld   a owl:NamedIndividual , rec:Agent ; rdfs:label "Arnold Sommerfeld"@en .
+ex:Paschen      a owl:NamedIndividual , rec:Agent ; rdfs:label "Friedrich Paschen"@en .
+ex:DeBroglie    a owl:NamedIndividual , rec:Agent ; rdfs:label "Louis de Broglie"@en .
+ex:Heisenberg   a owl:NamedIndividual , rec:Agent ; rdfs:label "Werner Heisenberg"@en .
+ex:Schroedinger a owl:NamedIndividual , rec:Agent ; rdfs:label "Erwin Schroedinger"@en .
+ex:Uhlenbeck    a owl:NamedIndividual , rec:Agent ; rdfs:label "George Uhlenbeck (with Samuel Goudsmit)"@en .
+ex:Davisson     a owl:NamedIndividual , rec:Agent ; rdfs:label "Clinton Davisson (with Lester Germer)"@en .
+ex:HistorianOfScience a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the historian of science"@en .
+
+# ----------------------------------------------------------------------------
+# STRATUM 1885-1912: observations, regularities, machinery, the crisis
+# ----------------------------------------------------------------------------
+
+ex:BalmerMeasurements a owl:NamedIndividual , rec:Record ;
+    rdfs:label "measured wavelengths of the visible hydrogen lines (1885)"@en ;
+    rec:forAgent ex:Balmer ; rec:hasWarrant rec:Empirical .
+
+# Pure numerology, historically: an induced regularity with no mechanism --
+# an EXPLANANDUM until 1913 derives it.
+ex:Inf_BalmerFormula a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "induction: the Balmer/Rydberg wavelength formula"@en ;
+    rec:forAgent ex:Balmer ; rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:BalmerMeasurements ;
+    rec:concludes ex:BalmerFormula .
+ex:BalmerFormula a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the Balmer/Rydberg formula (regularity, no mechanism)"@en ;
+    rec:forAgent ex:Balmer ; rec:hasWarrant rec:Empirical .
+
+ex:MichelsonFineStructure a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Michelson: the Balmer lines are close doublets (1891)"@en ;
+    rec:forAgent ex:Michelson ; rec:hasWarrant rec:Empirical .
+ex:Inf_FineStructureReport a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "observation report: spectral fine structure exists"@en ;
+    rec:forAgent ex:Michelson ; rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:MichelsonFineStructure ;
+    rec:concludes ex:FineStructureSplitting .
+# THE type-case explanandum: empirically live from 1891, unexplained until
+# 1916, then re-derived from a wholly different environment after 1926.
+ex:FineStructureSplitting a owl:NamedIndividual , rec:Record ;
+    rdfs:label "phenomenon: hydrogen fine-structure splitting"@en ;
+    rec:forAgent ex:Michelson ; rec:hasWarrant rec:Empirical .
+
+ex:ZeemanAnomalousPattern a owl:NamedIndividual , rec:Record ;
+    rdfs:label "anomalous Zeeman splitting patterns (observed from 1897)"@en ;
+    rec:forAgent ex:Zeeman ; rec:hasWarrant rec:Empirical .
+ex:Inf_ZeemanReport a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "observation report: the anomalous Zeeman effect"@en ;
+    rec:forAgent ex:Zeeman ; rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:ZeemanAnomalousPattern ;
+    rec:concludes ex:AnomalousZeemanEffect .
+# Explanandum #3 -- outlives BOTH old-quantum-theory eras; resolved by spin.
+ex:AnomalousZeemanEffect a owl:NamedIndividual , rec:Record ;
+    rdfs:label "phenomenon: the anomalous Zeeman effect"@en ;
+    rec:forAgent ex:Zeeman ; rec:hasWarrant rec:Empirical .
+
+ex:PickeringFowlerLines a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the Pickering-Fowler series (stellar + laboratory lines)"@en ;
+    rec:forAgent ex:Fowler ; rec:hasWarrant rec:Empirical .
+
+ex:PlanckQuantum a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Planck's quantum of action h (1900, a posit)"@en ;
+    rec:forAgent ex:Planck ; rec:hasWarrant rec:Empirical .
+
+# Formally structured but EMPIRICALLY warranted -- like Newton's law in the
+# Neptune fixture; its defeasibility is the door 1913 walks through.
+ex:ClassicalElectrodynamics a owl:NamedIndividual , rec:Record ;
+    rdfs:label "classical electrodynamics (Maxwell/Larmor), as held c. 1911"@en ;
+    rec:forAgent ex:Rutherford ; rec:hasWarrant rec:Empirical .
+
+# The formal machinery leaf (the explananda convention keys on these).
+ex:ClassicalMechanicsFormalism a owl:NamedIndividual , rec:Record ;
+    rdfs:label "classical mechanics (the mathematical machinery)"@en ;
+    rec:forAgent ex:Rutherford ; rec:hasWarrant rec:Formal .
+
+ex:GoldFoilScattering a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Geiger-Marsden alpha-scattering anomalies (1909)"@en ;
+    rec:forAgent ex:Rutherford ; rec:hasWarrant rec:Empirical .
+# Rutherford's scattering analysis is a CLASSICAL calculation -- the formal
+# machinery is genuinely a premise here.
+ex:Inf_NuclearAtom a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "abduction: a small massive nucleus explains the scattering (1911)"@en ;
+    rec:forAgent ex:Rutherford ; rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:GoldFoilScattering , ex:ClassicalMechanicsFormalism ;
+    rec:concludes ex:NuclearAtomModel .
+ex:NuclearAtomModel a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the Rutherford nuclear atom"@en ;
+    rec:forAgent ex:Rutherford ; rec:hasWarrant rec:Empirical .
+
+# The standing reductio: nuclear atom + classical electrodynamics entail
+# radiative collapse in ~10^-11 s -- atoms cannot exist. Truth-preserving,
+# and it NEVER falls in this fixture (classically the argument stays valid):
+# what 1913 retracts is the law's jurisdiction inside the atom, not the law.
+ex:Inf_RadiativeCollapse a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "deduction: the classical nuclear atom is radiatively unstable"@en ;
+    rec:forAgent ex:Bohr ; rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:NuclearAtomModel , ex:ClassicalElectrodynamics ,
+                   ex:ClassicalMechanicsFormalism ;
+    rec:concludes ex:RadiativeInstability .
+ex:RadiativeInstability a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the crisis: classically, atoms cannot exist"@en ;
+    rec:forAgent ex:Bohr ; rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:NuclearAtomModel .
+
+# ----------------------------------------------------------------------------
+# ERA 1913-14: Bohr
+# ----------------------------------------------------------------------------
+
+# A §13 ESCALATION FROM THE HISTORICAL RECORD: the 1913 trilogy states the
+# trade-off openly -- classical electrodynamics is SUSPENDED inside
+# stationary states, bought for stability and the spectra. An explicit,
+# recorded skip; directed at the record it sets aside.
+ex:BohrEscalation a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Bohr 1913: classical electrodynamics suspended for stationary states (recorded trade-off)"@en ;
+    rec:forAgent ex:Bohr ; rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:ClassicalElectrodynamics .
+
+ex:BohrPostulates a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Bohr's postulates: stationary states, frequency condition, quantized action (1913)"@en ;
+    rec:forAgent ex:Bohr ; rec:hasWarrant rec:Empirical .
+
+ex:Inf_BohrHydrogen a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "derivation: hydrogen energy levels E_n from the postulates"@en ;
+    rec:forAgent ex:Bohr ; rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:BohrPostulates , ex:PlanckQuantum , ex:NuclearAtomModel ,
+                   ex:ClassicalMechanicsFormalism ;
+    rec:concludes ex:HydrogenEnergyLevels .
+# A RESULT that outlives its first model: re-derived from quantum mechanics
+# after the Bohr postulates are retracted (second justification below).
+ex:HydrogenEnergyLevels a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the hydrogen energy levels E_n = -R/n^2"@en ;
+    rec:forAgent ex:Bohr ; rec:hasWarrant rec:Empirical .
+
+# Resolves explanandum #1: the Balmer formula, derived at last -- with the
+# Rydberg constant computed from e, m, h.
+ex:Inf_RydbergDerivation a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "derivation: the Balmer formula, Rydberg constant from e, m, h"@en ;
+    rec:forAgent ex:Bohr ; rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:HydrogenEnergyLevels ;
+    rec:concludes ex:BalmerFormula .
+
+# The Pickering-Fowler episode, compressed to one joint: Bohr reattributes
+# the lines to He+ (Z=2); Fowler objects on the exact wavelengths; the
+# reduced-mass correction answers; Evans's spectroscopy confirms (1913).
+ex:Inf_HeliumReattribution a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "reattribution: the Pickering-Fowler lines are ionized helium"@en ;
+    rec:forAgent ex:Bohr ; rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:HydrogenEnergyLevels , ex:PickeringFowlerLines ;
+    rec:concludes ex:IonizedHeliumOrigin .
+ex:IonizedHeliumOrigin a owl:NamedIndividual , rec:Record ;
+    rdfs:label "claim: the Pickering-Fowler series belongs to He+"@en ;
+    rec:forAgent ex:Bohr ; rec:hasWarrant rec:Empirical .
+
+ex:FranckHertzExperiment a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Franck-Hertz: discrete energy losses in electron-mercury collisions (1914)"@en ;
+    rec:forAgent ex:Franck ; rec:hasWarrant rec:Empirical .
+# Interpretation is itself revisable: Franck and Hertz first read their own
+# result as ionization; the stationary-state reading prevailed.
+ex:Inf_DiscreteLevelsConfirmed a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "interpretation: the collisions confirm discrete stationary states"@en ;
+    rec:forAgent ex:Franck ; rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:FranckHertzExperiment , ex:HydrogenEnergyLevels ;
+    rec:concludes ex:DiscreteEnergyLevelsReal .
+ex:DiscreteEnergyLevelsReal a owl:NamedIndividual , rec:Record ;
+    rdfs:label "claim: atomic energy levels are discrete and real"@en ;
+    rec:forAgent ex:Franck ; rec:hasWarrant rec:Empirical .
+
+# ----------------------------------------------------------------------------
+# ERA 1915-16: Bohr-Sommerfeld
+# ----------------------------------------------------------------------------
+
+ex:PhaseIntegralMethod a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the Wilson-Sommerfeld phase-integral quantization (mathematical machinery)"@en ;
+    rec:forAgent ex:Sommerfeld ; rec:hasWarrant rec:Formal .
+
+ex:SommerfeldPostulates a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Sommerfeld's postulates: elliptical orbits, two quantum numbers, relativistic mass (1916)"@en ;
+    rec:forAgent ex:Sommerfeld ; rec:hasWarrant rec:Empirical .
+
+# THE SOMMERFELD COINCIDENCE: this derivation yields the correct alpha^2
+# fine-structure formula with NO SPIN in it -- numerically right for the
+# wrong reasons. After 1926 the conclusion STANDS while this entire
+# environment is replaced (Inf_FineStructureQM below): the calculus's
+# environment-swap showcase. Resolves explanandum #2 (1916-26).
+ex:Inf_FineStructureSommerfeld a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "derivation: fine structure from relativistic elliptical orbits (1916)"@en ;
+    rec:forAgent ex:Sommerfeld ; rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:SommerfeldPostulates , ex:BohrPostulates ,
+                   ex:PhaseIntegralMethod , ex:ClassicalMechanicsFormalism ;
+    rec:concludes ex:FineStructureSplitting .
+
+ex:PaschenMeasurements a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Paschen: precision He+ fine-structure measurements (1916)"@en ;
+    rec:forAgent ex:Paschen ; rec:hasWarrant rec:Empirical .
+ex:Inf_PaschenAgreement a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "comparison: Sommerfeld's formula matches Paschen's lines"@en ;
+    rec:forAgent ex:Paschen ; rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:PaschenMeasurements , ex:FineStructureSplitting ;
+    rec:concludes ex:FineStructureQuantitativeMatch .
+ex:FineStructureQuantitativeMatch a owl:NamedIndividual , rec:Record ;
+    rdfs:label "claim: the fine-structure formula is quantitatively confirmed"@en ;
+    rec:forAgent ex:Paschen ; rec:hasWarrant rec:Empirical .
+
+# ----------------------------------------------------------------------------
+# ERA 1924-27: quantum mechanics
+# ----------------------------------------------------------------------------
+
+ex:DeBroglieHypothesis a owl:NamedIndividual , rec:Record ;
+    rdfs:label "de Broglie: matter waves, lambda = h/p (1924, a posit)"@en ;
+    rec:forAgent ex:DeBroglie ; rec:hasWarrant rec:Empirical .
+
+ex:SpinHypothesis a owl:NamedIndividual , rec:Record ;
+    rdfs:label "electron spin (Uhlenbeck-Goudsmit 1925, a posit)"@en ;
+    rec:forAgent ex:Uhlenbeck ; rec:hasWarrant rec:Empirical .
+
+ex:MatrixAlgebraFormalism a owl:NamedIndividual , rec:Record ;
+    rdfs:label "matrix algebra over observable transition quantities (machinery)"@en ;
+    rec:forAgent ex:Heisenberg ; rec:hasWarrant rec:Formal .
+ex:Inf_MatrixMechanics a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "construction: matrix mechanics from observable spectra (1925)"@en ;
+    rec:forAgent ex:Heisenberg ; rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:BalmerFormula , ex:DiscreteEnergyLevelsReal ,
+                   ex:MatrixAlgebraFormalism ;
+    rec:concludes ex:MatrixMechanics .
+ex:MatrixMechanics a owl:NamedIndividual , rec:Record ;
+    rdfs:label "matrix mechanics (Heisenberg, Born, Jordan)"@en ;
+    rec:forAgent ex:Heisenberg ; rec:hasWarrant rec:Empirical .
+
+ex:WaveEquationFormalism a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the wave equation's mathematics (eigenvalue problems; machinery)"@en ;
+    rec:forAgent ex:Schroedinger ; rec:hasWarrant rec:Formal .
+ex:Inf_WaveMechanics a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "construction: wave mechanics from matter waves (1926)"@en ;
+    rec:forAgent ex:Schroedinger ; rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:DeBroglieHypothesis , ex:WaveEquationFormalism ;
+    rec:concludes ex:WaveMechanics .
+ex:WaveMechanics a owl:NamedIndividual , rec:Record ;
+    rdfs:label "wave mechanics (Schroedinger)"@en ;
+    rec:forAgent ex:Schroedinger ; rec:hasWarrant rec:Empirical .
+
+# The warrant for the IDENTIFY decision (Engine.identify): a formal record --
+# the equivalence is proven, not observed. Premise-less machinery; the
+# decision that cites it lives in the LOG, as an escalation, not here.
+ex:EquivalenceProof a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Schroedinger 1926: equivalence of matrix and wave mechanics (proof)"@en ;
+    rec:forAgent ex:Schroedinger ; rec:hasWarrant rec:Formal .
+
+# Results re-derived: the levels survive the death of the model that first
+# derived them (environment swap under a standing conclusion).
+ex:Inf_HydrogenFromQM a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "derivation: hydrogen levels from wave mechanics (1926)"@en ;
+    rec:forAgent ex:Schroedinger ; rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:WaveMechanics , ex:WaveEquationFormalism ;
+    rec:concludes ex:HydrogenEnergyLevels .
+
+# Fine structure, re-derived WITH spin (Heisenberg-Jordan 1926; completed by
+# Dirac 1928 -- compressed to one joint): the environment that replaces
+# Sommerfeld's under the same standing conclusion.
+ex:Inf_FineStructureQM a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "derivation: fine structure from quantum mechanics + spin (1926)"@en ;
+    rec:forAgent ex:Heisenberg ; rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:SpinHypothesis , ex:WaveMechanics , ex:WaveEquationFormalism ;
+    rec:concludes ex:FineStructureSplitting .
+
+# Resolves explanandum #3: the anomalous Zeeman effect, at last.
+ex:Inf_ZeemanFromSpin a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "derivation: anomalous Zeeman patterns from spin (1926)"@en ;
+    rec:forAgent ex:Heisenberg ; rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:SpinHypothesis , ex:MatrixMechanics , ex:MatrixAlgebraFormalism ;
+    rec:concludes ex:AnomalousZeemanEffect .
+
+# CORRESPONDENCE AS LoA: the eclipsed model persists as a limiting case at a
+# coarser grain -- what §14 says a textbook keeps.
+ex:Inf_CorrespondenceLimit a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "derivation: the Bohr model as the large-quantum-number limit"@en ;
+    rec:forAgent ex:Bohr ; rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:WaveMechanics , ex:WaveEquationFormalism ;
+    rec:concludes ex:BohrModelAsLimit .
+ex:BohrModelAsLimit a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the Bohr model, valid as a limiting case"@en ;
+    rec:forAgent ex:Bohr ; rec:hasWarrant rec:Empirical ;
+    rec:atLevelOfAbstraction ex:LargeNumberLimitGrain .
+ex:LargeNumberLimitGrain a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the large-quantum-number / coarse spectral grain"@en ;
+    rec:forAgent ex:HistorianOfScience ; rec:hasWarrant rec:Empirical .
+
+ex:DavissonGermerExperiment a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Davisson-Germer: electron diffraction off nickel (1927)"@en ;
+    rec:forAgent ex:Davisson ; rec:hasWarrant rec:Empirical .
+# Fresh evidence arriving AFTER the fork -- but the fork is IDENTIFIED by
+# then, so this corroboration accrues to the pooled pair (matrix mechanics
+# gains it through the identity), instead of wave eclipsing matrix.
+ex:Inf_MatterWaveConfirmed a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "interpretation: electrons diffract -- matter waves are real"@en ;
+    rec:forAgent ex:Davisson ; rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:DavissonGermerExperiment , ex:WaveMechanics ;
+    rec:concludes ex:ElectronWavesReal .
+ex:ElectronWavesReal a owl:NamedIndividual , rec:Record ;
+    rdfs:label "claim: matter waves are physically real"@en ;
+    rec:forAgent ex:Davisson ; rec:hasWarrant rec:Empirical .

@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>Epistemic Ontology — Notes</title>
+  <subtitle>Working notes on the ontologies published here — design decisions, the reasoning behind them, and what breaks when they are wrong.</subtitle>
+  <id>https://epistemic-ontology.net/blog/</id>
+  <link rel="alternate" type="text/html" href="https://epistemic-ontology.net/blog/"/>
+  <link rel="self" type="application/atom+xml" href="https://epistemic-ontology.net/feed.xml"/>
+  <updated>2026-07-30T12:00:00+00:00</updated>
+  <author>
+    <name>Ron Hinchley</name>
+    <uri>https://github.com/commuted</uri>
+  </author>
+  <rights>© 2026 Ron Hinchley · CC BY 4.0</rights>
+  <generator uri="https://epistemic-ontology.net/">build.py</generator>
+  <entry>
+    <title>Born at a permanent address</title>
+    <id>https://epistemic-ontology.net/blog/born-at-a-permanent-address/</id>
+    <link rel="alternate" type="text/html" href="https://epistemic-ontology.net/blog/born-at-a-permanent-address/"/>
+    <published>2026-07-30T12:00:00+00:00</published>
+    <updated>2026-07-30T12:00:00+00:00</updated>
+    <summary type="text">Why the Record Ontology never had an example.org placeholder, what the redirect chain under this site actually does, and why a 303 is the right answer to a namespace IRI.</summary>
+    <category term="publishing"/>
+    <category term="namespaces"/>
+    <content type="html">&lt;p&gt;There is a debt you can take on in the first ten minutes of drafting an ontology
+and pay off for years. It looks like this:&lt;/p&gt;
+&lt;pre class=&#34;language-turtle&#34;&gt;&lt;code&gt;&lt;span class=&#34;t-k&#34;&gt;@prefix&lt;/span&gt; &lt;span class=&#34;t-p&#34;&gt;rho:&lt;/span&gt; &lt;span class=&#34;t-i&#34;&gt;&amp;lt;http://example.org/record-harm-ontology#&amp;gt;&lt;/span&gt; .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Nobody means it permanently. It is a placeholder, to be replaced once the real
+address exists. But an ontology&#39;s IRIs are not a naming convenience; they are the
+identity of every term in it. The moment anyone imports your vocabulary, cites a
+term, or stores an annotation, the placeholder is load-bearing. Changing it later
+is not a rename — it is a breaking release that every downstream adopter has to
+be dragged through.&lt;/p&gt;
+&lt;p&gt;The Record Harm Ontology was drafted that way, and it is still paying. What is
+served from this site is a &lt;em&gt;rewritten copy&lt;/em&gt;: the staging script substitutes the
+permanent base and then refuses to finish if a single &lt;code&gt;example.org&lt;/code&gt; IRI survives
+the rewrite.&lt;/p&gt;
+&lt;pre class=&#34;language-bash&#34;&gt;&lt;code&gt;if grep &lt;span class=&#34;t-l&#34;&gt;-rInE&lt;/span&gt; &lt;span class=&#34;t-s&#34;&gt;&amp;quot;https?://[^ &amp;lt;&amp;gt;]*example\.org&amp;quot;&lt;/span&gt; &lt;span class=&#34;t-s&#34;&gt;&amp;quot;$DEST&amp;quot;&lt;/span&gt;; then
+  echo &lt;span class=&#34;t-s&#34;&gt;&amp;quot;error: an example.org IRI is present in staged output&amp;quot;&lt;/span&gt; &amp;gt;&amp;amp;2
+  exit 1
+fi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That check is not paranoia. A hosted copy that quietly drifted back to the
+placeholder would publish two different names for the same term, which is exactly
+the failure the ontology itself calls &lt;strong&gt;Forgery of Provenance&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The Record Ontology was started later, and started at its final address:&lt;/p&gt;
+&lt;pre class=&#34;language-turtle&#34;&gt;&lt;code&gt;&lt;span class=&#34;t-k&#34;&gt;@prefix&lt;/span&gt; &lt;span class=&#34;t-p&#34;&gt;rec:&lt;/span&gt; &lt;span class=&#34;t-i&#34;&gt;&amp;lt;https://www.epistemic-ontology.net/record#&amp;gt;&lt;/span&gt; .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The consequence is small and pleasant. Its hosted copy is byte-identical to the
+source file in its repository. There is no rewrite step, nothing to verify, and
+no v3.0 migration waiting in its future. Its staging script only copies, and then
+asserts that the permanent namespace is present.&lt;/p&gt;
+&lt;h2 id=&#34;why-303-and-not-302&#34;&gt;Why 303 and not 302&lt;/h2&gt;
+&lt;p&gt;Ask this site for a namespace IRI and you get a &lt;code&gt;303 See Other&lt;/code&gt;.&lt;/p&gt;
+&lt;pre class=&#34;language-bash&#34;&gt;&lt;code&gt;&lt;span class=&#34;t-k&#34;&gt;curl&lt;/span&gt; &lt;span class=&#34;t-l&#34;&gt;-sI&lt;/span&gt; &lt;span class=&#34;t-l&#34;&gt;-H&lt;/span&gt; &lt;span class=&#34;t-s&#34;&gt;&amp;quot;Accept: text/turtle&amp;quot;&lt;/span&gt; https://epistemic-ontology.net/record | head -2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The distinction matters more than it looks. &lt;code&gt;https://…/record&lt;/code&gt; names &lt;em&gt;an
+ontology&lt;/em&gt;. It does not name a document. There is no file that &amp;quot;is&amp;quot; the Record
+Ontology; there are serializations of it — Turtle today, possibly RDF/XML and
+JSON-LD tomorrow — and a documentation page, and none of them is the thing
+itself.&lt;/p&gt;
+&lt;p&gt;A &lt;code&gt;302&lt;/code&gt; would say &amp;quot;the resource you asked for is temporarily over here&amp;quot;, which
+asserts that the ontology &lt;em&gt;is&lt;/em&gt; a document that has moved. A &lt;code&gt;303&lt;/code&gt; says something
+weaker and true: the thing you asked about is not a document, but here is a
+document &lt;em&gt;about&lt;/em&gt; it. That is the whole content of the httpRange-14 resolution,
+and it is one of the few places where a status code carries a genuine ontological
+commitment.&lt;/p&gt;
+&lt;p&gt;The same document then serves every term, because the namespaces here are &lt;strong&gt;hash&lt;/strong&gt;
+namespaces. &lt;code&gt;…/record#Inference&lt;/code&gt; never sends the fragment to the server at all;
+you fetch the one document and your client resolves the fragment locally. One
+round trip gets you the complete vocabulary. For vocabularies of this size that
+is plainly the right trade; slash namespaces earn their keep at thousands of
+terms, not dozens.&lt;/p&gt;
+&lt;h2 id=&#34;the-redirect-chain-and-why-the-old-name-still-works&#34;&gt;The redirect chain, and why the old name still works&lt;/h2&gt;
+&lt;p&gt;The IRIs were minted at &lt;code&gt;www.epistemic-ontology.net&lt;/code&gt;. The canonical host is now
+the apex, &lt;code&gt;epistemic-ontology.net&lt;/code&gt;. Four names exist — the apex, &lt;code&gt;www&lt;/code&gt;, and both
+&lt;code&gt;.org&lt;/code&gt; variants — and three of them permanently redirect to the fourth, as does
+all plain HTTP.&lt;/p&gt;
+&lt;p&gt;So a minted term IRI resolves through one &lt;code&gt;301&lt;/code&gt; to the apex, and then the &lt;code&gt;303&lt;/code&gt;
+negotiation. Two hops, both permanent, both cacheable.&lt;/p&gt;
+&lt;p&gt;It would have been tidier to mint at the apex. It is not worth &amp;quot;fixing&amp;quot;. A
+permanent identifier that you rewrite whenever a tidier form occurs to you is not
+a permanent identifier — it is a mutable one with good intentions. The minted
+form stays valid forever, because that is the only thing &amp;quot;permanent&amp;quot; can mean.&lt;/p&gt;
+&lt;h2 id=&#34;what-follows-for-anyone-citing-this&#34;&gt;What follows for anyone citing this&lt;/h2&gt;
+&lt;p&gt;Cite the IRI, never the file path:&lt;/p&gt;
+&lt;pre class=&#34;language-bibtex&#34;&gt;&lt;code&gt;&lt;span class=&#34;t-p&#34;&gt;url&lt;/span&gt; = &lt;span class=&#34;t-s&#34;&gt;{https://www.epistemic-ontology.net/record}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;not &lt;code&gt;…/record/record-ontology.ttl&lt;/code&gt;. The IRI is what is promised. File layout is
+an implementation detail, and this site has already moved files once: the worked
+examples now live under &lt;code&gt;/record/examples/&lt;/code&gt;, each at its own dereferenceable
+namespace, because every one of them declares an IRI of the form&lt;/p&gt;
+&lt;pre class=&#34;language-turtle&#34;&gt;&lt;code&gt;&lt;span class=&#34;t-k&#34;&gt;@prefix&lt;/span&gt; &lt;span class=&#34;t-p&#34;&gt;ex:&lt;/span&gt; &lt;span class=&#34;t-i&#34;&gt;&amp;lt;https://www.epistemic-ontology.net/record/examples/saccheri#&amp;gt;&lt;/span&gt; .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and an address that a file declares as its own name ought to be an address that
+answers. The old paths still redirect. They will keep redirecting.&lt;/p&gt;
+&lt;h2 id=&#34;the-general-rule&#34;&gt;The general rule&lt;/h2&gt;
+&lt;p&gt;Pick the permanent name before the first term is written. If you cannot — if the
+domain is not registered, if the project might be renamed — then you do not yet
+know what you are publishing, and it is cheaper to wait than to migrate.&lt;/p&gt;
+&lt;p&gt;The alternative is what this site demonstrates in miniature: one vocabulary that
+is copied straight through, and one that is rewritten in flight, checked, and
+still carrying a breaking release on its horizon. Both work. Only one of them was
+free.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>The carrier, dissolved</title>
+    <id>https://epistemic-ontology.net/blog/the-carrier-dissolved/</id>
+    <link rel="alternate" type="text/html" href="https://epistemic-ontology.net/blog/the-carrier-dissolved/"/>
+    <published>2026-07-30T12:00:00+00:00</published>
+    <updated>2026-07-30T12:00:00+00:00</updated>
+    <summary type="text">v0.5.0 removed a class rather than adding one. What carries the carrier turned out to be the wrong question — the regress halts in a warrant, not in a thing, and the cogito is a pattern rather than a class.</summary>
+    <category term="design"/>
+    <category term="foundations"/>
+    <content type="html">&lt;p&gt;Every external record is borne by something. A letter needs paper, a measurement
+needs an instrument and a log, a memory needs a nervous system. The support is
+always &lt;strong&gt;excised from the Continuum&lt;/strong&gt; — the undivided ground that is the one
+thing in this ontology that is not a Record — and the excision is never clean.
+The paper is still made of the world; nothing is causally sealed off.&lt;/p&gt;
+&lt;p&gt;So: what carries the carrier?&lt;/p&gt;
+&lt;p&gt;An earlier draft answered it the obvious way. There was a &lt;code&gt;Carrier&lt;/code&gt; class, a
+&lt;code&gt;borneBy&lt;/code&gt; property, and the chain was grounded at the Agent. It typechecked. It
+was also wrong twice over, and v0.5.0 reversed it — the release removed a class
+instead of adding one.&lt;/p&gt;
+&lt;h2 id=&#34;the-discipline-objection&#34;&gt;The discipline objection&lt;/h2&gt;
+&lt;p&gt;The ontology has exactly one class, &lt;code&gt;Record&lt;/code&gt;, and everything else is an
+&lt;strong&gt;attribute&lt;/strong&gt;. That is not minimalism for its own sake; it is what makes
+patchworks decompose. A real artifact is formal at some joints and conventional
+at others, and an ontology of &lt;em&gt;kinds&lt;/em&gt; forces you to pick one label for the whole
+thing. An ontology of attributes lets each joint carry its own warrant.&lt;/p&gt;
+&lt;p&gt;A &lt;code&gt;Carrier&lt;/code&gt; class buys the regress-halt at the cost of that rule. And the carrier
+does not need to be a relatum, because it factors cleanly into two attributes
+already in hand:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;rec:hasProvenance&lt;/code&gt; — the genealogy. &lt;em&gt;Whence&lt;/em&gt; was this form individuated from
+the Continuum?&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rec:hasLocus&lt;/code&gt; — &lt;em&gt;where and when&lt;/em&gt; it is borne, agent-relative, never a
+certified position in space-time-in-itself.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Between them there is nothing left for a &lt;code&gt;Carrier&lt;/code&gt; object to do. It was not a
+thing; it was two questions wearing a noun.&lt;/p&gt;
+&lt;h2 id=&#34;the-over-capture-objection&#34;&gt;The over-capture objection&lt;/h2&gt;
+&lt;p&gt;The second failure was sharper, and it came from a stress test rather than from
+theory. The draft had a &lt;strong&gt;defined&lt;/strong&gt; &lt;code&gt;Cogito&lt;/code&gt; class: a Record borne by an Agent,
+with self-verifying warrant. A reasoner would derive membership.&lt;/p&gt;
+&lt;p&gt;It derives too much. A &lt;strong&gt;promise&lt;/strong&gt; is agent-borne and self-verifying — saying &amp;quot;I
+promise&amp;quot; is what makes it true — and a promise is emphatically not the cogito. So
+is a christening, a resignation, a bet. Every performative walks into the class
+and the reasoner cannot tell them apart, because on the stated conditions there
+is nothing to tell apart.&lt;/p&gt;
+&lt;p&gt;The fix was to stop trying to define it. The cogito is not a class; it is a
+&lt;strong&gt;pattern&lt;/strong&gt;:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;self-verifying warrant,&lt;/li&gt;
+&lt;li&gt;reflexive provenance — the act that is its own genealogy,&lt;/li&gt;
+&lt;li&gt;self-directedness — the &lt;code&gt;directedToward&lt;/code&gt; points at the agent&#39;s own existence.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Performatives share the &lt;em&gt;warrant&lt;/em&gt; without matching the pattern. A promise is
+directed at a future act, not at the promiser&#39;s existence, so it never coincides.
+Demoting the cogito to a pattern dissolved the over-capture at the same stroke as
+the discipline problem — which is usually the sign that the reversal was the
+right one rather than merely a smaller one.&lt;/p&gt;
+&lt;h2 id=&#34;where-the-regress-actually-stops&#34;&gt;Where the regress actually stops&lt;/h2&gt;
+&lt;p&gt;Not at an entity. At a &lt;strong&gt;warrant&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&amp;quot;I think&amp;quot; is true in virtue of the act of recording it, and its provenance &lt;em&gt;is&lt;/em&gt;
+that very act. Its support is not a substrate it has but the thinking it is —
+which is, if anything, more faithful to Descartes than positing a
+carrier-substance underneath.&lt;/p&gt;
+&lt;p&gt;At that one point the roles this ontology otherwise keeps carefully apart all
+land on the same object: the &lt;em&gt;for-whom&lt;/em&gt;, the &lt;em&gt;intentional object&lt;/em&gt;, and the
+&lt;em&gt;provenance&lt;/em&gt; are the agent. It is indubitable &lt;strong&gt;because&lt;/strong&gt; of the collapse.&lt;/p&gt;
+&lt;p&gt;Structurally, that gives the system its shape: a coherentist web with exactly one
+foundationalist anchor, and the anchor placed in a warrant rather than in a
+class. It also preserves the asymmetry the ontology cares most about. Two limits
+are excluded — the world-in-itself and the form-in-itself — and approached only
+asymptotically. The &lt;strong&gt;Agent&lt;/strong&gt;-in-itself is not excluded. It is the one thing given
+to itself, and self-verifying warrant is precisely the warrant that reaches it.&lt;/p&gt;
+&lt;h2 id=&#34;how-much-descartes-to-credit&#34;&gt;How much Descartes to credit&lt;/h2&gt;
+&lt;p&gt;The fixed point, not the substance.&lt;/p&gt;
+&lt;p&gt;The cogito certifies &lt;em&gt;that&lt;/em&gt; the agent exists. It does not certify &lt;em&gt;what&lt;/em&gt; the
+agent is. Descartes&#39; slide from &amp;quot;I am&amp;quot; to &amp;quot;I am a thinking substance&amp;quot; is a
+different move entirely, and by this ontology&#39;s lights it is an &lt;strong&gt;apple&lt;/strong&gt; — a claim
+to the god&#39;s-eye standpoint that sees both the shadow and what casts it. Finitude
+survives even here: a certain anchor of existence, not a fully known object.&lt;/p&gt;
+&lt;p&gt;Credit Hintikka for the warrant, incidentally, not Descartes. The cogito works as
+a &lt;em&gt;performance&lt;/em&gt;, not as an inference; there is no suppressed premise from which
+&amp;quot;I am&amp;quot; is derived.&lt;/p&gt;
+&lt;p&gt;And the twin question never arises. If the mind is not a second substance, what
+is the body? Nothing needs answering, because nothing was split. The body is
+Continuum, approached the way any worldly object is — empirically, defeasibly,
+never fully held. What is special about the agent was never a second kind of
+stuff opposed to a first; it is the warrant-pattern above, sitting alongside all
+the ordinary empirical records the agent also holds about its own body. Descartes
+needed two substances to solve an interaction problem his own split created. Do
+not create the split and neither the problem nor its machinery ever shows up.&lt;/p&gt;
+&lt;h2 id=&#34;what-is-actually-in-the-file&#34;&gt;What is actually in the file&lt;/h2&gt;
+&lt;pre class=&#34;language-turtle&#34;&gt;&lt;code&gt;&lt;span class=&#34;t-p&#34;&gt;rec:hasLocus&lt;/span&gt; &lt;span class=&#34;t-k&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;t-p&#34;&gt;owl:ObjectProperty&lt;/span&gt; .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That is the whole positive change. No &lt;code&gt;Carrier&lt;/code&gt;, no &lt;code&gt;Cogito&lt;/code&gt;, no
+&lt;code&gt;FoundationalCarrier&lt;/code&gt;, no &lt;code&gt;borneBy&lt;/code&gt;. The cogito is recognised by its pattern, and
+the validator checks exactly that: the pattern holds in &lt;code&gt;cogito.ttl&lt;/code&gt;, and a
+self-verifying &lt;em&gt;promise&lt;/em&gt; in the same file is correctly &lt;strong&gt;not&lt;/strong&gt; conflated with it.&lt;/p&gt;
+&lt;p&gt;A negative control in a test suite is worth more than a class in a hierarchy.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>Exercise or exorcise</title>
+    <id>https://epistemic-ontology.net/blog/exercise-or-exorcise/</id>
+    <link rel="alternate" type="text/html" href="https://epistemic-ontology.net/blog/exercise-or-exorcise/"/>
+    <published>2026-07-30T12:00:00+00:00</published>
+    <updated>2026-07-30T12:00:00+00:00</updated>
+    <summary type="text">v0.6.0 added one datatype property and a discipline that goes with it. Formal warrant is a claim, not a credential: run the description or hold the record testimonially — and be honest about which.</summary>
+    <category term="design"/>
+    <category term="warrant"/>
+    <content type="html">&lt;p&gt;A Record is defined as &lt;em&gt;a form, in a carrier, for an agent, at a level of
+abstraction&lt;/em&gt;. For four versions, every record in every fixture had no form.&lt;/p&gt;
+&lt;p&gt;They had labels — prose glosses for humans. They had structure — premises,
+conclusions, warrants, provenance. But the actual content, the thing the record
+was a record &lt;em&gt;of&lt;/em&gt;, lived nowhere in the graph. The energy levels in the atom
+fixture were a string in an &lt;code&gt;rdfs:label&lt;/code&gt;. The triangle&#39;s three sides were a
+comment. An ontology of forms-in-carriers contained no forms.&lt;/p&gt;
+&lt;p&gt;v0.6.0 closes that with a single datatype property, the first in the vocabulary:&lt;/p&gt;
+&lt;pre class=&#34;language-turtle&#34;&gt;&lt;code&gt;&lt;span class=&#34;t-p&#34;&gt;rec:formulation&lt;/span&gt; &lt;span class=&#34;t-k&#34;&gt;a&lt;/span&gt; &lt;span class=&#34;t-p&#34;&gt;owl:DatatypeProperty&lt;/span&gt; ;
+    &lt;span class=&#34;t-p&#34;&gt;rdfs:domain&lt;/span&gt; &lt;span class=&#34;t-p&#34;&gt;rec:Record&lt;/span&gt; .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;The form as held, serialized.&lt;/strong&gt; A formula, a constraint list, a data table, a
+text. It is not mathematics-specific — a letter&#39;s formulation is its text.&lt;/p&gt;
+&lt;p&gt;Note what it is not. It is not the form-in-itself. It is the token serialization
+of what &lt;em&gt;this agent holds&lt;/em&gt;, which is why it passes the founding rule while a
+&lt;code&gt;Form&lt;/code&gt; class would not. The triangle gets content here. It still gets no birthday.&lt;/p&gt;
+&lt;h2 id=&#34;the-reasoner-must-not-look-inside&#34;&gt;The reasoner must not look inside&lt;/h2&gt;
+&lt;p&gt;The first discipline riding along with &lt;code&gt;formulation&lt;/code&gt; is that it is &lt;strong&gt;opaque to
+the classifier&lt;/strong&gt;, permanently and by design.&lt;/p&gt;
+&lt;p&gt;OWL 2 DL is decidable precisely because it excludes nearly all mathematics. A
+formulation is a literal; nothing in the reasoner evaluates it. Execution belongs
+to the engine.&lt;/p&gt;
+&lt;p&gt;This is the same architectural rule the ontology already lives under, striking a
+second time and symmetrically:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Dynamics&lt;/em&gt; live over the statics because DL is monotonic.
+&lt;em&gt;Computation&lt;/em&gt; lives over the statics because DL is decidable.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;One rule, two corollaries. The ontology holds structure; engines perform
+operations.&lt;/p&gt;
+&lt;h2 id=&#34;warrant-is-earned&#34;&gt;Warrant is earned&lt;/h2&gt;
+&lt;p&gt;The second discipline is the interesting one, and it generalises something the
+validator has always done. The validator refuses stipulated inference-hood: it
+strips &lt;code&gt;a rec:Inference&lt;/code&gt; from a record and demands the reasoner re-derive it from
+the definition, with a negative control that must &lt;em&gt;not&lt;/em&gt; be derived.&lt;/p&gt;
+&lt;p&gt;Say the same thing about formal warrant. &lt;code&gt;hasWarrant rec:Formal&lt;/code&gt; is a &lt;strong&gt;claim&lt;/strong&gt;.
+Exercising the formulation — running its description, checking that it closes —
+is what confirms the claim.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;claim → &lt;strong&gt;exercise&lt;/strong&gt; → confirmed, &lt;em&gt;or&lt;/em&gt; &lt;strong&gt;exorcised&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;with a third state sitting before the fork, and it is the most common one:
+&lt;strong&gt;never exercised&lt;/strong&gt;, which means testimonially held. That is not a failure state.
+Most mathematics-as-held is testimonial. You did not re-derive the theorems you
+use; you received them through a chain of agents and trusted the chain. The
+capacity to complete a formal record internally is a &lt;em&gt;capacity&lt;/em&gt;, rarely
+exercised. Running the derivation converts testimonial holding into formal
+holding — which is exactly what executable content does when it is added to a
+fixture.&lt;/p&gt;
+&lt;p&gt;The point of the vocabulary is not to shame testimonial holding. It is to make it
+&lt;strong&gt;visible&lt;/strong&gt;, so that &amp;quot;formally warranted&amp;quot; stops silently meaning two different
+things.&lt;/p&gt;
+&lt;h2 id=&#34;what-exorcism-expels&#34;&gt;What exorcism expels&lt;/h2&gt;
+&lt;p&gt;Not the record. The &lt;strong&gt;pretender&lt;/strong&gt; — formal warrant worn without the form.&lt;/p&gt;
+&lt;p&gt;Kempe published a proof of the four-colour theorem in 1879. It stood for eleven
+years, until Heawood exercised it in 1890 and found the flaw. The paper is a
+real, historically important record; records &lt;em&gt;about&lt;/em&gt; it preserve the history; the
+mathematics it developed went on being useful. What is withdrawn is its formal
+warrant, &lt;strong&gt;at a moment&lt;/strong&gt; — 1890, not retroactively.&lt;/p&gt;
+&lt;p&gt;That timestamp is the entire point. As of 1885, trusting Kempe was justified.
+Judging the 1885 agent by the 1890 verdict is what this project calls the
+temporal apple: hindsight dressed up as a god&#39;s-eye view along the time axis. The
+log records when the verdict landed, and states are computed as-of a moment, so
+the question &amp;quot;was this reasonable then?&amp;quot; has an answer that is not contaminated by
+what came later.&lt;/p&gt;
+&lt;p&gt;After an exorcism the record survives but can no longer transmit support, and
+everything resting on it cascades away. A repaired proof is a &lt;strong&gt;new&lt;/strong&gt; record, not
+a restoration.&lt;/p&gt;
+&lt;p&gt;The demo pair brackets the two outcomes at eyeball scale: the 3-4-5 triangle,
+described in full and exercised from its own description, passes; the 2 = 1
+pseudo-proof fails at its hidden division by zero and is expelled, taking its
+dependents with it and leaving the publication record standing.&lt;/p&gt;
+&lt;h2 id=&#34;provenance-couples-differently-to-each-warrant&#34;&gt;Provenance couples differently to each warrant&lt;/h2&gt;
+&lt;p&gt;One more thing fell out of taking formulation seriously, and it resolves an old
+quarrel in passing. Formal warrant is agent-independent; provenance is
+agent-relative and constitutive. There is no contradiction, because they answer
+different questions — &lt;em&gt;how is it justified?&lt;/em&gt; versus &lt;em&gt;whence did it come?&lt;/em&gt; Ask how
+tightly the two couple, and the warrant triad completes itself once more, one
+value per limit:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Warrant&lt;/th&gt;
+&lt;th&gt;Coupling to provenance&lt;/th&gt;
+&lt;th&gt;Consequence&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;formal&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;decoupled&lt;/strong&gt; — survives total provenance loss&lt;/td&gt;
+&lt;td&gt;anonymous theorems are fine&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;empirical&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;constituted&lt;/strong&gt; — lose the chain of custody, lose the warrant&lt;/td&gt;
+&lt;td&gt;anonymous data is worthless&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;self-verifying&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;coincident&lt;/strong&gt; — the act is both genealogy and justification&lt;/td&gt;
+&lt;td&gt;an anonymous cogito is impossible&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Kant&#39;s version: knowledge that &lt;em&gt;begins with&lt;/em&gt; experience need not &lt;em&gt;arise out of&lt;/em&gt;
+it. The rationalist and empiricist camps were each collapsing one of these
+columns into the other.&lt;/p&gt;
+&lt;p&gt;The practical payoff is a storage rule, and it is exact:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Drop whatever is provenance-decoupled. Keep whatever is
+provenance-constituted.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The formal interior of a web regenerates by deduction. The empirical leaves and
+the trail of decisions do not. That is why a knowledge web can be compressed at
+all — and, read the other way, it is precisely what destruction can and cannot
+reach.&lt;/p&gt;
+</content>
+  </entry>
+  <entry>
+    <title>A harm is a legitimate operation minus its escalation record</title>
+    <id>https://epistemic-ontology.net/blog/harm-is-an-operation-minus-its-record/</id>
+    <link rel="alternate" type="text/html" href="https://epistemic-ontology.net/blog/harm-is-an-operation-minus-its-record/"/>
+    <published>2026-07-30T12:00:00+00:00</published>
+    <updated>2026-07-30T12:00:00+00:00</updated>
+    <summary type="text">Two ontologies published here cut the same territory differently — one act-shaped, one warrant-shaped. Writing the dictionary between them produced a single sentence that covers all five prime harms, and explains why neither vocabulary should absorb the other.</summary>
+    <category term="record-harm"/>
+    <category term="design"/>
+    <content type="html">&lt;p&gt;Two vocabularies are published at this namespace, and they were built from
+opposite ends.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;/record-harm/&#34;&gt;Record Harm Ontology&lt;/a&gt; is &lt;strong&gt;act-shaped&lt;/strong&gt;. Its five prime harms
+name what a perpetrator does to an artifact: destroy it, fabricate it, alter it,
+omit from it, deny it. Its event layer carries a date, a perpetrator, a severity.
+It is the shape an archivist or a court needs.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&#34;/record/&#34;&gt;Record Ontology&lt;/a&gt; is &lt;strong&gt;warrant-shaped&lt;/strong&gt;. Its native cuts are about
+where in a web an incoherence lands: a leaf lost, a moment rewritten, a skip left
+unrecorded, a pretender&#39;s exercise failing. It has no harm vocabulary at all.&lt;/p&gt;
+&lt;p&gt;The obvious guess is that one should absorb the other — re-derive the harm
+taxonomy from the record web and drop the duplicate. Writing out the translation
+in full showed that this is wrong, and produced something better on the way.&lt;/p&gt;
+&lt;h2 id=&#34;the-sentence&#34;&gt;The sentence&lt;/h2&gt;
+&lt;p&gt;Every prime harm is a &lt;strong&gt;normal web operation with its explicitness removed&lt;/strong&gt;.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;The operation, recorded (legitimate)&lt;/th&gt;
+&lt;th&gt;The same operation, concealed (prime harm)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;puncture&lt;/strong&gt; — a storage decision; leaves and trail kept, interior regenerates&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Destruction&lt;/strong&gt; — the non-regenerable residue lost: empirical leaves, the escalation trail&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;supposition&lt;/strong&gt; — stood on, worn openly; quarantined, transmits nothing&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Fabrication&lt;/strong&gt; — the pretender: unearned warrant transmitted into the held web&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;retraction&lt;/strong&gt; — a new moment appended; old moments never rewritten&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Alteration&lt;/strong&gt; — a rewrite of old moments; change without a moment&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;stub&lt;/strong&gt; — the skip that became a record: &amp;quot;X deferred, for Y, at moment m&amp;quot;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Omission&lt;/strong&gt; — the unrecorded skip&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;exorcism&lt;/strong&gt; — standing withdrawn &lt;em&gt;by a verdict&lt;/em&gt;, logged at a moment&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Denial&lt;/strong&gt; — standing refused without a verdict&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Read down the right column and record-harm&#39;s five primes appear. Read across and
+each is its left-hand twin with the escalation record deleted.&lt;/p&gt;
+&lt;p&gt;This matters because the left column is not a list of things to avoid. Excision
+is &lt;strong&gt;constitutive&lt;/strong&gt; — no record has total support, so something is always cut
+away. Retraction is routine. Skips are mandatory for any finite agent; an agent
+that never deferred anything would never finish anything. Puncturing is how a web
+stays affordable.&lt;/p&gt;
+&lt;p&gt;The act was never the harm. &lt;strong&gt;Concealment is.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;why-the-engine-needs-no-harm-vocabulary&#34;&gt;Why the engine needs no harm vocabulary&lt;/h2&gt;
+&lt;p&gt;Once the dictionary is written, the detectors turn out to already exist, because
+each one is a discipline the web needed for its own sake:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;strong&gt;pretender alarm&lt;/strong&gt; — the generated test suites — is Fabrication&#39;s formal
+detector.&lt;/li&gt;
+&lt;li&gt;The &lt;strong&gt;consumption check&lt;/strong&gt; catches the subtler case: a fabrication whose content
+happens to be &lt;em&gt;true&lt;/em&gt; and only whose genealogy is forged. A joint that restates
+its own conclusion is the undeclared twin of an honestly stated stub.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;As-of-moment computation&lt;/strong&gt; catches Alteration. If states are computed at a
+moment and old moments are never rewritten, an anachronism is a contradiction
+rather than a suspicion.&lt;/li&gt;
+&lt;li&gt;The &lt;strong&gt;observation planner&lt;/strong&gt; renders Omission as the stub that isn&#39;t there: it
+can name what should have been recorded.&lt;/li&gt;
+&lt;li&gt;The &lt;strong&gt;puncture report&#39;s&lt;/strong&gt; must-keep partition says exactly what Destruction can
+and cannot reach.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Environment liveness&lt;/strong&gt; after an exorcism computes what a poisoned ground
+infects. &amp;quot;Doubt infects the whole&amp;quot; stops being a mood and becomes a map.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;None of these were built as harm detection. They are the disciplines that make a
+revisable web work at all, and harm detection is what they do incidentally. That
+is the strongest argument that the factorization is real.&lt;/p&gt;
+&lt;h2 id=&#34;where-the-two-shapes-genuinely-disagree&#34;&gt;Where the two shapes genuinely disagree&lt;/h2&gt;
+&lt;p&gt;The isomorphism is in coverage, not in structure — and it does not preserve the
+prime/composite distinction. Two disagreements are worth naming.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Three acts collapse into one shape.&lt;/strong&gt; Fabrication, harmful Omission and harmful
+Alteration are three distinct things to do to an artifact. Web-internally they
+are one genus: &lt;strong&gt;concealed escalation&lt;/strong&gt;. A trade-off made against the web and not
+logged; a skip not recorded; a change not given a moment. To a perpetrator these
+are different crimes. To the web they are the same lesion.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Denial goes the other way, and instructively.&lt;/strong&gt; Record-harm promoted Denial to
+a &lt;em&gt;prime&lt;/em&gt; precisely because it involves no act of hiding, creating or modifying —
+it looked irreducible as an act. Web-internally it reduces after all, one level
+up. &amp;quot;That document is fake&amp;quot; is a record &lt;em&gt;directed at&lt;/em&gt; a record: a
+fabrication-charge the web does not corroborate. It is &lt;strong&gt;Fabrication at the
+meta-level&lt;/strong&gt;, a false posit whose content is another record&#39;s standing.&lt;/p&gt;
+&lt;p&gt;Prime in one factorization, composite in the other, and both correct in their own
+shape. That is the cleanest evidence that these are two genuine factorizations
+rather than one taxonomy and one paraphrase of it.&lt;/p&gt;
+&lt;p&gt;One composite does not survive translation at all. &lt;strong&gt;Decontextualization&lt;/strong&gt; loses
+its object: there is no metadata layer to strip, and the excision is already part
+of the support. &amp;quot;Stripping context&amp;quot; is not a distinct operation on an intact
+record — it is Alteration or Omission of the record itself.&lt;/p&gt;
+&lt;h2 id=&#34;why-both-vocabularies-stay&#34;&gt;Why both vocabularies stay&lt;/h2&gt;
+&lt;p&gt;The temptation was to re-derive record-harm and retire it. The dictionary argues
+against that, because the act-shape carries exactly what the warrant-shape
+deliberately refuses.&lt;/p&gt;
+&lt;p&gt;A &lt;code&gt;HarmEvent&lt;/code&gt; has a &lt;strong&gt;perpetrator&lt;/strong&gt;. It has a date and a severity. That is
+attribution — and the Record Ontology forbids itself to compute it. Punitive
+calculus is refused there on purpose; harm is &lt;em&gt;detected&lt;/em&gt;, never &lt;em&gt;charged&lt;/em&gt;. An
+engine that computed blame would be claiming the standpoint that sees both the
+shadow and what casts it, which is the one move the whole ontology is built to
+avoid.&lt;/p&gt;
+&lt;p&gt;So the division of labour is clean, and it is a division rather than a merger:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This web computes the incoherence. Record-harm names the act and the actor.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Two readings of the same web, kept apart on purpose — attached, never absorbed,
+which is the same relation the &lt;a href=&#34;/arith/&#34;&gt;Arithmetic Companion&lt;/a&gt; has to the core.
+The next release of record-harm keeps its taxonomy and re-grounds its definitions
+through this table: correspondence language out, web-internal readings in.&lt;/p&gt;
+&lt;p&gt;And the dictionary settles one more thing by demonstration. It adds no
+vocabulary to either ontology — a harm class would stamp per node what the web
+already entails — and it needs no new code, because every detector in it was
+already running. It is the compression argument applied to itself: one fewer
+ontology to assert.&lt;/p&gt;
+</content>
+  </entry>
+</feed>

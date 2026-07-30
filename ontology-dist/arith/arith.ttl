@@ -1,0 +1,177 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc:    <http://purl.org/dc/terms/> .
+@prefix rec:   <https://www.epistemic-ontology.net/record#> .
+@prefix arith: <https://www.epistemic-ontology.net/arith#> .
+
+# ============================================================================
+# The Arithmetic Companion  --  REPRESENTATIVE (v0.1.0)
+# ============================================================================
+# The OBJECT face of the formal (ROOT.md §2), laid out in full -- as a
+# COMPANION, attached never absorbed (§12's pattern, applied to mathematics
+# itself). record-ontology already owns the OPERATION face (Inference); this
+# ontology supplies the objects: operations in a definitional hierarchy, and
+# expressions as formal Records composed of Records.
+#
+# Two disciplines:
+#  * The reasoner checks SHAPE, never VALUE. 2+2=4 is not a DL entailment --
+#    OWL 2 DL is decidable because it excludes nearly all mathematics.
+#    Evaluation and exercise live in the engine (engine/compile.py), which
+#    COMPILES descriptions into a CAS and runs them (§15.3).
+#  * REPRESENTATIVE scope, on purpose: integers, variables, the four
+#    operations, equality. Not analysis, not set theory, not proofs-as-
+#    objects. Names align with the OpenMath arith1 content dictionary by
+#    dc:source pointer -- never by import (the SKOS lesson, §12).
+# ============================================================================
+
+<https://www.epistemic-ontology.net/arith>
+    a owl:Ontology ;
+    dc:title "The Arithmetic Companion"@en ;
+    dc:creator "Ron Hinchley / epistemic-ontology.net" ;
+    dc:license <http://creativecommons.org/licenses/by/4.0/> ;
+    dc:source <https://openmath.org/cd/arith1.html> ;
+    owl:imports <https://www.epistemic-ontology.net/record> ;
+    owl:versionInfo "0.1.0 — representative arithmetic: operations in a definitional hierarchy; expressions as formal Records" ;
+    rdfs:comment "A representative companion ontology of arithmetic content for the Record Ontology (ROOT.md §15): the formal OBJECT face laid out in full. Expressions are Records; operands are parts; the reasoner checks shape, the engine computes value."@en .
+
+
+# ----------------------------------------------------------------------------
+# OPERATIONS -- individuals in a DEFINITIONAL HIERARCHY
+# ----------------------------------------------------------------------------
+# Mathematics' own derivation web: every joint truth-preserving, every leaf
+# formal, bottoming out at the Peano ground (Successor) the way empirical
+# webs bottom out in observation. The §14 limiting case: a web like this
+# punctures to almost nothing -- the whole interior regenerates from the
+# definitional core.
+
+arith:Operation a owl:Class ;
+    rdfs:label "Operation"@en ;
+    rdfs:comment "An arithmetic operation, held as an individual (like the warrant values). The definitional edges between operations are the hierarchy."@en .
+
+arith:definedFrom a owl:ObjectProperty ;
+    rdfs:label "defined from"@en ;
+    rdfs:domain arith:Operation ;
+    rdfs:range  arith:Operation ;
+    rdfs:comment "The definitional DAG over operations. Deliberately NON-transitive in the base -- the same §6 discipline as composition."@en .
+
+arith:inverseOperationOf a owl:ObjectProperty ;
+    rdfs:label "inverse operation of"@en ;
+    rdfs:subPropertyOf arith:definedFrom ;
+    rdfs:comment "Defined as the inverse of another operation."@en .
+
+arith:iterates a owl:ObjectProperty ;
+    rdfs:label "iterates"@en ;
+    rdfs:subPropertyOf arith:definedFrom ;
+    rdfs:comment "Defined as the iteration of another operation."@en .
+
+arith:Successor a owl:NamedIndividual , arith:Operation ;
+    rdfs:label "successor"@en ;
+    rdfs:comment "The Peano ground: the root of the definitional DAG. Defined from nothing -- the formal analogue of an empirical leaf."@en .
+
+arith:Addition a owl:NamedIndividual , arith:Operation ;
+    rdfs:label "addition"@en ;
+    dc:source <https://openmath.org/cd/arith1.html#plus> ;
+    arith:iterates arith:Successor .
+
+arith:Subtraction a owl:NamedIndividual , arith:Operation ;
+    rdfs:label "subtraction"@en ;
+    dc:source <https://openmath.org/cd/arith1.html#minus> ;
+    arith:inverseOperationOf arith:Addition .
+
+arith:Multiplication a owl:NamedIndividual , arith:Operation ;
+    rdfs:label "multiplication"@en ;
+    dc:source <https://openmath.org/cd/arith1.html#times> ;
+    arith:iterates arith:Addition .
+
+arith:Division a owl:NamedIndividual , arith:Operation ;
+    rdfs:label "division"@en ;
+    dc:source <https://openmath.org/cd/arith1.html#divide> ;
+    arith:inverseOperationOf arith:Multiplication .
+
+
+# ----------------------------------------------------------------------------
+# EXPRESSIONS -- formal Records composed of Records
+# ----------------------------------------------------------------------------
+# The bridge that makes this a true companion rather than a bolt-on:
+# arith:Expression ⊑ rec:Record. An expression AS HELD is a formal record;
+# an expression tree is a record composed of records -- the operand
+# properties are sub-properties of rec:composedOf, so the tree structure IS
+# record-ontology composition, with only the operation vocabulary added.
+
+arith:Expression a owl:Class ;
+    rdfs:label "Expression"@en ;
+    rdfs:subClassOf rec:Record ;
+    rdfs:comment "An arithmetic expression as held -- a formal Record. Trees are Record-of-Records: operands are parts."@en .
+
+arith:Numeral a owl:Class ;
+    rdfs:label "Numeral"@en ;
+    rdfs:subClassOf arith:Expression ;
+    rdfs:comment "A literal integer, as held."@en .
+
+arith:numericValue a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "numeric value"@en ;
+    rdfs:domain arith:Numeral ;
+    rdfs:range  xsd:integer .
+
+arith:Variable a owl:Class ;
+    rdfs:label "Variable"@en ;
+    rdfs:subClassOf arith:Expression .
+
+arith:symbol a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:label "symbol"@en ;
+    rdfs:domain arith:Variable ;
+    rdfs:range  xsd:string .
+
+# Binary application only, in the representative scope. The functional
+# properties are the DECIDABLE face of well-formedness (two distinct first
+# operands entail sameAs; with differentFrom, inconsistency). ABSENCE of an
+# operand is open-world-invisible to OWL -- closed-world well-formedness is
+# the compiler's job (engine/compile.py), per the strata rule.
+arith:Application a owl:Class ;
+    rdfs:label "Application"@en ;
+    rdfs:subClassOf arith:Expression ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty arith:operator      ; owl:cardinality 1 ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty arith:firstOperand  ; owl:cardinality 1 ] ;
+    rdfs:subClassOf [ a owl:Restriction ; owl:onProperty arith:secondOperand ; owl:cardinality 1 ] ;
+    rdfs:comment "A binary operation applied to two operand expressions."@en .
+
+arith:operator a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "operator"@en ;
+    rdfs:domain arith:Application ;
+    rdfs:range  arith:Operation ;
+    rdfs:comment "Which operation is applied. A vocabulary reference, not a part."@en .
+
+arith:firstOperand a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "first operand"@en ;
+    rdfs:subPropertyOf rec:composedOf ;
+    rdfs:domain arith:Application ;
+    rdfs:range  arith:Expression .
+
+arith:secondOperand a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "second operand"@en ;
+    rdfs:subPropertyOf rec:composedOf ;
+    rdfs:domain arith:Application ;
+    rdfs:range  arith:Expression .
+
+# An equation relates two expressions; lhs/rhs are parts. A description --
+# "the whole thing: sides, and all, coming together" -- is simply a Record
+# composedOf equations (attributes not kinds: no Description class needed).
+arith:Equation a owl:Class ;
+    rdfs:label "Equation"@en ;
+    rdfs:subClassOf rec:Record ;
+    dc:source <https://openmath.org/cd/relation1.html#eq> ;
+    rdfs:comment "An asserted equality between two expressions, as held. The compiler exercises it: both sides evaluate and must agree."@en .
+
+arith:lhs a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "left-hand side"@en ;
+    rdfs:subPropertyOf rec:composedOf ;
+    rdfs:domain arith:Equation ;
+    rdfs:range  arith:Expression .
+
+arith:rhs a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:label "right-hand side"@en ;
+    rdfs:subPropertyOf rec:composedOf ;
+    rdfs:domain arith:Equation ;
+    rdfs:range  arith:Expression .

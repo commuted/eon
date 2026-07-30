@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body_class %}doc{% endblock %}
+
+{% block content %}
+<div class="wrap doc-head">
+  <h1>{{ page.title }}</h1>
+  {% if page.lead %}<p class="lead">{{ page.lead }}</p>{% endif %}
+</div>
+
+{% set has_sidebar = page.toc | length > 2 %}
+<div class="wrap doc-layout{{ '' if has_sidebar else ' no-sidebar' }}">
+  {% if has_sidebar %}
+  <aside class="sidebar">
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        {% for item in page.toc %}
+        <li class="toc-l{{ item.level }}"><a href="#{{ item.id }}">{{ item.title }}</a></li>
+        {% endfor %}
+      </ol>
+    </nav>
+  </aside>
+  {% endif %}
+  <article class="doc-body prose">
+    {{ page.body | safe }}
+  </article>
+</div>
+{% endblock %}

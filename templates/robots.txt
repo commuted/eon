@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# The RDF serializations are meant to be fetched by tooling.
+Allow: /*.ttl$
+
+Sitemap: {{ '/sitemap.xml' | absurl }}

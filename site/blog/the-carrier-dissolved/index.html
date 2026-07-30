@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The carrier, dissolved — Epistemic Ontology</title>
+<meta name="description" content="v0.5.0 removed a class rather than adding one. What carries the carrier turned out to be the wrong question — the regress halts in a warrant, not in a thing, and the cogito is a pattern rather than a class.">
+<link rel="canonical" href="https://epistemic-ontology.net/blog/the-carrier-dissolved/">
+<meta name="author" content="Ron Hinchley">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Epistemic Ontology">
+<meta property="og:title" content="The carrier, dissolved">
+<meta property="og:description" content="v0.5.0 removed a class rather than adding one. What carries the carrier turned out to be the wrong question — the regress halts in a warrant, not in a thing, and the cogito is a pattern rather than a class.">
+<meta property="og:url" content="https://epistemic-ontology.net/blog/the-carrier-dissolved/">
+<meta property="og:image" content="https://epistemic-ontology.net/logo.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Epistemic Ontology — Notes" href="/feed.xml">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BlogPosting", "author": {"@type": "Person", "name": "Ron Hinchley"}, "dateModified": "2026-07-30", "datePublished": "2026-07-30", "description": "v0.5.0 removed a class rather than adding one. What carries the carrier turned out to be the wrong question \u2014 the regress halts in a warrant, not in a thing, and the cogito is a pattern rather than a class.", "headline": "The carrier, dissolved", "keywords": "design, foundations", "publisher": {"@type": "Organization", "name": "Epistemic Ontology"}, "url": "https://epistemic-ontology.net/blog/the-carrier-dissolved/"}
+</script>
+<script>
+  // Set the theme before first paint so there is no flash. Progressive: with
+  // JS off the page falls back to prefers-color-scheme in the stylesheet.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body class="doc post-page">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="/apple-touch-icon.png" alt="" width="32" height="32" decoding="async">
+      <span class="brand-text">Epistemic<span class="brand-accent">Ontology</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/#ontologies">Ontologies</a>
+      <a href="/blog/">Notes</a>
+      <a href="/using/">Using</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4Z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap doc-head">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/blog/">Notes</a> <span aria-hidden="true">/</span>
+    <span>The carrier, dissolved</span>
+  </nav>
+  <h1>The carrier, dissolved</h1>
+  <p class="lead">v0.5.0 removed a class rather than adding one. What carries the carrier turned out to be the wrong question — the regress halts in a warrant, not in a thing, and the cogito is a pattern rather than a class.</p>
+  <p class="meta-line">
+    <time datetime="2026-07-30">30 July 2026</time>
+    · 5 min read
+    · <a class="tag tag-sm" href="/blog/tag/design/">design</a>
+    · <a class="tag tag-sm" href="/blog/tag/foundations/">foundations</a>
+  </p>
+</div>
+
+<div class="wrap doc-layout">
+  <aside class="sidebar">
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        <li class="toc-l2"><a href="#the-discipline-objection">The discipline objection</a></li>
+        <li class="toc-l2"><a href="#the-over-capture-objection">The over-capture objection</a></li>
+        <li class="toc-l2"><a href="#where-the-regress-actually-stops">Where the regress actually stops</a></li>
+        <li class="toc-l2"><a href="#how-much-descartes-to-credit">How much Descartes to credit</a></li>
+        <li class="toc-l2"><a href="#what-is-actually-in-the-file">What is actually in the file</a></li>
+      </ol>
+    </nav>
+    <div class="sidebar-card">
+      <h2 class="sidebar-title">In the source</h2>
+      <ul class="plain">
+        <li><a href="/record/">Record Ontology</a></li>
+        <li><a href="/record/examples/cogito.ttl">cogito.ttl</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <article class="doc-body prose">
+    <p>Every external record is borne by something. A letter needs paper, a measurement
+needs an instrument and a log, a memory needs a nervous system. The support is
+always <strong>excised from the Continuum</strong> — the undivided ground that is the one
+thing in this ontology that is not a Record — and the excision is never clean.
+The paper is still made of the world; nothing is causally sealed off.</p>
+<p>So: what carries the carrier?</p>
+<p>An earlier draft answered it the obvious way. There was a <code>Carrier</code> class, a
+<code>borneBy</code> property, and the chain was grounded at the Agent. It typechecked. It
+was also wrong twice over, and v0.5.0 reversed it — the release removed a class
+instead of adding one.</p>
+<h2 id="the-discipline-objection">The discipline objection</h2>
+<p>The ontology has exactly one class, <code>Record</code>, and everything else is an
+<strong>attribute</strong>. That is not minimalism for its own sake; it is what makes
+patchworks decompose. A real artifact is formal at some joints and conventional
+at others, and an ontology of <em>kinds</em> forces you to pick one label for the whole
+thing. An ontology of attributes lets each joint carry its own warrant.</p>
+<p>A <code>Carrier</code> class buys the regress-halt at the cost of that rule. And the carrier
+does not need to be a relatum, because it factors cleanly into two attributes
+already in hand:</p>
+<ul>
+<li><code>rec:hasProvenance</code> — the genealogy. <em>Whence</em> was this form individuated from
+the Continuum?</li>
+<li><code>rec:hasLocus</code> — <em>where and when</em> it is borne, agent-relative, never a
+certified position in space-time-in-itself.</li>
+</ul>
+<p>Between them there is nothing left for a <code>Carrier</code> object to do. It was not a
+thing; it was two questions wearing a noun.</p>
+<h2 id="the-over-capture-objection">The over-capture objection</h2>
+<p>The second failure was sharper, and it came from a stress test rather than from
+theory. The draft had a <strong>defined</strong> <code>Cogito</code> class: a Record borne by an Agent,
+with self-verifying warrant. A reasoner would derive membership.</p>
+<p>It derives too much. A <strong>promise</strong> is agent-borne and self-verifying — saying &quot;I
+promise&quot; is what makes it true — and a promise is emphatically not the cogito. So
+is a christening, a resignation, a bet. Every performative walks into the class
+and the reasoner cannot tell them apart, because on the stated conditions there
+is nothing to tell apart.</p>
+<p>The fix was to stop trying to define it. The cogito is not a class; it is a
+<strong>pattern</strong>:</p>
+<ol>
+<li>self-verifying warrant,</li>
+<li>reflexive provenance — the act that is its own genealogy,</li>
+<li>self-directedness — the <code>directedToward</code> points at the agent's own existence.</li>
+</ol>
+<p>Performatives share the <em>warrant</em> without matching the pattern. A promise is
+directed at a future act, not at the promiser's existence, so it never coincides.
+Demoting the cogito to a pattern dissolved the over-capture at the same stroke as
+the discipline problem — which is usually the sign that the reversal was the
+right one rather than merely a smaller one.</p>
+<h2 id="where-the-regress-actually-stops">Where the regress actually stops</h2>
+<p>Not at an entity. At a <strong>warrant</strong>.</p>
+<p>&quot;I think&quot; is true in virtue of the act of recording it, and its provenance <em>is</em>
+that very act. Its support is not a substrate it has but the thinking it is —
+which is, if anything, more faithful to Descartes than positing a
+carrier-substance underneath.</p>
+<p>At that one point the roles this ontology otherwise keeps carefully apart all
+land on the same object: the <em>for-whom</em>, the <em>intentional object</em>, and the
+<em>provenance</em> are the agent. It is indubitable <strong>because</strong> of the collapse.</p>
+<p>Structurally, that gives the system its shape: a coherentist web with exactly one
+foundationalist anchor, and the anchor placed in a warrant rather than in a
+class. It also preserves the asymmetry the ontology cares most about. Two limits
+are excluded — the world-in-itself and the form-in-itself — and approached only
+asymptotically. The <strong>Agent</strong>-in-itself is not excluded. It is the one thing given
+to itself, and self-verifying warrant is precisely the warrant that reaches it.</p>
+<h2 id="how-much-descartes-to-credit">How much Descartes to credit</h2>
+<p>The fixed point, not the substance.</p>
+<p>The cogito certifies <em>that</em> the agent exists. It does not certify <em>what</em> the
+agent is. Descartes' slide from &quot;I am&quot; to &quot;I am a thinking substance&quot; is a
+different move entirely, and by this ontology's lights it is an <strong>apple</strong> — a claim
+to the god's-eye standpoint that sees both the shadow and what casts it. Finitude
+survives even here: a certain anchor of existence, not a fully known object.</p>
+<p>Credit Hintikka for the warrant, incidentally, not Descartes. The cogito works as
+a <em>performance</em>, not as an inference; there is no suppressed premise from which
+&quot;I am&quot; is derived.</p>
+<p>And the twin question never arises. If the mind is not a second substance, what
+is the body? Nothing needs answering, because nothing was split. The body is
+Continuum, approached the way any worldly object is — empirically, defeasibly,
+never fully held. What is special about the agent was never a second kind of
+stuff opposed to a first; it is the warrant-pattern above, sitting alongside all
+the ordinary empirical records the agent also holds about its own body. Descartes
+needed two substances to solve an interaction problem his own split created. Do
+not create the split and neither the problem nor its machinery ever shows up.</p>
+<h2 id="what-is-actually-in-the-file">What is actually in the file</h2>
+<pre class="language-turtle"><code><span class="t-p">rec:hasLocus</span> <span class="t-k">a</span> <span class="t-p">owl:ObjectProperty</span> .
+</code></pre>
+<p>That is the whole positive change. No <code>Carrier</code>, no <code>Cogito</code>, no
+<code>FoundationalCarrier</code>, no <code>borneBy</code>. The cogito is recognised by its pattern, and
+the validator checks exactly that: the pattern holds in <code>cogito.ttl</code>, and a
+self-verifying <em>promise</em> in the same file is correctly <strong>not</strong> conflated with it.</p>
+<p>A negative control in a test suite is worth more than a class in a hierarchy.</p>
+
+  </article>
+</div>
+
+<div class="wrap">
+  <nav class="post-nav" aria-label="More notes">
+    <a class="post-nav-link" href="/blog/exercise-or-exorcise/">
+      <span class="dim">← Older</span><span>Exercise or exorcise</span>
+    </a>
+    <a class="post-nav-link post-nav-next" href="/blog/born-at-a-permanent-address/">
+      <span class="dim">Newer →</span><span>Born at a permanent address</span>
+    </a>
+  </nav>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-brand">Epistemic Ontology</p>
+      <p class="footer-note">Formal vocabularies for knowledge and record.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Secondary">
+      <a href="/feed.xml">Atom feed</a>
+      <a href="/sitemap.xml">Sitemap</a>
+      <a href="https://github.com/commuted/record-ontology">Source</a>
+    </nav>
+    <p class="footer-copy">© 2026 Ron Hinchley</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.theme-toggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var dark = getComputedStyle(root).getPropertyValue('--is-dark').trim() === '1';
+    var next = dark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>
+</body>
+</html>

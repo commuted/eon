@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using a vocabulary — Epistemic Ontology</title>
+<meta name="description" content="How to dereference, import and cite the ontologies published at epistemic-ontology.net — content negotiation, hash namespaces, and CORS.">
+<link rel="canonical" href="https://epistemic-ontology.net/using/">
+<meta name="author" content="Ron Hinchley">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Epistemic Ontology">
+<meta property="og:title" content="Using a vocabulary">
+<meta property="og:description" content="How to dereference, import and cite the ontologies published at epistemic-ontology.net — content negotiation, hash namespaces, and CORS.">
+<meta property="og:url" content="https://epistemic-ontology.net/using/">
+<meta property="og:image" content="https://epistemic-ontology.net/logo.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Epistemic Ontology — Notes" href="/feed.xml">
+<script>
+  // Set the theme before first paint so there is no flash. Progressive: with
+  // JS off the page falls back to prefers-color-scheme in the stylesheet.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body class="doc">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="/apple-touch-icon.png" alt="" width="32" height="32" decoding="async">
+      <span class="brand-text">Epistemic<span class="brand-accent">Ontology</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/#ontologies">Ontologies</a>
+      <a href="/blog/">Notes</a>
+      <a href="/using/" aria-current="page">Using</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4Z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap doc-head">
+  <h1>Using a vocabulary</h1>
+<p class="lead">Every term IRI published here resolves to both human documentation and machine RDF, by content negotiation, from one permanent address.</p></div>
+
+<div class="wrap doc-layout">
+  <aside class="sidebar">
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        <li class="toc-l2"><a href="#dereferencing">Dereferencing</a></li>
+        <li class="toc-l2"><a href="#hash-namespaces">Hash namespaces</a></li>
+        <li class="toc-l2"><a href="#importing">Importing</a></li>
+        <li class="toc-l2"><a href="#worked-examples">Worked examples</a></li>
+        <li class="toc-l2"><a href="#canonical-host-and-redirects">Canonical host and redirects</a></li>
+        <li class="toc-l2"><a href="#citing">Citing</a></li>
+        <li class="toc-l2"><a href="#licensing">Licensing</a></li>
+      </ol>
+    </nav>
+  </aside>
+  <article class="doc-body prose">
+    <h2 id="dereferencing">Dereferencing</h2>
+<p>Ask for what you want with an <code>Accept</code> header. The namespace IRI answers with a
+<code>303 See Other</code> pointing at the representation you asked for.</p>
+<pre class="language-bash"><code><span class="t-c"># Human-readable documentation</span>
+curl <span class="t-l">-L</span> <span class="t-l">-H</span> <span class="t-s">&quot;Accept: text/html&quot;</span> https://epistemic-ontology.net/record
+
+<span class="t-c"># Turtle (also: application/rdf+xml, application/ld+json, application/n-triples)</span>
+curl <span class="t-l">-L</span> <span class="t-l">-H</span> <span class="t-s">&quot;Accept: text/turtle&quot;</span> https://epistemic-ontology.net/record
+</code></pre>
+<p>Use <code>-L</code>, or you will only see the redirect. A <code>303</code> is the correct status here
+rather than a <code>302</code>: the namespace IRI names an <em>ontology</em>, not the document that
+describes it, and a <code>303</code> is exactly the way to say &quot;the thing you asked about is
+not a document, but here is a document about it&quot;.</p>
+<h2 id="hash-namespaces">Hash namespaces</h2>
+<p>All vocabularies here use <strong>hash</strong> namespaces:</p>
+<pre class="language-turtle"><code><span class="t-p">https:</span>//www.epistemic-ontology.net/record<span class="t-c">#Inference</span>
+<span class="t-p">https:</span>//www.epistemic-ontology.net/record-harm<span class="t-c">#Destruction</span>
+<span class="t-p">https:</span>//www.epistemic-ontology.net/arith<span class="t-c">#Expression</span>
+</code></pre>
+<p>The fragment never reaches the server. Dereferencing any single term therefore
+fetches the <em>whole</em> vocabulary document, and your client resolves the fragment
+locally. That is a deliberate trade: one round trip gets you every term, which is
+the right shape for vocabularies of this size.</p>
+<h2 id="importing">Importing</h2>
+<p>The serializations are served with correct media types and
+<code>Access-Control-Allow-Origin: *</code>, so browser-based RDF tooling and
+<code>owl:imports</code>-by-URL both work without a proxy.</p>
+<pre class="language-turtle"><code><span class="t-k">@prefix</span> <span class="t-p">owl:</span>  <span class="t-i">&lt;http://www.w3.org/2002/07/owl#&gt;</span> .
+<span class="t-k">@prefix</span> <span class="t-p">rec:</span>  <span class="t-i">&lt;https://www.epistemic-ontology.net/record#&gt;</span> .
+
+<span class="t-i">&lt;https://example.com/my-ontology&gt;</span>
+    <span class="t-k">a</span> <span class="t-p">owl:Ontology</span> ;
+    <span class="t-p">owl:imports</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record&gt;</span> .
+</code></pre>
+<p>Note the import target has <strong>no</strong> trailing <code>#</code>: import the ontology IRI, not the
+namespace prefix.</p>
+<p>Loading directly with <a href="https://rdflib.readthedocs.io/">rdflib</a>:</p>
+<pre class="language-python"><code><span class="t-k">from</span> rdflib <span class="t-k">import</span> Graph
+
+g = Graph().parse(<span class="t-s">&quot;https://epistemic-ontology.net/record&quot;</span>, format=<span class="t-s">&quot;turtle&quot;</span>)
+print(len(g), <span class="t-s">&quot;triples&quot;</span>)
+</code></pre>
+<h2 id="worked-examples">Worked examples</h2>
+<p>Every worked example carries its own permanent namespace, formed
+systematically from its name:</p>
+<pre class="language-turtle"><code><span class="t-k">@prefix</span> <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record/examples/neptune-discovery#&gt;</span> .
+</code></pre>
+<p>These dereference the same way as the vocabularies. They are illustrations, not
+normative parts of any ontology — nothing imports them.</p>
+<h2 id="canonical-host-and-redirects">Canonical host and redirects</h2>
+<p>The canonical host is the apex, <code>https://epistemic-ontology.net</code>. Three other
+names (<code>www</code>, and both <code>.org</code> variants) permanently redirect to it, as does all
+plain HTTP.</p>
+<p>The namespace IRIs were minted at <code>www.epistemic-ontology.net</code>, so they resolve
+through one permanent <code>301</code> to the apex and then the <code>303</code> negotiation. The
+minted form stays valid forever; that is what &quot;permanent&quot; has to mean.</p>
+<h2 id="citing">Citing</h2>
+<p>Cite the <strong>namespace IRI</strong>, never a file path. The IRI is the identifier that is
+promised to keep resolving; file layout is an implementation detail and may
+change as serializations are added.</p>
+<p>Version numbers shown on each ontology page are read directly out of the
+published Turtle's <code>owl:versionInfo</code> at build time, so a version quoted on this
+site is the version actually being served.</p>
+<h2 id="licensing">Licensing</h2>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Licence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Record Ontology and Arithmetic Companion (ontology and docs)</td>
+<td>CC BY 4.0</td>
+</tr>
+<tr>
+<td>Record Ontology scripts and engine</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>Record Harm Ontology</td>
+<td>MIT</td>
+</tr>
+</tbody>
+</table>
+<p>Attribution for CC BY 4.0 material:</p>
+<blockquote>
+<p>&quot;The Record Ontology — epistemic-ontology.net&quot; —
+https://www.epistemic-ontology.net/record</p>
+</blockquote>
+
+  </article>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-brand">Epistemic Ontology</p>
+      <p class="footer-note">Formal vocabularies for knowledge and record.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Secondary">
+      <a href="/feed.xml">Atom feed</a>
+      <a href="/sitemap.xml">Sitemap</a>
+      <a href="https://github.com/commuted/record-ontology">Source</a>
+    </nav>
+    <p class="footer-copy">© 2026 Ron Hinchley</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.theme-toggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var dark = getComputedStyle(root).getPropertyValue('--is-dark').trim() === '1';
+    var next = dark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>
+</body>
+</html>

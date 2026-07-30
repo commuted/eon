@@ -1,0 +1,299 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/neptune-discovery#> .
+
+# ============================================================================
+# Worked exemplar: the DISCOVERY OF NEPTUNE (1821-1846) as a derivation DAG
+# ----------------------------------------------------------------------------
+# The flagship fixture for ROOT.md §10: science as a derivation DAG across time
+# and agents, containing a real FORK -- two competing abductive explanations of
+# the same residuals -- that history resolved. The resolution is therefore a
+# built-in correctness ORACLE for the future propagation engine.
+# Validate MERGED with ontology/record-ontology.ttl, never alone.
+#
+# Shape:  empirical leaves (positional observations of Uranus) + two formal /
+#         conventional grounds (perturbation mathematics; the Bode relation),
+#         two TRUTH-PRESERVING inferences (Bouvard's tables; the residual
+#         comparison), then the FORK: two AMPLIATIVE inferences abducing rival
+#         explanations of the residuals, two parallel prediction sub-DAGs
+#         (Le Verrier; Adams -- independent convergence), a record traversing
+#         agents (the letter to Galle), one resolving empirical leaf (the
+#         Berlin observation), and one identification inference. One narrative
+#         root, directed at the outer solar system AS RECORDED.
+#
+# What the STATIC graph holds (this file): both forks, in full, side by side.
+# Fork-ness is STRUCTURAL -- two ampliative inferences sharing a premise and
+# concluding incompatible claims -- not a class; their incompatibility is
+# content-level and OWL cannot see it. Nothing here is retracted: OWL DL is
+# monotonic, so collapse/re-leveling is the ENGINE's job (§10), never axioms.
+#
+# What the ENGINE must compute over this fixture (the oracle):
+#   1. As given: the unseen-planet fork dominates -- ex:GalleObservation grounds
+#      ex:NeptuneExists, which resolves the fork; ex:ModifiedGravityClaim's
+#      support is withdrawn ("the discovery pops out").
+#   2. Retract ex:GalleObservation  ->  the fork REOPENS (both explanations
+#      stand on the residuals again).
+#   3. Retract ex:LawOfGravitation  ->  re-levels ex:BouvardTables, hence
+#      ex:UranusResiduals, hence BOTH forks. Note fork B is SELF-UNDERMINING:
+#      it contests the very premise its own evidence (the residuals) was
+#      computed from -- historically part of why it was disfavoured. Fidelity
+#      is combinatorial (the whole sub-DAG), not a per-node stamp.
+#   4. Coda (not modelled): the SAME abductive schema failed for Mercury's
+#      perihelion -- Le Verrier's Vulcan was never found, and modified gravity
+#      (general relativity) won THAT fork. The unseen-planet victory here is
+#      ampliative and stays defeasible; its revisability is entailed, not
+#      bolted on (ROOT.md §8).
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/neptune-discovery>
+    a owl:Ontology ;
+    rdfs:comment "Example individuals for the Record Ontology; merge with the ontology to validate."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+# -- the agents (the DAG spans them; premises are other agents' conclusions) --
+# Token-relativity note: strictly, each agent's copy of a shared record (the
+# law, the residuals) is its own Record traversed via provenance; we elide the
+# duplicates here to keep the fixture eyeball-sized.
+
+ex:Bouvard a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "Alexis Bouvard"@en .
+
+ex:Airy a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "George Biddell Airy"@en .
+
+ex:Adams a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "John Couch Adams"@en .
+
+ex:LeVerrier a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "Urbain Le Verrier"@en .
+
+ex:Galle a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "Johann Gottfried Galle"@en .
+
+ex:HistorianOfScience a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "the historian of science"@en ;
+    rdfs:comment "The agent FOR WHOM the reconstruction-as-a-whole is a record: this exemplar is itself a historical narrative about science (ROOT.md §8, applied to §10)."@en .
+
+# ----------------------------------------------------------------------------
+# LEAVES AND GROUNDS
+# ----------------------------------------------------------------------------
+
+# -- the empirical leaf everything bottoms out in ------------------------------
+ex:UranusObservations a owl:NamedIndividual , rec:Record ;
+    rdfs:label "positional observations of Uranus, 1690-1845 (incl. pre-discovery sightings)"@en ;
+    rec:forAgent ex:Bouvard ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:OuterSolarSystem .
+
+# -- Newton's law: formally STRUCTURED but empirically WARRANTED ---------------
+#    Held by induction from observation, hence defeasible -- and that
+#    defeasibility is exactly the door fork B walks through. Making it rec:Formal
+#    would make fork B unthinkable; the warrant placement is load-bearing.
+ex:LawOfGravitation a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Newton's law of universal gravitation, as held c. 1845"@en ;
+    rec:forAgent ex:Bouvard ;
+    rec:hasWarrant rec:Empirical .
+
+# -- the formal OBJECT (the "triangle" face): premise-less, completable --------
+#    (Doubles as the validator's negative control: formal + no premises => NOT
+#    an Inference.)
+ex:PerturbationMathematics a owl:NamedIndividual , rec:Record ;
+    rdfs:label "analytic perturbation theory (the mathematical machinery)"@en ;
+    rec:forAgent ex:Bouvard ;
+    rec:hasWarrant rec:Formal .
+
+# -- an induced regularity, injected as a premise by BOTH predictions ----------
+#    The Titius-Bode relation is warranted only by convention/induction -- and
+#    is in fact FALSE for Neptune (a ~ 30 AU, not ~38), which is why both
+#    predicted ORBITS were substantially wrong while the predicted DIRECTION
+#    was right. Fidelity is not all-or-nothing; fodder for the calculus (§10).
+ex:BodesLaw a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the Titius-Bode relation (induced regularity)"@en ;
+    rec:forAgent ex:LeVerrier ;
+    rec:hasWarrant rec:Empirical .
+
+# ----------------------------------------------------------------------------
+# THE TABLES AND THE ANOMALY (truth-preserving stage)
+# ----------------------------------------------------------------------------
+# Truth-preserving force passes through only what the premises HAD: the law is
+# defeasible, so the tables are -- deduction over empirical leaves does not
+# mint certainty (ROOT.md §2, force as the hinge).
+
+ex:Inf_BouvardTables a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: computing Uranus's predicted positions"@en ;
+    rec:forAgent ex:Bouvard ;
+    rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:UranusObservations , ex:LawOfGravitation , ex:PerturbationMathematics ;
+    rec:concludes ex:BouvardTables .
+
+ex:BouvardTables a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Tables astronomiques (1821): predicted positions of Uranus"@en ;
+    rec:forAgent ex:Bouvard ;
+    rec:hasWarrant rec:Empirical .
+
+ex:Inf_Residuals a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: observed minus predicted positions"@en ;
+    rec:forAgent ex:LeVerrier ;
+    rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:BouvardTables , ex:UranusObservations ;
+    rec:concludes ex:UranusResiduals .
+
+ex:UranusResiduals a owl:NamedIndividual , rec:Record ;
+    rdfs:label "systematic residuals: Uranus deviates from its Newtonian orbit (~2 arcmin by 1845)"@en ;
+    rec:forAgent ex:LeVerrier ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:OuterSolarSystem .
+
+# ----------------------------------------------------------------------------
+# THE FORK -- two ampliative inferences over the SAME premise, concluding
+# incompatible explanations. This is §10's "forks for unknowns", present in the
+# static graph as pure structure.
+# ----------------------------------------------------------------------------
+
+# -- fork A: an unseen trans-Uranian planet ------------------------------------
+ex:Inf_UnseenPlanet a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "abduction: an undiscovered planet would explain the residuals"@en ;
+    rec:forAgent ex:LeVerrier ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:UranusResiduals , ex:LawOfGravitation ;
+    rec:concludes ex:UnseenPlanetClaim .
+
+ex:UnseenPlanetClaim a owl:NamedIndividual , rec:Record ;
+    rdfs:label "claim: an undiscovered trans-Uranian planet perturbs Uranus"@en ;
+    rec:forAgent ex:LeVerrier ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:OuterSolarSystem .
+
+# -- fork B: the law itself fails at distance (Airy's suggestion) ---------------
+#    Directed AT another record: a claim contesting the law-as-held. Note the
+#    self-undermining combinatorics (header, oracle item 3).
+ex:Inf_ModifiedGravity a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "abduction: the inverse-square law may weaken at great distances"@en ;
+    rec:forAgent ex:Airy ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:UranusResiduals ;
+    rec:concludes ex:ModifiedGravityClaim .
+
+ex:ModifiedGravityClaim a owl:NamedIndividual , rec:Record ;
+    rdfs:label "claim: Newtonian gravitation fails at planetary distances"@en ;
+    rec:forAgent ex:Airy ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:LawOfGravitation .
+
+# ----------------------------------------------------------------------------
+# THE PREDICTIONS -- two nearly-disjoint sub-DAGs converging on the same place
+# (independent convergence across agents: fidelity-calculus fodder).
+# Ampliative despite the heavy mathematics: the inverse perturbation problem is
+# underdetermined, and both injected the Bode radius as an extra assumption.
+# ----------------------------------------------------------------------------
+
+ex:Inf_LeVerrierPrediction a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: Le Verrier's predicted place of the disturbing planet"@en ;
+    rec:forAgent ex:LeVerrier ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:UnseenPlanetClaim , ex:UranusResiduals ,
+                   ex:PerturbationMathematics , ex:BodesLaw ;
+    rec:concludes ex:LeVerrierPredictedPosition .
+
+ex:LeVerrierPredictedPosition a owl:NamedIndividual , rec:Record ;
+    rdfs:label "predicted place of the disturbing planet (ecliptic longitude ~326 deg, 1846)"@en ;
+    rec:forAgent ex:LeVerrier ;
+    rec:hasWarrant rec:Empirical .
+
+ex:Inf_AdamsPrediction a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: Adams's independent prediction (1845)"@en ;
+    rec:forAgent ex:Adams ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:UnseenPlanetClaim , ex:UranusResiduals ,
+                   ex:PerturbationMathematics , ex:BodesLaw ;
+    rec:concludes ex:AdamsPredictedPosition .
+
+ex:AdamsPredictedPosition a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Adams's predicted place (communicated to Airy and Challis, 1845)"@en ;
+    rec:forAgent ex:Adams ;
+    rec:hasWarrant rec:Empirical .
+
+# ----------------------------------------------------------------------------
+# TRAVERSAL AND RESOLUTION
+# ----------------------------------------------------------------------------
+
+# -- a record traversing agents: provenance's middle stage made concrete -------
+#    ("observation -> formal mental paths -> traversal between agents -> social
+#    fixation"). Once received it is a record FOR Galle, composed of the
+#    prediction it carries.
+ex:LeVerrierLetterToGalle a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Le Verrier's letter to Galle (received Berlin, 1846-09-23)"@en ;
+    rec:forAgent ex:Galle ;
+    rec:hasWarrant rec:Empirical ;
+    rec:composedOf ex:LeVerrierPredictedPosition .
+
+# -- the resolving empirical leaf ----------------------------------------------
+#    Its PROVENANCE runs through the letter (Galle pointed the refractor there
+#    because the letter said where); its LOCUS is the nights as logged --
+#    the dissolved carrier's two halves, both in use (ROOT.md §11).
+ex:GalleObservation a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Berlin observation: 8th-mag star absent from the Bremiker chart, ~1 deg from the predicted place; motion confirmed the next night"@en ;
+    rec:forAgent ex:Galle ;
+    rec:hasWarrant rec:Empirical ;
+    rec:hasProvenance ex:LeVerrierLetterToGalle ;
+    rec:hasLocus ex:BerlinNights1846 ;
+    rec:directedToward ex:OuterSolarSystem .
+
+ex:BerlinNights1846 a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Berlin Observatory, nights of 23-24 September 1846, as logged"@en ;
+    rec:forAgent ex:Galle ;
+    rec:hasWarrant rec:Empirical .
+
+# -- the identification: still ampliative --------------------------------------
+#    "That moving point of light IS the predicted planet" adds content beyond
+#    the premises; very strong, never triangle-grade.
+ex:Inf_Identification a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "inference: the observed body is the predicted planet"@en ;
+    rec:forAgent ex:Galle ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:GalleObservation , ex:LeVerrierPredictedPosition ;
+    rec:concludes ex:NeptuneExists .
+
+# -- THE ORACLE NODE: where the fork collapses ---------------------------------
+#    With this record supported, fork A dominates and fork B's support is
+#    withdrawn; retract ex:GalleObservation and the fork reopens. The collapse
+#    itself is an ENGINE event over this static structure, never an axiom.
+ex:NeptuneExists a owl:NamedIndividual , rec:Record ;
+    rdfs:label "claim: the predicted trans-Uranian planet exists (Neptune)"@en ;
+    rec:forAgent ex:Galle ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:OuterSolarSystem .
+
+# ----------------------------------------------------------------------------
+# THE ROOT AND THE INTENTIONAL OBJECT
+# ----------------------------------------------------------------------------
+
+# -- the narrative root: the discovery as socially-fixed record ----------------
+#    Composed of BOTH forks -- the losing branch is part of the history, and the
+#    engine needs it present to have anything to collapse.
+ex:NeptuneDiscoveryNarrative a owl:NamedIndividual , rec:Record ;
+    rdfs:label "narrative: the discovery of Neptune"@en ;
+    rec:forAgent ex:HistorianOfScience ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:OuterSolarSystem ;
+    rec:composedOf ex:UranusObservations , ex:LawOfGravitation ,
+                   ex:PerturbationMathematics , ex:BodesLaw ,
+                   ex:Inf_BouvardTables , ex:BouvardTables ,
+                   ex:Inf_Residuals , ex:UranusResiduals ,
+                   ex:Inf_UnseenPlanet , ex:UnseenPlanetClaim ,
+                   ex:Inf_ModifiedGravity , ex:ModifiedGravityClaim ,
+                   ex:Inf_LeVerrierPrediction , ex:LeVerrierPredictedPosition ,
+                   ex:Inf_AdamsPrediction , ex:AdamsPredictedPosition ,
+                   ex:LeVerrierLetterToGalle , ex:GalleObservation ,
+                   ex:Inf_Identification , ex:NeptuneExists .
+
+# -- the intentional object: the outer solar system AS RECORDED ----------------
+#    In the record web. The solar-system-in-itself (dynamical object) is the
+#    EXCLUDED LIMIT beyond it -- deliberately NOT instantiated. The gap is why
+#    even the resolved fork stays revisable (see the Vulcan coda, header).
+ex:OuterSolarSystem a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the outer solar system, as recorded"@en ;
+    rec:forAgent ex:HistorianOfScience ;
+    rec:hasWarrant rec:Empirical .

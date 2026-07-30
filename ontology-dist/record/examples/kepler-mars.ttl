@@ -1,0 +1,195 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rec:  <https://www.epistemic-ontology.net/record#> .
+@prefix ex:   <https://www.epistemic-ontology.net/record/examples/kepler-mars#> .
+
+# ============================================================================
+# Worked exemplar: THE WAR ON MARS (1600-1609) as the full
+# discovery / grooming / deprecation cycle
+# ----------------------------------------------------------------------------
+# Kepler's Astronomia Nova, compressed to fixture size. Tycho's Mars
+# longitudes are the empirical leaves; two hypotheses explain them -- the
+# VICARIOUS HYPOTHESIS (circle + bisected equant, the best of the old
+# astronomy) and the ELLIPSE with the area law. Both fit at the quadrant
+# points to within Tycho's 2 arcminutes; at the OCTANTS the equant model errs
+# by ~8 arcminutes -- "these eight minutes alone have led the way to the
+# reformation of all of astronomy" -- and only the ellipse survives.
+#
+# The demo (scripts/kepler_demo.py) runs the cycle over this static graph:
+#   DISCOVERY    -- the fork opens on the quadrant data; the meta layer names
+#                   the octants as the decisive observation BEFORE they
+#                   arrive; their arrival corroborates the ellipse.
+#   GROOMING     -- the puncture report: the ephemeris interior is
+#                   truth-preserving and regenerates from the postulates, so
+#                   it punctures away; the leaves and the decisions stay
+#                   (§14.2) -- and the ratio RISES as theory lands, the
+#                   formal-heavy contrast to Neptune's ampliative resolution.
+#   DEPRECATION  -- the vicarious hypothesis is retracted as a JURISDICTION
+#                   (§15.2, the Sommerfeld pattern): its geometry passes
+#                   exercise then as now; its empirical adequacy fell. The
+#                   postulate ground is retracted at a moment, the claim and
+#                   its ephemeris cascade away, and the record ABOUT the war
+#                   (Astronomia Nova) keeps the history (§9).
+#
+# Numbers, so the story is RUN and not told (engine/orbits.py executes the
+# formulations): Mars a = 1.5237 AU, e = 0.0934. The bisected-equant model
+# agrees with the ellipse to O(e^2): exact at perihelion/aphelion, <1' at
+# quadratures, and off by (e^2)*sin(2M)-order at the octants -- 8.96' at
+# M = 45 deg. Tycho's stated accuracy, 2', sits exactly between the two.
+# "Quadrant" observations here are M in {0,90,180,270} (both models pass),
+# "octant" observations M in {45,135,225,315} (only the ellipse passes) --
+# the eyeball-sized version of oppositions-fit vs octants-break.
+#
+# Validate MERGED with ontology/record-ontology.ttl, never alone.
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/kepler-mars>
+    a owl:Ontology ;
+    rdfs:comment "Example individuals for the Record Ontology; merge with the ontology to validate."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> .
+
+# -- agents --------------------------------------------------------------------
+
+ex:Tycho a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "Tycho Brahe"@en .
+
+ex:Kepler a owl:NamedIndividual , rec:Agent ;
+    rdfs:label "Johannes Kepler"@en .
+
+# -- what the web is directed toward -------------------------------------------
+
+ex:MarsAsRecorded a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the orbit of Mars, as recorded"@en ;
+    rec:forAgent ex:Kepler .
+
+# ----------------------------------------------------------------------------
+# EMPIRICAL LEAVES -- Tycho's longitudes (the formulation carries the table:
+# mean-anomaly-deg:heliocentric-longitude-deg pairs, ellipse truth to 4 d.p.)
+# ----------------------------------------------------------------------------
+
+ex:QuadrantObservations a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Tycho's Mars longitudes at the quadrant points (accuracy 2')"@en ;
+    rec:forAgent ex:Tycho ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:MarsAsRecorded ;
+    rec:formulation "obs 0:0.0000 90:100.6414 180:180.0000 270:259.3586" .
+
+# Deferred by the demo: the discriminating evidence, arriving later --
+# the moment of arrival is load-bearing (fork corroboration is temporal).
+ex:OctantObservations a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Tycho's Mars longitudes at the octants (accuracy 2')"@en ;
+    rec:forAgent ex:Tycho ;
+    rec:hasWarrant rec:Empirical ;
+    rec:directedToward ex:MarsAsRecorded ;
+    rec:formulation "obs 45:53.2178 135:141.9723 225:218.0277 315:306.7822" .
+
+# ----------------------------------------------------------------------------
+# THE TWO HYPOTHESES -- postulate grounds whose formulations are RUNNABLE
+# MODELS (§15.1: the formulation must suffice to exercise it). Their
+# exercise, against whatever observations stand asserted, is
+# engine/orbits.py. Note both are held as postulates: neither is formal
+# machinery; each is a modelling decision about Mars.
+# ----------------------------------------------------------------------------
+
+ex:VicariousPostulates a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the vicarious hypothesis: circle with bisected equant, a=1.5237, e=0.0934"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:formulation "model equant a=1.5237 e=0.0934 tol_arcmin=2" .
+
+ex:EllipsePostulates a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the ellipse with the area law: a=1.5237, e=0.0934"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:formulation "model ellipse a=1.5237 e=0.0934 tol_arcmin=2" .
+
+# -- the formal machinery both predictions run on -------------------------------
+
+ex:ConicGeometry a owl:NamedIndividual , rec:Record ;
+    rdfs:label "the geometry of conics (Apollonius, as held by Kepler)"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:hasWarrant rec:Formal .
+
+# ----------------------------------------------------------------------------
+# THE FORK -- two ampliative abductions from the SAME quadrant data
+# ----------------------------------------------------------------------------
+
+ex:Inf_AbduceVicarious a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "abduction: the equant model explains the quadrant longitudes"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:QuadrantObservations , ex:VicariousPostulates ;
+    rec:concludes ex:VicariousOrbitClaim .
+
+ex:VicariousOrbitClaim a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Mars moves on an equant circle"@en ;
+    rec:forAgent ex:Kepler .
+
+ex:Inf_AbduceEllipse a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "abduction: the ellipse + area law explains the quadrant longitudes"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:hasForce rec:Ampliative ;
+    rec:hasPremise ex:QuadrantObservations , ex:EllipsePostulates ;
+    rec:concludes ex:EllipseOrbitClaim .
+
+ex:EllipseOrbitClaim a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Mars moves on an ellipse, sweeping equal areas"@en ;
+    rec:forAgent ex:Kepler .
+
+# ----------------------------------------------------------------------------
+# PREDICTION -- truth-preserving: each claim + the geometry yields an
+# ephemeris. These are the PUNCTURABLE INTERIOR: derivable, never stored.
+# ----------------------------------------------------------------------------
+
+ex:Inf_PredictVicarious a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "deduction: equant positions for any date"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:VicariousOrbitClaim , ex:ConicGeometry ;
+    rec:concludes ex:VicariousEphemeris .
+
+ex:VicariousEphemeris a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Mars ephemeris from the equant model"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:hasWarrant rec:Formal .
+
+ex:Inf_PredictEllipse a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "deduction: ellipse positions for any date"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:EllipseOrbitClaim , ex:ConicGeometry ;
+    rec:concludes ex:MarsEphemeris .
+
+ex:MarsEphemeris a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Mars ephemeris from the ellipse"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:hasWarrant rec:Formal .
+
+# ----------------------------------------------------------------------------
+# THE DISCRIMINATING TEST -- fresh evidence feeding the ellipse's downstream.
+# The octants corroborate the ellipse under the temporal rule (they arrive
+# after the fork opens, from outside its ancestry). The equant model's
+# octant failure is not a web inference at all: it is an EXERCISE the demo
+# runs and logs -- the model's own description, tried against the data.
+# ----------------------------------------------------------------------------
+
+ex:Inf_OctantAgreement a owl:NamedIndividual , rec:Record , rec:Inference ;
+    rdfs:label "the octant longitudes agree with the ellipse ephemeris to 2'"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:hasForce rec:TruthPreserving ;
+    rec:hasPremise ex:MarsEphemeris , ex:OctantObservations ;
+    rec:concludes ex:OctantAgreement .
+
+ex:OctantAgreement a owl:NamedIndividual , rec:Record ;
+    rdfs:label "residuals at the octants within Tycho's accuracy"@en ;
+    rec:forAgent ex:Kepler .
+
+# ----------------------------------------------------------------------------
+# HISTORY KEEPS THE DOCUMENT (§9) -- the record about the war, untouched by
+# the deprecation of what it describes.
+# ----------------------------------------------------------------------------
+
+ex:AstronomiaNova a owl:NamedIndividual , rec:Record ;
+    rdfs:label "Astronomia Nova (1609), the war on Mars, vicarious hypothesis and all"@en ;
+    rec:forAgent ex:Kepler ;
+    rec:hasWarrant rec:Empirical ;
+    rec:metadataOf ex:VicariousOrbitClaim .

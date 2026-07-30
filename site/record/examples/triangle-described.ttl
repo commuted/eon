@@ -1,0 +1,109 @@
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rec:   <https://www.epistemic-ontology.net/record#> .
+@prefix arith: <https://www.epistemic-ontology.net/arith#> .
+@prefix exm:   <https://www.epistemic-ontology.net/record/examples/minimal#> .
+@prefix ex:    <https://www.epistemic-ontology.net/record/examples/triangle-described#> .
+
+# ============================================================================
+# Worked example: THE TRIANGLE, DESCRIBED IN FULL (arith companion + §15)
+# ----------------------------------------------------------------------------
+# "Why make the description sufficient to exercise it when you can describe
+# the whole thing? Sides, and all, then have it come together." -- so: the
+# 3-4-5 triangle's Pythagorean relation as an EXPRESSION SUBGRAPH -- numerals,
+# applications, one equation -- every node a formal Record, every operand a
+# part (arith operand properties ⊑ rec:composedOf). The description is then
+# attached to the EXISTING triangle record (minimal-formal.ttl) as parts:
+# the formulation literal stays as the rendering; this subgraph is the
+# description, and the compiler (engine/compile.py) treats it as
+# authoritative -- exercise is DERIVED from the description, not hand-written
+# beside it.
+#
+# Also here: the pretender's final step (2 = 1) described the same way, so
+# its exercise FAILURE is compiled too -- and the exercise ACT is logged with
+# a moment (performative provenance, §15.2: formal genealogies bottom out in
+# acts of derivation; the log is the genealogy).
+# Validate MERGED with both ontologies.
+# ============================================================================
+
+<https://www.epistemic-ontology.net/record/examples/triangle-described>
+    a owl:Ontology ;
+    rdfs:comment "The 3-4-5 triangle's relation as an expression subgraph; merge with record + arith ontologies to validate."@en ;
+    owl:imports <https://www.epistemic-ontology.net/record> ,
+                <https://www.epistemic-ontology.net/arith> .
+
+# -- numerals (each a formal record, as held) ----------------------------------
+ex:N1 a owl:NamedIndividual , arith:Numeral , rec:Record ;
+    rdfs:label "1"@en ;
+    rec:forAgent exm:Bob ; rec:hasWarrant rec:Formal ;
+    arith:numericValue 1 .
+
+ex:N3 a owl:NamedIndividual , arith:Numeral , rec:Record ;
+    rdfs:label "3"@en ;
+    rec:forAgent exm:Bob ; rec:hasWarrant rec:Formal ;
+    arith:numericValue 3 .
+
+ex:N4 a owl:NamedIndividual , arith:Numeral , rec:Record ;
+    rdfs:label "4"@en ;
+    rec:forAgent exm:Bob ; rec:hasWarrant rec:Formal ;
+    arith:numericValue 4 .
+
+ex:N5 a owl:NamedIndividual , arith:Numeral , rec:Record ;
+    rdfs:label "5"@en ;
+    rec:forAgent exm:Bob ; rec:hasWarrant rec:Formal ;
+    arith:numericValue 5 .
+
+# -- the sides, squared (applications: trees of Record-of-Records) -------------
+ex:Sq3 a owl:NamedIndividual , arith:Application , rec:Record ;
+    rdfs:label "3 x 3"@en ;
+    rec:forAgent exm:Bob ; rec:hasWarrant rec:Formal ;
+    arith:operator arith:Multiplication ;
+    arith:firstOperand ex:N3 ; arith:secondOperand ex:N3 .
+
+ex:Sq4 a owl:NamedIndividual , arith:Application , rec:Record ;
+    rdfs:label "4 x 4"@en ;
+    rec:forAgent exm:Bob ; rec:hasWarrant rec:Formal ;
+    arith:operator arith:Multiplication ;
+    arith:firstOperand ex:N4 ; arith:secondOperand ex:N4 .
+
+ex:Sq5 a owl:NamedIndividual , arith:Application , rec:Record ;
+    rdfs:label "5 x 5"@en ;
+    rec:forAgent exm:Bob ; rec:hasWarrant rec:Formal ;
+    arith:operator arith:Multiplication ;
+    arith:firstOperand ex:N5 ; arith:secondOperand ex:N5 .
+
+# -- coming together ------------------------------------------------------------
+ex:SumOfSquares a owl:NamedIndividual , arith:Application , rec:Record ;
+    rdfs:label "3x3 + 4x4"@en ;
+    rec:forAgent exm:Bob ; rec:hasWarrant rec:Formal ;
+    arith:operator arith:Addition ;
+    arith:firstOperand ex:Sq3 ; arith:secondOperand ex:Sq4 .
+
+ex:PythagoreanRelation345 a owl:NamedIndividual , arith:Equation , rec:Record ;
+    rdfs:label "3^2 + 4^2 = 5^2"@en ;
+    rec:forAgent exm:Bob ; rec:hasWarrant rec:Formal ;
+    rec:formulation "3*3 + 4*4 = 5*5" ;
+    arith:lhs ex:SumOfSquares ; arith:rhs ex:Sq5 .
+
+# The existing triangle record (minimal-formal.ttl), fattened: the described
+# relation is a PART of it. (The angle relations stay in the hand registry --
+# trigonometry is outside the companion's representative scope, honestly.)
+exm:PythagoreanTheorem rec:composedOf ex:PythagoreanRelation345 .
+
+# -- the pretender's final step, described the same way --------------------------
+# 1 + 1 = 1: the last line of the 2=1 pseudo-proof (minimal-exorcism.ttl) as
+# an expression subgraph. The compiler exercises it and it FAILS -- the
+# failure is now derived from the description, not hand-coded.
+ex:OnePlusOne a owl:NamedIndividual , arith:Application , rec:Record ;
+    rdfs:label "1 + 1"@en ;
+    rec:forAgent exm:Prover ; rec:hasWarrant rec:Formal ;
+    arith:operator arith:Addition ;
+    arith:firstOperand ex:N1 ; arith:secondOperand ex:N1 .
+
+ex:TwoEqualsOneEquation a owl:NamedIndividual , arith:Equation , rec:Record ;
+    rdfs:label "2 = 1 (the pretender's final step)"@en ;
+    rec:forAgent exm:Prover ; rec:hasWarrant rec:Formal ;   # the CLAIM
+    rec:formulation "1 + 1 = 1" ;
+    arith:lhs ex:OnePlusOne ; arith:rhs ex:N1 .
+
+exm:PseudoProofTwoEqualsOne rec:composedOf ex:TwoEqualsOneEquation .

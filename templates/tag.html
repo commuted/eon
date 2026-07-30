@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block body_class %}doc{% endblock %}
+
+{% block content %}
+<div class="wrap doc-head">
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/blog/">{{ site.blog_title }}</a> <span aria-hidden="true">/</span> <span>{{ tag }}</span>
+  </nav>
+  <h1>Tagged “{{ tag }}”</h1>
+  <p class="lead">{{ tagged | length }} note{{ '' if tagged | length == 1 else 's' }}.</p>
+</div>
+
+<div class="wrap">
+  <ul class="post-list post-list-full">
+    {% for post in tagged %}
+    <li class="post-item">
+      <time datetime="{{ post.date | isodate }}">{{ post.date | datefmt }}</time>
+      <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+      <p>{{ post.summary }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+  <p><a class="back" href="/blog/">← All notes</a></p>
+</div>
+{% endblock %}

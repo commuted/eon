@@ -129,6 +129,27 @@ signatures and breaks SPF, which is precisely the case DKIM exists to cover.
 
 ### The fix
 
+Two ways. Either needs the three DKIM targets from Proton first:
+**Settings → All settings → Domain names → rhymeswith.net → DKIM**. They look
+like `<hash>.domainkey.<token>.domains.proton.ch`.
+
+**Scripted** (needs `aws` CLI with `route53:ChangeResourceRecordSets`):
+
+```bash
+./dns/fix-rhymeswith.sh --dry-run          # show the exact change batch
+./dns/fix-rhymeswith.sh \
+  --dkim1 <target1> --dkim2 <target2> --dkim3 <target3>
+```
+
+The script never retypes the apex TXT. It reads the live record set, removes
+only strings matching `v=DMARC1`, and writes back everything else verbatim —
+then refuses to proceed unless both the SPF record and the Proton verification
+token survive the rewrite. That matters because the apex TXT is a *single*
+record set holding all three strings, so removing one means rewriting the set,
+and a slip deletes something mail currently depends on.
+
+**By hand**, in the Route 53 console:
+
 | Name | Type | Value |
 |---|---|---|
 | `rhymeswith.net` | TXT | *delete the `v=DMARC1; p=none` string; leave SPF and the verification token* |

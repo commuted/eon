@@ -4,6 +4,7 @@
 #   make serve      build and preview on http://localhost:8000
 #   make stage      refresh ontology-dist/ from the source repos, then build
 #   make check      build and verify links, staging and namespaces
+#   make check-server  read-only health check of the DEPLOYED site
 #   make fresh      check that site/ matches its sources (fails if stale)
 #   make deploy     build, check, then rsync to the server
 #
@@ -22,7 +23,7 @@ DEPLOY_PATH ?= /var/www/html
 SSH_KEY     ?= $(HOME)/.ssh/lightsail-ontology.pem
 STAGING_DIR ?= /home/ec2-user/site
 
-.PHONY: all build serve stage check fresh deploy icons install clean help
+.PHONY: all build serve stage check check-server fresh deploy icons install clean help
 
 all: build
 
@@ -44,6 +45,12 @@ stage:
 	@./migrate.sh $(HARM_SRC)
 	@$(PYTHON) build.py --check
 
+# Read-only. Verifies the live server: nginx running/enabled, nginx -t passing,
+# exactly one config loaded, live config == this repo, served tree == site/, and
+# the namespace IRIs still negotiating with CORS and charset intact.
+check-server:
+	@./check-server.sh $(DEPLOY_HOST) $(SSH_KEY)
+
 # site/ is committed so the served bytes are reviewable and deployable without
 # a Python environment. This target proves it is not stale.
 fresh: build
@@ -60,7 +67,8 @@ deploy: check
 	  sudo find $(DEPLOY_PATH) -type d -exec chmod 755 {} + && \
 	  sudo find $(DEPLOY_PATH) -type f -exec chmod 644 {} + && \
 	  sudo nginx -t && sudo systemctl reload nginx'
-	@echo "Deployed. Verify:  curl -sI -H 'Accept: text/turtle' https://epistemic-ontology.net/record"
+	@echo
+	@$(MAKE) --no-print-directory check-server
 
 icons:
 	@./make-icons.sh

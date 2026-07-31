@@ -59,6 +59,7 @@ make install     # pip install -r requirements.txt (once)
 make             # build into site/
 make serve       # build + preview on http://localhost:8000
 make check       # build + verify links, staging, namespaces
+make check-server  # read-only health check of the LIVE server
 ```
 
 ### Write a post
@@ -176,6 +177,26 @@ curl -sI -H "Accept: text/turtle" https://epistemic-ontology.net/record   # 303 
 curl -sI https://epistemic-ontology.net/record/examples/saccheri          # 303 → .ttl
 curl -s  https://epistemic-ontology.net/feed.xml | head -5                # Atom
 ```
+
+## What `make check-server` checks
+
+Read-only, safe to run at any time, and safe to run when you already suspect
+something is wrong. It exists because of a real outage: the config was once
+copied to **both** `conf.d/default.conf` and `conf.d/epistemic-ontology.net.conf`.
+`nginx.conf` includes `conf.d/*.conf`, so both declared `default_server`, nginx
+refused to start, and the site stayed down. `nginx -t` had been failing the whole
+time — nothing was asking it.
+
+- nginx is **running**, **enabled at boot**, and `nginx -t` passes
+- **exactly one** site config is loaded, and nothing else sits in `conf.d`
+- the live config is **byte-identical** to `nginx/` in this repo
+- the served tree matches `site/`, file for file and size for size
+- the namespace IRIs still `303` to Turtle, with `Access-Control-Allow-Origin`
+  and `Vary: Accept` on the redirect, `text/turtle; charset=utf-8` on the RDF,
+  and the example IRIs and compatibility redirects intact
+
+It exits non-zero on any failure, so it can gate a cron job. `make deploy` runs
+it automatically as its last step.
 
 ## What the build checks
 

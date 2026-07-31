@@ -12,7 +12,7 @@
 #     ./dns/check-dns.sh example.com nomail   # expect the lock-down set
 set -uo pipefail
 
-DOMAINS_DEFAULT=(epistemic-ontology.net epistemic-ontology.org)
+DOMAINS_DEFAULT=(epistemic-ontology.net epistemic-ontology.org rhymeswith.net)
 # Domains that should carry the "no mail, ever" set rather than a live config.
 NOMAIL=(epistemic-ontology.org)
 
@@ -76,9 +76,19 @@ check_domain() {
   fi
 
   # --- DMARC ---------------------------------------------------------------
-  local dmarc; dmarc=$(dig +short TXT "_dmarc.$d" | tr -d '"' | grep -i '^v=DMARC1' || true)
+  # A DMARC record is read ONLY at _dmarc.<domain>. Put it on the apex and it is
+  # inert: no receiver ever looks there, and nothing reports the mistake. This
+  # has actually happened on one of these domains, so it is checked explicitly.
+  local dmarc apex_dmarc
+  dmarc=$(dig +short TXT "_dmarc.$d" | tr -d '"' | grep -i '^v=DMARC1' || true)
+  apex_dmarc=$(dig +short TXT "$d" | tr -d '"' | grep -i '^v=DMARC1' || true)
+  if [ -n "$apex_dmarc" ]; then
+    bad "a DMARC record sits on the APEX, where nothing reads it:"
+    note "$apex_dmarc"
+    note "move it to _dmarc.$d — on the apex it is decoration, not policy"
+  fi
   if [ -z "$dmarc" ]; then
-    bad "no DMARC record — receivers have no instruction for failures"
+    bad "no DMARC record at _dmarc.$d — receivers have no instruction for failures"
   else
     local pol; pol=$(sed -n 's/.*[;[:space:]]p=\([a-z]*\).*/\1/p' <<<"$dmarc")
     case "$pol" in

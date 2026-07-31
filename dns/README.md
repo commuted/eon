@@ -97,6 +97,52 @@ becomes unspoofable immediately.
 
 ---
 
+## rhymeswith.net — two defects in a working setup
+
+This domain already receives mail through Proton, and the receiving half is
+correct: MX to `mail.protonmail.ch` / `mailsec.protonmail.ch`, exactly one SPF
+record with the right include. The *sending* half is not.
+
+**1. The DMARC record is on the apex, where nothing reads it.**
+
+```
+rhymeswith.net.         TXT  "v=DMARC1; p=none"      ← inert
+_dmarc.rhymeswith.net.  TXT  (nothing)               ← where it must live
+```
+
+A DMARC record is only ever looked up at `_dmarc.<domain>`. On the apex it is
+decoration: no receiver consults it, and nothing anywhere reports the mistake.
+The domain is, in practice, publishing no DMARC policy at all.
+
+**2. No DKIM records exist.** All three Proton selectors are empty, confirmed
+against the zone's authoritative nameserver:
+
+```
+protonmail._domainkey    CNAME none   TXT none
+protonmail2._domainkey   CNAME none   TXT none
+protonmail3._domainkey   CNAME none   TXT none
+```
+
+So outbound mail is unsigned. It can still pass DMARC on SPF alignment alone,
+but it fails the moment a message is forwarded — forwarding preserves DKIM
+signatures and breaks SPF, which is precisely the case DKIM exists to cover.
+
+### The fix
+
+| Name | Type | Value |
+|---|---|---|
+| `rhymeswith.net` | TXT | *delete the `v=DMARC1; p=none` string; leave SPF and the verification token* |
+| `_dmarc.rhymeswith.net` | TXT | `"v=DMARC1; p=none; rua=mailto:you@rhymeswith.net"` |
+| `protonmail._domainkey` | CNAME | *(from Proton → Settings → Domain names)* |
+| `protonmail2._domainkey` | CNAME | *(same)* |
+| `protonmail3._domainkey` | CNAME | *(same)* |
+
+Keep `p=none` until the DKIM records have been live long enough to confirm mail
+is signing and aligning, then move to `p=quarantine` and finally `p=reject`.
+Raising the policy before DKIM works would start rejecting your own mail.
+
+---
+
 ## Verifying
 
 ```bash

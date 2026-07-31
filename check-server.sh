@@ -157,6 +157,8 @@ probe=$("${SSH[@]}" '
           | tr -d "\r" | grep -ci "access-control-allow-origin")"
   echo "VARY $(curl -sI $R -H "Accept: text/turtle" $B/record | tr -d "\r" | grep -ci "^vary")"
   echo "CTYPE $(curl -sI $R $B/record/record-ontology.ttl | tr -d "\r" | grep -i "^content-type" | cut -d" " -f2-)"
+  echo "HTMLCC $(curl -sI $R $B/ | tr -d "\r" | grep -i "^cache-control" | cut -d" " -f2- | tr -d " ")"
+  echo "CSSREF $(curl -s $R $B/ | grep -o "href=\"/style[^\"]*\"" | head -1 | sed "s/href=.//; s/.$//")"
   echo "EXAMPLE $(curl -sI $R $B/record/examples/saccheri | head -1 | tr -d "\r" | awk "{print \$2}")"
   echo "MOVED $(curl -sI $R $B/record/cogito.ttl | head -1 | tr -d "\r" | awk "{print \$2}")"
 ' 2>/dev/null)
@@ -180,6 +182,15 @@ ctype=$(grep '^CTYPE ' <<<"$probe" | cut -d' ' -f2-)
 [[ $ctype == *"text/turtle"* && $ctype == *"charset=utf-8"* ]] \
   && ok "Turtle served as $ctype" \
   || bad "Turtle content-type is '$ctype' (expected text/turtle; charset=utf-8)"
+htmlcc=$(grep '^HTMLCC ' <<<"$probe" | cut -d' ' -f2-)
+[[ $htmlcc == *"no-cache"* ]] \
+  && ok "HTML sends Cache-Control: $htmlcc" \
+  || bad "HTML Cache-Control is '${htmlcc:-none}' — browsers may heuristically serve stale pages, which breaks the fingerprinted stylesheet"
+cssref=$(grep '^CSSREF ' <<<"$probe" | cut -d' ' -f2-)
+cssrefcode=$("${SSH[@]}" "curl -s --resolve epistemic-ontology.net:443:127.0.0.1 -o /dev/null -w '%{http_code}' https://epistemic-ontology.net$cssref" 2>/dev/null)
+[[ $cssrefcode == 200 ]] \
+  && ok "the stylesheet the page links to resolves ($cssref)" \
+  || bad "the page links to $cssref which returns $cssrefcode — the site will render unstyled"
 [[ $(grep '^EXAMPLE ' <<<"$probe" | awk '{print $2}') == 303 ]] \
   && ok "example IRIs dereference" || bad "bare example IRI did not 303"
 [[ $(grep '^MOVED ' <<<"$probe" | awk '{print $2}') == 301 ]] \

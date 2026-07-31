@@ -5,6 +5,7 @@
 #   make stage      refresh ontology-dist/ from the source repos, then build
 #   make check      build and verify links, staging and namespaces
 #   make check-server  read-only health check of the DEPLOYED site
+#   make check-dns     report the domains' mail-authentication records
 #   make fresh      check that site/ matches its sources (fails if stale)
 #   make deploy     build, check, then rsync to the server (push)
 #   make release    commit-and-push, then have the server pull and install
@@ -30,7 +31,7 @@ STAGING_DIR ?= /home/$(shell echo $(DEPLOY_HOST) | cut -d@ -f1)/site
 GIT_REMOTE  ?= https://github.com/commuted/eon.git
 EON_CHECKOUT ?= /opt/eon
 
-.PHONY: all build serve stage check check-server fresh deploy release icons install clean help
+.PHONY: all build serve stage check check-server check-dns fresh deploy release icons install clean help
 
 all: build
 
@@ -57,6 +58,10 @@ stage:
 # the namespace IRIs still negotiating with CORS and charset intact.
 check-server:
 	@./check-server.sh $(DEPLOY_HOST) $(SSH_KEY)
+
+# Read-only DNS check: MX, SPF, DKIM, DMARC on both domains. See dns/README.md.
+check-dns:
+	@./dns/check-dns.sh
 
 # site/ is committed so the served bytes are reviewable and deployable without
 # a Python environment. This target proves it is not stale.

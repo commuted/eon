@@ -89,4 +89,4 @@ date and a severity — attribution content a court or an archive genuinely need
 and which the Record Ontology deliberately refuses to compute: there, harm is
 detected, never charged.
 
-[Read the note on the harm dictionary →](/blog/harm-is-an-operation-minus-its-record/)
+[Read the post on the harm dictionary →](/blog/harm-is-an-operation-minus-its-record/)

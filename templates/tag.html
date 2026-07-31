@@ -7,7 +7,7 @@
     <a href="/blog/">{{ site.blog_title }}</a> <span aria-hidden="true">/</span> <span>{{ tag }}</span>
   </nav>
   <h1>Tagged “{{ tag }}”</h1>
-  <p class="lead">{{ tagged | length }} note{{ '' if tagged | length == 1 else 's' }}.</p>
+  <p class="lead">{{ tagged | length }} post{{ '' if tagged | length == 1 else 's' }}.</p>
 </div>
 
 <div class="wrap">
@@ -20,6 +20,6 @@
     </li>
     {% endfor %}
   </ul>
-  <p><a class="back" href="/blog/">← All notes</a></p>
+  <p><a class="back" href="/blog/">← All posts</a></p>
 </div>
 {% endblock %}

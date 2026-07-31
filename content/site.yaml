@@ -15,7 +15,7 @@ author:
   name: Ron Hinchley
   url: https://github.com/commuted
 
-blog_title: Notes
+blog_title: Blog
 blog_description: >-
   Working notes on the ontologies published here — design decisions, the
   reasoning behind them, and what breaks when they are wrong.
@@ -24,7 +24,7 @@ repo: https://github.com/commuted/record-ontology
 
 nav:
   - { title: Ontologies, url: /#ontologies }
-  - { title: Notes, url: /blog/ }
+  - { title: Blog, url: /blog/ }
   - { title: Using, url: /using/ }
   - { title: About, url: /about/ }
 

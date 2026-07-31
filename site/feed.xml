@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
-  <title>Epistemic Ontology — Notes</title>
+  <title>Epistemic Ontology — Blog</title>
   <subtitle>Working notes on the ontologies published here — design decisions, the reasoning behind them, and what breaks when they are wrong.</subtitle>
   <id>https://epistemic-ontology.net/blog/</id>
   <link rel="alternate" type="text/html" href="https://epistemic-ontology.net/blog/"/>

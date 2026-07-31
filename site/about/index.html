@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://epistemic-ontology.net/logo.png">
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style.b8fe57e333.css">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
@@ -113,6 +113,9 @@ cannot advertise a version it is not serving.</li>
 <li><strong>Checks every internal link</strong> and fails the build on a dead one.</li>
 <li><strong>Refuses placeholder IRIs</strong>, so a rewritten namespace can never silently
 revert.</li>
+<li><strong>Fingerprints the stylesheet</strong> by its own content hash, so the URL changes
+exactly when the bytes do and the file can be cached permanently. A returning
+reader never sees new markup styled by an old stylesheet.</li>
 </ol>
 <p>Staging is separate from building. <code>stage-record.sh</code> and <code>migrate.sh</code> copy
 serializations out of the source repositories into <code>ontology-dist/</code>; the site

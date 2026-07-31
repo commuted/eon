@@ -243,3 +243,16 @@ it automatically as its last step.
 - an ontology whose front matter names a file that is not staged;
 - an ontology whose Turtle carries no `owl:versionInfo`;
 - any `example.org` IRI that reached the output.
+
+## Assets
+
+`style.css` is emitted twice: once under its own content hash
+(`style.<sha>.css`), which is what every page links to, and once under the plain
+name so external references keep working. The hash changes only when the CSS
+changes, which lets nginx serve the fingerprinted copy with
+`max-age=31536000, immutable` — it is never revalidated, and a stale stylesheet
+against fresh markup becomes impossible.
+
+Images and favicons are deliberately *not* fingerprinted: `favicon.ico` is
+fetched by browsers at a fixed path, and `logo.png` is the Open Graph image,
+where a stable URL matters more to social-media caches than instant updates.

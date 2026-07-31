@@ -54,6 +54,9 @@ The build does three things worth naming:
 2. **Checks every internal link** and fails the build on a dead one.
 3. **Refuses placeholder IRIs**, so a rewritten namespace can never silently
    revert.
+4. **Fingerprints the stylesheet** by its own content hash, so the URL changes
+   exactly when the bytes do and the file can be cached permanently. A returning
+   reader never sees new markup styled by an old stylesheet.
 
 Staging is separate from building. `stage-record.sh` and `migrate.sh` copy
 serializations out of the source repositories into `ontology-dist/`; the site

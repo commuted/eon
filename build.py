@@ -27,6 +27,7 @@ Usage
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
 import re
 import shutil
@@ -384,6 +385,20 @@ def write(url: str, text: str) -> Path:
     return target
 
 
+def fingerprint(path: Path) -> str:
+    """Content hash for cache-busting: `style.css` -> `style.1a2b3c4d5e.css`.
+
+    The stylesheet has no version in its name, so a returning visitor could hold
+    a stale one against new markup for as long as its max-age. Naming it by its
+    own content means the URL changes exactly when the bytes do, which lets it
+    be cached immutably for a year and never revalidated.
+    """
+    if not path.exists():
+        raise SystemExit(f"error: {path} is missing — cannot fingerprint it")
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()[:10]
+    return f"{path.stem}.{digest}{path.suffix}"
+
+
 def copy_tree(src: Path, dst: Path) -> int:
     count = 0
     for item in sorted(src.rglob("*")):
@@ -428,9 +443,12 @@ def build() -> dict[str, Any]:
         for tag in post["tags"]:
             tags.setdefault(tag, []).append(post)
 
+    css_name = fingerprint(STATIC / "style.css")
+
     shared = {
         "site": config,
         "base_url": base_url,
+        "css_url": f"/{css_name}",
         "ontologies": ontologies,
         "posts": posts,
         "tags": dict(sorted(tags.items())),
@@ -490,6 +508,12 @@ def build() -> dict[str, Any]:
 
     static_count = copy_tree(STATIC, OUT)
     ttl_count = copy_tree(DIST, OUT)
+
+    # Ship both: the fingerprinted name every page links to (cached for a year,
+    # immutable), and the plain name, so an old bookmark or an external
+    # reference to /style.css does not 404. nginx caches the plain one briefly.
+    shutil.copy2(OUT / "style.css", OUT / css_name)
+    static_count += 1
 
     return {
         "pages": len(written),

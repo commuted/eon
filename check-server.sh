@@ -18,8 +18,8 @@
 # Usage:  ./check-server.sh [user@host] [ssh-key]
 set -uo pipefail
 
-HOST="${1:-${DEPLOY_HOST:-ec2-user@35.175.8.34}}"
-KEY="${2:-${SSH_KEY:-$HOME/.ssh/lightsail-ontology.pem}}"
+HOST="${1:-${DEPLOY_HOST:-}}"
+KEY="${2:-${SSH_KEY:-}}"
 WEBROOT="${DEPLOY_PATH:-/var/www/html}"
 CONF_NAME="epistemic-ontology.net.conf"
 REPO="$(cd "$(dirname "$0")" && pwd)"

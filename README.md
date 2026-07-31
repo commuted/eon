@@ -139,14 +139,51 @@ those files share one namespace, so no single file can own that IRI.
 
 ## Deploy
 
+Deployment settings live in `deploy.env`, which is **gitignored** — this is a
+public repository and infrastructure specifics do not belong in it:
+
 ```bash
-make deploy      # build, check, rsync, fix ownership, reload nginx
+cp deploy.env.example deploy.env && $EDITOR deploy.env
 ```
 
-Override the target if it moves:
+Two ways to ship, and the first is preferred:
 
 ```bash
-make deploy DEPLOY_HOST=user@host SSH_KEY=~/.ssh/key DEPLOY_PATH=/var/www/html
+make release     # commit-and-push, then the SERVER pulls and installs itself
+make deploy      # push from here: rsync site/, fix ownership, reload nginx
+```
+
+`make release` is better because the server decides what it runs, it works
+without this workstation, and `server/install.sh` **tests the nginx config
+before keeping it** — if `nginx -t` fails it restores the previous config and
+aborts without touching content. That is the exact failure that took the site
+down on 2026-07-31: a config that could not load, installed anyway, leaving
+nginx unable to start at all.
+
+### On the server
+
+`server/install.sh` runs on the box. Because `site/` is committed, the server
+needs only `git` and `rsync` — no Python, no build step, no toolchain to keep
+current. What is in git is exactly what is served.
+
+```bash
+./server/install.sh              # pull the default branch and install
+./server/install.sh --dry-run    # show what would change, touch nothing
+./server/install.sh --ref v1.2   # install a specific tag, branch or commit
+```
+
+It refuses to proceed if another `*.conf` sits in `conf.d` (nginx loads those
+too, and a second `default_server` is fatal), starts nginx rather than reloading
+if the service is down, and finishes by verifying that the IRIs negotiate with
+CORS and charset intact.
+
+First run, before the checkout exists:
+
+```bash
+sudo dnf install -y git rsync
+sudo git clone https://github.com/commuted/eon.git /opt/eon
+sudo chown -R "$(id -un):$(id -gn)" /opt/eon
+/opt/eon/server/install.sh
 ```
 
 First-time server setup:

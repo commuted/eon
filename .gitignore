@@ -9,3 +9,6 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+
+# Local deployment target (host, key, paths) — never committed.
+deploy.env

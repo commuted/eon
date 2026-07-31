@@ -18,11 +18,39 @@
 # Usage:  ./check-server.sh [user@host] [ssh-key]
 set -uo pipefail
 
-HOST="${1:-${DEPLOY_HOST:-}}"
-KEY="${2:-${SSH_KEY:-}}"
-WEBROOT="${DEPLOY_PATH:-/var/www/html}"
-CONF_NAME="epistemic-ontology.net.conf"
 REPO="$(cd "$(dirname "$0")" && pwd)"
+CONF_NAME="epistemic-ontology.net.conf"
+
+# deploy.env is Makefile syntax (`KEY = value`, with $(HOME)), so it is parsed
+# rather than sourced -- bash would read $(HOME) as a command substitution.
+# Precedence: command-line argument, then environment, then deploy.env.
+if [ -f "$REPO/deploy.env" ]; then
+  while IFS= read -r line; do
+    case "$line" in ''|'#'*) continue ;; esac
+    case "$line" in *=*) : ;; *) continue ;; esac
+    k="${line%%=*}"; v="${line#*=}"
+    k="${k// /}"
+    v="${v#"${v%%[![:space:]]*}"}"; v="${v%"${v##*[![:space:]]}"}"
+    v="${v//\$(HOME)/$HOME}"
+    case "$k" in
+      DEPLOY_HOST) ENV_HOST="$v" ;;
+      SSH_KEY)     ENV_KEY="$v" ;;
+      DEPLOY_PATH) ENV_PATH="$v" ;;
+    esac
+  done < "$REPO/deploy.env"
+fi
+
+HOST="${1:-${DEPLOY_HOST:-${ENV_HOST:-}}}"
+KEY="${2:-${SSH_KEY:-${ENV_KEY:-}}}"
+WEBROOT="${DEPLOY_PATH:-${ENV_PATH:-/var/www/html}}"
+
+if [ -z "$HOST" ] || [ -z "$KEY" ]; then
+  echo "error: no deploy target." >&2
+  echo "  cp deploy.env.example deploy.env && \$EDITOR deploy.env" >&2
+  echo "  or: ./check-server.sh user@host /path/to/key.pem" >&2
+  exit 2
+fi
+
 SSH=(ssh -i "$KEY" -o BatchMode=yes -o ConnectTimeout=10 "$HOST")
 
 fails=0

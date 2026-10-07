@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Record harm compared — Epistemic Ontology</title>
+<meta name="description" content="How the Record Harm Ontology maps to STRIDE, the CIA triad, InterPARES diplomatics and spoliation doctrine, and what it deliberately does not cover.">
+<link rel="canonical" href="https://epistemic-ontology.net/record-harm/comparison/">
+<meta name="author" content="Ron Hinchley">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Epistemic Ontology">
+<meta property="og:title" content="Record harm compared">
+<meta property="og:description" content="How the Record Harm Ontology maps to STRIDE, the CIA triad, InterPARES diplomatics and spoliation doctrine, and what it deliberately does not cover.">
+<meta property="og:url" content="https://epistemic-ontology.net/record-harm/comparison/">
+<meta property="og:image" content="https://epistemic-ontology.net/logo.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/style.b8fe57e333.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Epistemic Ontology — Blog" href="/feed.xml">
+<script>
+  // Set the theme before first paint so there is no flash. Progressive: with
+  // JS off the page falls back to prefers-color-scheme in the stylesheet.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body class="doc">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="/apple-touch-icon.png" alt="" width="32" height="32" decoding="async">
+      <span class="brand-text">Epistemic<span class="brand-accent">Ontology</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/#ontologies">Ontologies</a>
+      <a href="/blog/">Blog</a>
+      <a href="/using/">Using</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4Z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap doc-head">
+  <h1>Record harm compared</h1>
+</div>
+
+<div class="wrap doc-layout">
+  <aside class="sidebar">
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        <li class="toc-l2"><a href="#overview">Overview</a></li>
+        <li class="toc-l2"><a href="#comparison-table">Comparison Table</a></li>
+        <li class="toc-l3"><a href="#record-harm-stride">Record Harm ↔ STRIDE</a></li>
+        <li class="toc-l3"><a href="#record-harm-cia-triad">Record Harm ↔ CIA Triad</a></li>
+        <li class="toc-l3"><a href="#record-harm-interpares-diplomatics">Record Harm ↔ InterPARES Diplomatics</a></li>
+        <li class="toc-l3"><a href="#record-harm-spoliation-doctrine-legal">Record Harm ↔ Spoliation Doctrine (Legal)</a></li>
+        <li class="toc-l2"><a href="#unique-contributions-of-record-harm-ontology">Unique Contributions of Record Harm Ontology</a></li>
+        <li class="toc-l3"><a href="#1-inside-agent-records-v31">1. Inside-Agent Records (v3.1)</a></li>
+        <li class="toc-l3"><a href="#2-formal-dependency-structure">2. Formal Dependency Structure</a></li>
+        <li class="toc-l3"><a href="#3-mereological-structure-v31">3. Mereological Structure (v3.1)</a></li>
+        <li class="toc-l3"><a href="#4-aspect-based-targeting">4. Aspect-Based Targeting</a></li>
+        <li class="toc-l3"><a href="#5-event-layer-with-severity">5. Event Layer with Severity</a></li>
+        <li class="toc-l2"><a href="#integration-guidance">Integration Guidance</a></li>
+        <li class="toc-l3"><a href="#for-information-security-practitioners">For Information Security Practitioners</a></li>
+        <li class="toc-l3"><a href="#for-archivists-and-records-managers">For Archivists and Records Managers</a></li>
+        <li class="toc-l3"><a href="#for-legal-professionals">For Legal Professionals</a></li>
+        <li class="toc-l3"><a href="#for-ai-ethics-and-misinformation-research">For AI Ethics and Misinformation Research</a></li>
+        <li class="toc-l2"><a href="#limitations-and-scope-boundaries">Limitations and Scope Boundaries</a></li>
+        <li class="toc-l3"><a href="#what-record-harm-does-not-cover">What Record Harm Does NOT Cover</a></li>
+        <li class="toc-l3"><a href="#what-record-harm-does-cover">What Record Harm DOES Cover</a></li>
+        <li class="toc-l2"><a href="#references">References</a></li>
+        <li class="toc-l2"><a href="#versioning">Versioning</a></li>
+      </ol>
+    </nav>
+  </aside>
+  <article class="doc-body prose">
+    <h1 id="ontology-comparison-record-harm-vs-related-frameworks">Ontology Comparison: Record Harm vs. Related Frameworks</h1>
+<p>This document maps the Record Harm Ontology to established frameworks in information security, archival science, and diplomatics.</p>
+<h2 id="overview">Overview</h2>
+<p>The Record Harm Ontology focuses on <strong>ontological attacks on records</strong> — how records can be damaged, destroyed, or corrupted as informational entities. While it shares concerns with other frameworks, its scope and granularity differ:</p>
+<ul>
+<li><strong>STRIDE</strong> (threat modeling): Focuses on system security threats</li>
+<li><strong>CIA Triad</strong> (information security): Focuses on confidentiality, integrity, availability</li>
+<li><strong>InterPARES Diplomatics</strong>: Focuses on record authenticity and trustworthiness</li>
+<li><strong>Spoliation Doctrine</strong> (legal): Focuses on evidence destruction and concealment</li>
+</ul>
+<h2 id="comparison-table">Comparison Table</h2>
+<h3 id="record-harm-stride">Record Harm ↔ STRIDE</h3>
+<table>
+<thead>
+<tr>
+<th>Record Harm</th>
+<th>STRIDE Category</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fabrication</strong></td>
+<td>Tampering</td>
+<td>Both involve creating/modifying false information</td>
+</tr>
+<tr>
+<td><strong>Alteration</strong></td>
+<td>Tampering</td>
+<td>Direct modification of existing data</td>
+</tr>
+<tr>
+<td><strong>Destruction</strong></td>
+<td>Denial of Service (partial)</td>
+<td>DoS is transient unavailability; Destruction is permanent loss</td>
+</tr>
+<tr>
+<td><strong>Suppression</strong></td>
+<td>Denial of Service (partial)</td>
+<td>Suppression is deliberate concealment; DoS is service disruption</td>
+</tr>
+<tr>
+<td><strong>Denial</strong></td>
+<td>Repudiation</td>
+<td>Both involve denying validity/authorship</td>
+</tr>
+<tr>
+<td><strong>Omission</strong></td>
+<td><em>(no direct mapping)</em></td>
+<td>STRIDE has no completeness category. Not an inverse of Information Disclosure: omission attacks what the record contains, disclosure attacks who can read it — different aspects, not opposite ends of one.</td>
+</tr>
+<tr>
+<td><strong>ForgeryOfProvenance</strong></td>
+<td>Spoofing</td>
+<td>Both involve falsifying identity/origin</td>
+</tr>
+<tr>
+<td><strong>Repudiation</strong></td>
+<td>Repudiation</td>
+<td>Direct mapping</td>
+</tr>
+<tr>
+<td><strong>Contamination</strong></td>
+<td>Tampering</td>
+<td>Mixing genuine with false</td>
+</tr>
+<tr>
+<td><strong>Decontextualization</strong></td>
+<td><em>(no direct mapping)</em></td>
+<td>STRIDE doesn't model context stripping</td>
+</tr>
+<tr>
+<td><strong>Fragmentation</strong></td>
+<td><em>(no direct mapping)</em></td>
+<td>STRIDE doesn't model record fragmentation</td>
+</tr>
+<tr>
+<td><strong>Obfuscation</strong></td>
+<td><em>(no direct mapping)</em></td>
+<td>STRIDE doesn't model deliberate obscurity</td>
+</tr>
+<tr>
+<td><em>(no mapping)</em></td>
+<td><strong>Information Disclosure</strong></td>
+<td><strong>Deliberate gap</strong>: Leaked records are undamaged as records</td>
+</tr>
+<tr>
+<td><em>(no mapping)</em></td>
+<td><strong>Elevation of Privilege</strong></td>
+<td>Outside record harm scope (system access, not record integrity)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Differences:</strong></p>
+<ul>
+<li><strong>STRIDE is system-centric</strong>; Record Harm is <strong>record-centric</strong></li>
+<li><strong>STRIDE includes confidentiality</strong> (Information Disclosure); Record Harm <strong>deliberately excludes it</strong> — a leaked record is authentic, complete, and accessible</li>
+<li><strong>Record Harm distinguishes Suppression from Destruction</strong>; STRIDE conflates both under Denial of Service</li>
+<li><strong>Record Harm models composite harms</strong>; STRIDE categories are flat</li>
+</ul>
+<h3 id="record-harm-cia-triad">Record Harm ↔ CIA Triad</h3>
+<table>
+<thead>
+<tr>
+<th>Record Harm</th>
+<th>CIA Category</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Destruction</strong></td>
+<td>Availability</td>
+<td>Permanent loss vs. transient unavailability</td>
+</tr>
+<tr>
+<td><strong>Suppression</strong></td>
+<td>Availability</td>
+<td>Deliberate concealment vs. system failure</td>
+</tr>
+<tr>
+<td><strong>Fabrication</strong></td>
+<td>Integrity</td>
+<td>Creating false records</td>
+</tr>
+<tr>
+<td><strong>Alteration</strong></td>
+<td>Integrity</td>
+<td>Modifying existing records</td>
+</tr>
+<tr>
+<td><strong>Contamination</strong></td>
+<td>Integrity</td>
+<td>Mixing genuine with false</td>
+</tr>
+<tr>
+<td><strong>Omission</strong></td>
+<td>Integrity</td>
+<td>Incomplete records</td>
+</tr>
+<tr>
+<td><strong>ForgeryOfProvenance</strong></td>
+<td>Integrity + Authenticity</td>
+<td>Falsifying origin/custody</td>
+</tr>
+<tr>
+<td><strong>Denial</strong></td>
+<td><em>(no mapping)</em></td>
+<td>Contesting legitimacy. Trustworthiness is a Record Harm aspect, not a CIA category — see the key difference below.</td>
+</tr>
+<tr>
+<td><strong>Repudiation</strong></td>
+<td><em>(no mapping)</em></td>
+<td>Disavowing authorship. Same gap as Denial.</td>
+</tr>
+<tr>
+<td><strong>Decontextualization</strong></td>
+<td>Integrity</td>
+<td>Stripping metadata/context</td>
+</tr>
+<tr>
+<td><strong>Fragmentation</strong></td>
+<td>Integrity + Availability</td>
+<td>Breaking into disconnected pieces</td>
+</tr>
+<tr>
+<td><strong>Obfuscation</strong></td>
+<td>Availability</td>
+<td>Degrading comprehensibility</td>
+</tr>
+<tr>
+<td><em>(no mapping)</em></td>
+<td><strong>Confidentiality</strong></td>
+<td><strong>Deliberate gap</strong>: See STRIDE notes above</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Differences:</strong></p>
+<ul>
+<li><strong>CIA is property-centric</strong> (what properties are violated); Record Harm is <strong>action-centric</strong> (what attacks occur)</li>
+<li><strong>CIA Integrity is broad</strong>; Record Harm <strong>separates what it lumps together</strong> — <code>Alteration</code> and <code>Omission</code> both violate integrity but are distinct primes, and <code>Fabrication</code> is split off entirely as an attack on Authenticity</li>
+<li><strong>CIA Availability conflates</strong> destruction, suppression, and obfuscation; Record Harm <strong>separates them</strong></li>
+<li><strong>Record Harm adds Trustworthiness</strong> as a distinct aspect beyond CIA</li>
+</ul>
+<h3 id="record-harm-interpares-diplomatics">Record Harm ↔ InterPARES Diplomatics</h3>
+<p>InterPARES (International Research on Permanent Authentic Records in Electronic Systems) provides a framework for archival authenticity.</p>
+<table>
+<thead>
+<tr>
+<th>Record Harm</th>
+<th>Diplomatics Concept</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Authenticity</strong> (aspect)</td>
+<td>Authenticity</td>
+<td>Core shared concept</td>
+</tr>
+<tr>
+<td><strong>Context</strong> (aspect)</td>
+<td>Archival Bond</td>
+<td>Both emphasize provenance and relationships</td>
+</tr>
+<tr>
+<td><strong>Integrity</strong> (aspect)</td>
+<td>Completeness</td>
+<td>Both require wholeness</td>
+</tr>
+<tr>
+<td><strong>Fabrication</strong></td>
+<td>Forgery</td>
+<td>Creating false records</td>
+</tr>
+<tr>
+<td><strong>Alteration</strong></td>
+<td>Corruption</td>
+<td>Unauthorized modification</td>
+</tr>
+<tr>
+<td><strong>ForgeryOfProvenance</strong></td>
+<td>False Provenance</td>
+<td>Falsifying archival context</td>
+</tr>
+<tr>
+<td><strong>Decontextualization</strong></td>
+<td>Loss of Archival Bond</td>
+<td>Severing from context</td>
+</tr>
+<tr>
+<td><strong>Omission</strong></td>
+<td>Incompleteness</td>
+<td>Missing elements</td>
+</tr>
+<tr>
+<td><strong>Destruction</strong></td>
+<td>Loss</td>
+<td>Permanent removal</td>
+</tr>
+<tr>
+<td><strong>Suppression</strong></td>
+<td>Concealment</td>
+<td>Deliberate hiding</td>
+</tr>
+<tr>
+<td><strong>Denial</strong></td>
+<td>Contestation of Authenticity</td>
+<td>Challenging legitimacy</td>
+</tr>
+<tr>
+<td><strong>Fragmentation</strong></td>
+<td>Dispersal</td>
+<td>Breaking archival unity</td>
+</tr>
+<tr>
+<td><strong>Contamination</strong></td>
+<td>Adulteration</td>
+<td>Mixing genuine with false</td>
+</tr>
+<tr>
+<td><strong>Obfuscation</strong></td>
+<td>Obscuration</td>
+<td>Degrading intelligibility</td>
+</tr>
+<tr>
+<td><strong>Repudiation</strong></td>
+<td>Disavowal of Authorship</td>
+<td>Denying creation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Similarities:</strong></p>
+<ul>
+<li>Both emphasize <strong>authenticity and provenance</strong></li>
+<li>Both recognize <strong>context as essential</strong> to record meaning</li>
+<li>Both distinguish <strong>form from content</strong></li>
+</ul>
+<p><strong>Key Differences:</strong></p>
+<ul>
+<li><strong>Diplomatics is preservation-focused</strong>; Record Harm is <strong>attack-focused</strong></li>
+<li><strong>Diplomatics emphasizes archival bond</strong> (relationships between records); Record Harm <strong>models this via hasElement</strong></li>
+<li><strong>Diplomatics is community-calibrated</strong>; Record Harm <strong>includes inside-agent records</strong> (memories, beliefs)</li>
+</ul>
+<h3 id="record-harm-spoliation-doctrine-legal">Record Harm ↔ Spoliation Doctrine (Legal)</h3>
+<p>Spoliation doctrine addresses destruction or concealment of evidence in legal proceedings.</p>
+<table>
+<thead>
+<tr>
+<th>Record Harm</th>
+<th>Spoliation Concept</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Destruction</strong></td>
+<td>Destruction of Evidence</td>
+<td>Direct mapping</td>
+</tr>
+<tr>
+<td><strong>Suppression</strong></td>
+<td>Concealment/Withholding</td>
+<td>Hiding evidence from discovery</td>
+</tr>
+<tr>
+<td><strong>Alteration</strong></td>
+<td>Tampering with Evidence</td>
+<td>Modifying evidence</td>
+</tr>
+<tr>
+<td><strong>Fabrication</strong></td>
+<td>Fabrication of Evidence</td>
+<td>Creating false evidence</td>
+</tr>
+<tr>
+<td><strong>Omission</strong></td>
+<td>Selective Production</td>
+<td>Withholding relevant documents</td>
+</tr>
+<tr>
+<td><strong>ForgeryOfProvenance</strong></td>
+<td>False Chain of Custody</td>
+<td>Falsifying evidence handling</td>
+</tr>
+<tr>
+<td><strong>Contamination</strong></td>
+<td>Tainting Evidence</td>
+<td>Mixing genuine with false</td>
+</tr>
+<tr>
+<td><strong>Denial</strong></td>
+<td>Contesting Authenticity</td>
+<td>Challenging evidence validity</td>
+</tr>
+<tr>
+<td><strong>Repudiation</strong></td>
+<td>Disavowal</td>
+<td>Denying authorship/authority</td>
+</tr>
+<tr>
+<td><strong>Decontextualization</strong></td>
+<td>Selective Quotation</td>
+<td>Removing context to mislead</td>
+</tr>
+<tr>
+<td><strong>Fragmentation</strong></td>
+<td>Partial Production</td>
+<td>Producing incomplete sets</td>
+</tr>
+<tr>
+<td><strong>Obfuscation</strong></td>
+<td>Burying in Volume</td>
+<td>Making evidence hard to find</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Similarities:</strong></p>
+<ul>
+<li>Both recognize <strong>destruction and concealment as distinct wrongs</strong></li>
+<li>Both address <strong>chain of custody</strong> (ForgeryOfProvenance)</li>
+<li>Both recognize <strong>selective production</strong> (Omission)</li>
+</ul>
+<p><strong>Key Differences:</strong></p>
+<ul>
+<li><strong>Spoliation is adversarial</strong> (litigation context); Record Harm is <strong>general-purpose</strong></li>
+<li><strong>Spoliation focuses on intent and bad faith</strong>; Record Harm <strong>models the acts themselves</strong></li>
+<li><strong>Spoliation has legal remedies</strong> (adverse inference, sanctions); Record Harm is <strong>descriptive, not prescriptive</strong></li>
+</ul>
+<h2 id="unique-contributions-of-record-harm-ontology">Unique Contributions of Record Harm Ontology</h2>
+<h3 id="1-inside-agent-records-v31">1. Inside-Agent Records (v3.1)</h3>
+<p><strong>No other framework explicitly models:</strong></p>
+<ul>
+<li>Memories as records</li>
+<li>Beliefs as records</li>
+<li>Self-directed harm (repression, self-deception, motivated forgetting)</li>
+<li>The agent/community boundary</li>
+</ul>
+<p><strong>Example:</strong> A witness repressing a memory is <code>ex:Suppression</code> where <code>perpetrator = bearer</code>. This is inexpressible in STRIDE, CIA, diplomatics, or spoliation.</p>
+<h3 id="2-formal-dependency-structure">2. Formal Dependency Structure</h3>
+<p><strong>Record Harm uniquely provides:</strong></p>
+<ul>
+<li>Distinction between <strong>prime</strong> (irreducible) and <strong>composite</strong> (derived) harms</li>
+<li>Explicit <code>buildsUpon</code> relationships</li>
+<li>Reasoner-derivable composite membership</li>
+<li>Transitive closure via SPARQL property paths</li>
+</ul>
+<p><strong>Example:</strong> <code>ex:Obfuscation buildsUpon ex:Suppression, ex:Alteration</code> — neither STRIDE nor CIA models this dependency.</p>
+<h3 id="3-mereological-structure-v31">3. Mereological Structure (v3.1)</h3>
+<p><strong>Record Harm uniquely models:</strong></p>
+<ul>
+<li>Records as composed of other records (<code>hasElement</code>)</li>
+<li>Community registers as records in their own right</li>
+<li>Non-admission as <code>Omission</code> from the register</li>
+</ul>
+<p><strong>Example:</strong> A parish register whose elements are individual testimonies. Refusing to admit a testimony is <code>ex:Omission</code> from that register.</p>
+<h3 id="4-aspect-based-targeting">4. Aspect-Based Targeting</h3>
+<p><strong>Record Harm provides:</strong></p>
+<ul>
+<li>6 fundamental aspects (Existence, Authenticity, Integrity, Accessibility, Context, Trustworthiness)</li>
+<li>Multi-valued targeting (one harm can attack multiple aspects)</li>
+<li>Coverage guarantee (every aspect reachable from at least one prime)</li>
+</ul>
+<p><strong>Example:</strong> <code>ex:Alteration</code> targets both <code>Authenticity</code> and <code>Integrity</code> — CIA would only say &quot;Integrity violation.&quot;</p>
+<h3 id="5-event-layer-with-severity">5. Event Layer with Severity</h3>
+<p><strong>Record Harm separates:</strong></p>
+<ul>
+<li>Harm <strong>types</strong> (abstract categories)</li>
+<li>Harm <strong>events</strong> (specific occurrences with dates, perpetrators, severity)</li>
+</ul>
+<p><strong>Example:</strong> Two <code>ex:Destruction</code> events can have different severities (destroying a parking receipt vs. a birth certificate).</p>
+<h2 id="integration-guidance">Integration Guidance</h2>
+<h3 id="for-information-security-practitioners">For Information Security Practitioners</h3>
+<ul>
+<li><strong>Map STRIDE threats to Record Harms</strong> for evidence integrity analysis</li>
+<li><strong>Use Record Harm for forensics</strong> where CIA Triad is too coarse</li>
+<li><strong>Note the confidentiality gap</strong> — add your own confidentiality layer if needed</li>
+</ul>
+<h3 id="for-archivists-and-records-managers">For Archivists and Records Managers</h3>
+<ul>
+<li><strong>Use Record Harm alongside diplomatics</strong> for threat modeling</li>
+<li><strong>Model archival bonds via <code>hasElement</code></strong> for collection integrity</li>
+<li><strong>Track provenance attacks via <code>ForgeryOfProvenance</code></strong></li>
+</ul>
+<h3 id="for-legal-professionals">For Legal Professionals</h3>
+<ul>
+<li><strong>Map spoliation claims to Record Harms</strong> for structured analysis</li>
+<li><strong>Use severity scoring</strong> for proportionality arguments</li>
+<li><strong>Track chain of custody via <code>ForgeryOfProvenance</code> events</strong></li>
+</ul>
+<h3 id="for-ai-ethics-and-misinformation-research">For AI Ethics and Misinformation Research</h3>
+<ul>
+<li><strong>Model disinformation campaigns as <code>HarmPattern</code> instances</strong></li>
+<li><strong>Track inside-agent harms</strong> (belief manipulation, memory distortion)</li>
+<li><strong>Use <code>Contamination</code> for genuine/false mixing</strong> in information ecosystems</li>
+</ul>
+<h2 id="limitations-and-scope-boundaries">Limitations and Scope Boundaries</h2>
+<h3 id="what-record-harm-does-not-cover">What Record Harm Does NOT Cover</h3>
+<ol>
+<li><strong>Confidentiality breaches</strong> — Deliberate exclusion (see notes above)</li>
+<li><strong>System vulnerabilities</strong> — STRIDE is better for this</li>
+<li><strong>Access control</strong> — Outside record harm scope</li>
+<li><strong>Encryption/cryptography</strong> — Technical implementation, not ontological harm</li>
+<li><strong>Pure non-creation</strong> — Witnessing without recording (see <code>ex:RecordHarm</code> scope note)</li>
+</ol>
+<h3 id="what-record-harm-does-cover">What Record Harm DOES Cover</h3>
+<ol>
+<li><strong>Ontological attacks on records</strong> — Existence, authenticity, integrity, accessibility, context, trustworthiness</li>
+<li><strong>Inside-agent and inside-community records</strong> — Memories, beliefs, registers, archives</li>
+<li><strong>Self-directed harm</strong> — Repression, self-deception, motivated forgetting</li>
+<li><strong>Composite harm structures</strong> — Dependencies and patterns</li>
+<li><strong>Event tracking</strong> — Specific occurrences with severity and attribution</li>
+</ol>
+<h2 id="references">References</h2>
+<ul>
+<li><strong>STRIDE</strong>: Microsoft Threat Modeling Framework</li>
+<li><strong>CIA Triad</strong>: Confidentiality, Integrity, Availability (foundational InfoSec model)</li>
+<li><strong>InterPARES</strong>: International Research on Permanent Authentic Records in Electronic Systems</li>
+<li><strong>Spoliation Doctrine</strong>: Legal doctrine on evidence destruction/concealment</li>
+<li><strong>Record Harm Ontology</strong>: This ontology (v3.1)</li>
+</ul>
+<h2 id="versioning">Versioning</h2>
+<p>This document describes the Record Harm Ontology at <strong>v3.1</strong> and carries no
+version of its own. The ontology has a single version, asserted in
+<code>owl:versionInfo</code> and recorded in <a href="https://github.com/commuted/record-harm-ontology/blob/main/CHANGELOG.md">CHANGELOG.md</a>; a separate
+per-document number would be a second version axis that drifts out of step
+with the thing it describes — the same failure mode as v1's
+<code>isFundamentalRoot</code> boolean drifting out of step with class membership.</p>
+<p>When the mappings below change because the taxonomy changed, record it in the
+ontology's changelog entry for that release, not here.</p>
+
+  </article>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-brand">Epistemic Ontology</p>
+      <p class="footer-note">Formal vocabularies for knowledge and record.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Secondary">
+      <a href="/feed.xml">Atom feed</a>
+      <a href="/sitemap.xml">Sitemap</a>
+      <a href="https://github.com/commuted/record-ontology">Source</a>
+    </nav>
+    <p class="footer-copy">© 2026 Ron Hinchley</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.theme-toggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var dark = getComputedStyle(root).getPropertyValue('--is-dark').trim() === '1';
+    var next = dark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>
+</body>
+</html>

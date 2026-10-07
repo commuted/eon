@@ -131,3 +131,19 @@ and which the Record Ontology deliberately refuses to compute: there, harm is
 detected, never charged.
 
 [Read the post on the harm dictionary →](/blog/harm-is-an-operation-minus-its-record/)
+
+## Further reading
+
+- [Querying record harm](/record-harm/queries/) — worked SPARQL for harm
+  dependencies, aspect coverage, events, patterns, and where a record lives.
+  The IRIs are the permanent ones, so the queries run against what is served
+  here.
+- [Record harm compared](/record-harm/comparison/) — the mapping to STRIDE, the
+  CIA triad, InterPARES diplomatics and spoliation doctrine, including the two
+  things this vocabulary deliberately does not cover.
+- [Architecture and design decisions](https://github.com/commuted/record-harm-ontology/blob/main/docs/ARCHITECTURE.md)
+  — kept in the repository rather than published here. It is contributor
+  documentation: the primality tests a new harm must pass, what counts as a
+  breaking change, and the defects past versions shipped. Useful if you are
+  extending the vocabulary, not if you are using it.
+

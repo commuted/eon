@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Querying record harm — Epistemic Ontology</title>
+<meta name="description" content="SPARQL queries against the Record Harm Ontology: harm dependencies, aspect coverage, event and pattern analysis, and where a record lives.">
+<link rel="canonical" href="https://epistemic-ontology.net/record-harm/queries/">
+<meta name="author" content="Ron Hinchley">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Epistemic Ontology">
+<meta property="og:title" content="Querying record harm">
+<meta property="og:description" content="SPARQL queries against the Record Harm Ontology: harm dependencies, aspect coverage, event and pattern analysis, and where a record lives.">
+<meta property="og:url" content="https://epistemic-ontology.net/record-harm/queries/">
+<meta property="og:image" content="https://epistemic-ontology.net/logo.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/style.b8fe57e333.css">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/atom+xml" title="Epistemic Ontology — Blog" href="/feed.xml">
+<script>
+  // Set the theme before first paint so there is no flash. Progressive: with
+  // JS off the page falls back to prefers-color-scheme in the stylesheet.
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+</head>
+<body class="doc">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">
+      <img class="brand-mark" src="/apple-touch-icon.png" alt="" width="32" height="32" decoding="async">
+      <span class="brand-text">Epistemic<span class="brand-accent">Ontology</span></span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="/#ontologies">Ontologies</a>
+      <a href="/blog/">Blog</a>
+      <a href="/using/">Using</a>
+      <a href="/about/">About</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+      </svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13.4A8.2 8.2 0 1 1 10.6 4a6.6 6.6 0 0 0 9.4 9.4Z"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+<div class="wrap doc-head">
+  <h1>Querying record harm</h1>
+</div>
+
+<div class="wrap doc-layout">
+  <aside class="sidebar">
+    <nav class="sidebar-card toc" aria-label="On this page">
+      <h2 class="sidebar-title">On this page</h2>
+      <ol>
+        <li class="toc-l2"><a href="#setup">Setup</a></li>
+        <li class="toc-l2"><a href="#basic-queries">Basic Queries</a></li>
+        <li class="toc-l3"><a href="#list-all-prime-harms">List All Prime Harms</a></li>
+        <li class="toc-l3"><a href="#list-all-composite-harms-with-dependencies">List All Composite Harms with Dependencies</a></li>
+        <li class="toc-l3"><a href="#find-harms-targeting-specific-aspect">Find Harms Targeting Specific Aspect</a></li>
+        <li class="toc-l2"><a href="#dependency-analysis">Dependency Analysis</a></li>
+        <li class="toc-l3"><a href="#find-all-transitive-dependencies">Find All Transitive Dependencies</a></li>
+        <li class="toc-l3"><a href="#find-harms-that-build-upon-omission">Find Harms That Build Upon Omission</a></li>
+        <li class="toc-l3"><a href="#count-underlying-prime-harms">Count Underlying Prime Harms</a></li>
+        <li class="toc-l2"><a href="#record-location-bearer-and-nesting">Record Location (bearer and nesting)</a></li>
+        <li class="toc-l3"><a href="#inside-agent-vs-inside-community-records">Inside-agent vs inside-community records</a></li>
+        <li class="toc-l3"><a href="#self-directed-harm-repression-self-deception">Self-directed harm (repression, self-deception)</a></li>
+        <li class="toc-l3"><a href="#records-nested-inside-a-community-register">Records nested inside a community register</a></li>
+        <li class="toc-l3"><a href="#agent-to-community-boundary-what-a-register-leaves-out">Agent-to-community boundary: what a register leaves out</a></li>
+        <li class="toc-l2"><a href="#event-queries">Event Queries</a></li>
+        <li class="toc-l3"><a href="#list-all-harm-events">List All Harm Events</a></li>
+        <li class="toc-l3"><a href="#find-high-severity-events">Find High-Severity Events</a></li>
+        <li class="toc-l3"><a href="#events-by-perpetrator">Events by Perpetrator</a></li>
+        <li class="toc-l3"><a href="#timeline-of-events-against-specific-record">Timeline of Events Against Specific Record</a></li>
+        <li class="toc-l2"><a href="#pattern-analysis">Pattern Analysis</a></li>
+        <li class="toc-l3"><a href="#identify-potential-cover-up-patterns">Identify Potential Cover-up Patterns</a></li>
+        <li class="toc-l2"><a href="#aspect-analysis">Aspect Analysis</a></li>
+        <li class="toc-l3"><a href="#aspect-attack-surface">Aspect Attack Surface</a></li>
+        <li class="toc-l3"><a href="#aspect-coverage-by-prime">Aspect Coverage by Prime</a></li>
+        <li class="toc-l3"><a href="#multi-aspect-harms">Multi-Aspect Harms</a></li>
+        <li class="toc-l2"><a href="#detectability-and-reversibility">Detectability and Reversibility</a></li>
+        <li class="toc-l3"><a href="#difficult-to-detect-harms">Difficult to Detect Harms</a></li>
+        <li class="toc-l3"><a href="#irreversible-harms">Irreversible Harms</a></li>
+        <li class="toc-l3"><a href="#risk-matrix-detectability-reversibility">Risk Matrix (Detectability × Reversibility)</a></li>
+        <li class="toc-l2"><a href="#validation-queries">Validation Queries</a></li>
+        <li class="toc-l3"><a href="#find-unclassified-harms">Find Unclassified Harms</a></li>
+        <li class="toc-l3"><a href="#find-composites-without-dependencies">Find Composites Without Dependencies</a></li>
+        <li class="toc-l3"><a href="#find-harms-without-aspect-targeting">Find Harms Without Aspect Targeting</a></li>
+        <li class="toc-l2"><a href="#advanced-queries">Advanced Queries</a></li>
+        <li class="toc-l3"><a href="#harm-propagation-analysis">Harm Propagation Analysis</a></li>
+        <li class="toc-l3"><a href="#event-clustering-by-time-window">Event Clustering by Time Window</a></li>
+        <li class="toc-l3"><a href="#severity-distribution">Severity Distribution</a></li>
+      </ol>
+    </nav>
+  </aside>
+  <article class="doc-body prose">
+    <h1 id="example-sparql-queries">Example SPARQL Queries</h1>
+<p>This document provides example SPARQL queries for common use cases with the Record Harm Ontology.</p>
+<h2 id="setup">Setup</h2>
+<pre class="language-python"><code><span class="t-k">from</span> rdflib <span class="t-k">import</span> Graph
+
+g = Graph()
+g.parse(<span class="t-s">&quot;ontology/record-harm-ontology.ttl&quot;</span>, format=<span class="t-s">&quot;turtle&quot;</span>)
+g.parse(<span class="t-s">&quot;examples/example-harm-events.ttl&quot;</span>, format=<span class="t-s">&quot;turtle&quot;</span>)
+</code></pre>
+<h2 id="basic-queries">Basic Queries</h2>
+<h3 id="list-all-prime-harms">List All Prime Harms</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?harm ?label WHERE {
+    ?harm <span class="t-k">a</span> <span class="t-p">ex:PrimeHarm</span> ;
+          <span class="t-p">rdfs:label</span> ?label .
+}
+ORDER BY ?label
+</code></pre>
+<h3 id="list-all-composite-harms-with-dependencies">List All Composite Harms with Dependencies</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?composite ?label ?dependency ?depLabel WHERE {
+    ?composite <span class="t-k">a</span> <span class="t-p">ex:CompositeHarm</span> ;
+               <span class="t-p">rdfs:label</span> ?label ;
+               <span class="t-p">ex:buildsUpon</span> ?dependency .
+    ?dependency <span class="t-p">rdfs:label</span> ?depLabel .
+}
+ORDER BY ?label ?depLabel
+</code></pre>
+<h3 id="find-harms-targeting-specific-aspect">Find Harms Targeting Specific Aspect</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+PREFIX <span class="t-p">skos:</span> <span class="t-i">&lt;http://www.w3.org/2004/02/skos/core#&gt;</span>
+
+SELECT ?harm ?label ?definition WHERE {
+    ?harm <span class="t-p">ex:targetsAspect</span> <span class="t-p">ex:Authenticity</span> ;
+          <span class="t-p">rdfs:label</span> ?label ;
+          <span class="t-p">skos:definition</span> ?definition .
+}
+</code></pre>
+<h2 id="dependency-analysis">Dependency Analysis</h2>
+<h3 id="find-all-transitive-dependencies">Find All Transitive Dependencies</h3>
+<blockquote>
+<p><strong>v3.0</strong>: the dependency graph is currently <strong>flat</strong> — every composite builds
+directly on primes, maximum chain depth 1 — so <code>ex:buildsUpon+</code> returns the
+same rows as <code>ex:buildsUpon</code> here. The two-hop chain that used to exist
+(<code>Obfuscation → Suppression → Omission</code>) was the defect fixed in v3.0. The
+<code>+</code> form is kept because it remains correct if a composite is ever given a
+composite dependency.</p>
+</blockquote>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?composite ?label ?prime ?primeLabel WHERE {
+    ?composite <span class="t-k">a</span> <span class="t-p">ex:CompositeHarm</span> ;
+               <span class="t-p">rdfs:label</span> ?label ;
+               <span class="t-p">ex:buildsUpon</span>+ ?prime .
+    ?prime <span class="t-k">a</span> <span class="t-p">ex:PrimeHarm</span> ;
+           <span class="t-p">rdfs:label</span> ?primeLabel .
+}
+ORDER BY ?label ?primeLabel
+</code></pre>
+<h3 id="find-harms-that-build-upon-omission">Find Harms That Build Upon Omission</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?harm ?label WHERE {
+    ?harm <span class="t-p">ex:buildsUpon</span> <span class="t-p">ex:Omission</span> ;
+          <span class="t-p">rdfs:label</span> ?label .
+}
+</code></pre>
+<h3 id="count-underlying-prime-harms">Count Underlying Prime Harms</h3>
+<p>Counts the distinct prime harms in each composite's transitive closure (how many
+primes it ultimately rests on) — not path depth / longest chain, which would need
+a recursive longest-path query.</p>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?harm ?label (COUNT(DISTINCT ?prime) as ?primeCount) WHERE {
+    ?harm <span class="t-k">a</span> <span class="t-p">ex:CompositeHarm</span> ;
+          <span class="t-p">rdfs:label</span> ?label ;
+          <span class="t-p">ex:buildsUpon</span>+ ?prime .
+    ?prime <span class="t-k">a</span> <span class="t-p">ex:PrimeHarm</span> .
+}
+GROUP BY ?harm ?label
+ORDER BY DESC(?primeCount)
+</code></pre>
+<h2 id="record-location-bearer-and-nesting">Record Location (bearer and nesting)</h2>
+<p><em>New in v3.1.</em> Where a record lives is stated with <code>ex:bearer</code>, and what it is
+made of with <code>ex:hasElement</code>. Neither needed a new harm type — the
+inside-agent / inside-community distinction is a property of the record, not a
+dimension of harm.</p>
+<h3 id="inside-agent-vs-inside-community-records">Inside-agent vs inside-community records</h3>
+<p>A record borne by exactly one agent resides inside that agent; one borne by
+several, or by a collective agent, resides in a community.</p>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?record ?label (COUNT(DISTINCT ?bearer) as ?bearers) WHERE {
+    ?record <span class="t-k">a</span> <span class="t-p">ex:Record</span> ;
+            <span class="t-p">rdfs:label</span> ?label ;
+            <span class="t-p">ex:bearer</span> ?bearer .
+}
+GROUP BY ?record ?label
+ORDER BY ?bearers
+</code></pre>
+<blockquote>
+<p>Bearer <em>count</em> alone cannot tell a single individual bearer from a single
+collective one — a parish register borne by the parish returns <code>1</code>, same as a
+private memory. That is deliberate: per the note on <code>ex:Agent</code>, the
+individual/collective distinction is left to an external vocabulary, so add
+<code>?bearer a foaf:Group</code> (or <code>prov:Organization</code>) to split them.</p>
+</blockquote>
+<h3 id="self-directed-harm-repression-self-deception">Self-directed harm (repression, self-deception)</h3>
+<p>The perpetrator of the event is also the bearer of the record it harms.
+Inexpressible before <code>ex:bearer</code> existed.</p>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?event ?eventLabel ?harmType ?agent WHERE {
+    ?event <span class="t-k">a</span> <span class="t-p">ex:HarmEvent</span> ;
+           <span class="t-p">ex:perpetrator</span> ?agent ;
+           <span class="t-p">ex:harms</span> ?record ;
+           <span class="t-p">ex:ofType</span> ?harmType .
+    ?record <span class="t-p">ex:bearer</span> ?agent .
+    OPTIONAL { ?event <span class="t-p">rdfs:label</span> ?eventLabel }
+}
+</code></pre>
+<h3 id="records-nested-inside-a-community-register">Records nested inside a community register</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?whole ?wholeLabel ?element ?elementLabel WHERE {
+    ?whole <span class="t-p">ex:hasElement</span>+ ?element .
+    OPTIONAL { ?whole <span class="t-p">rdfs:label</span> ?wholeLabel }
+    OPTIONAL { ?element <span class="t-p">rdfs:label</span> ?elementLabel }
+}
+</code></pre>
+<blockquote>
+<p><code>ex:hasElement</code> is asymmetric and irreflexive but <strong>not</strong> transitive (the
+v2.3 precedent — transitivity would make it non-simple in OWL 2 DL and
+forbid those two guards), so nesting is walked with <code>+</code> exactly as
+<code>ex:buildsUpon</code> is. A nesting <em>cycle</em> deeper than two steps violates no
+declared OWL axiom and is caught instead by <code>ex:RecordAcyclicShape</code> in the
+shapes file.</p>
+</blockquote>
+<h3 id="agent-to-community-boundary-what-a-register-leaves-out">Agent-to-community boundary: what a register leaves out</h3>
+<p>Records held by some agent that are not elements of a given register. Candidate
+<code>ex:Omission</code> from that register — the modeled form of refusing a record entry.</p>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?record ?label ?bearer WHERE {
+    ?record <span class="t-k">a</span> <span class="t-p">ex:Record</span> ;
+            <span class="t-p">ex:bearer</span> ?bearer .
+    OPTIONAL { ?record <span class="t-p">rdfs:label</span> ?label }
+    FILTER NOT EXISTS { <span class="t-p">ex:ParishRegister</span> <span class="t-p">ex:hasElement</span>+ ?record }
+    FILTER (?record != <span class="t-p">ex:ParishRegister</span>)
+}
+</code></pre>
+<blockquote>
+<p>This finds <em>candidates</em>, not harms. Most records a community does not hold
+were never owed to it; omission is a harm only where the record should have
+been part of the register, and nothing in this ontology supplies the &quot;should&quot;
+(see the scope boundary note at <code>ex:RecordHarm</code>).</p>
+</blockquote>
+<h2 id="event-queries">Event Queries</h2>
+<h3 id="list-all-harm-events">List All Harm Events</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+PREFIX <span class="t-p">dc:</span> <span class="t-i">&lt;http://purl.org/dc/terms/&gt;</span>
+
+SELECT ?event ?label ?type ?date ?severity WHERE {
+    ?event <span class="t-k">a</span> <span class="t-p">ex:HarmEvent</span> ;
+           <span class="t-p">rdfs:label</span> ?label ;
+           <span class="t-p">ex:ofType</span> ?harmType ;
+           <span class="t-p">dc:date</span> ?date .
+    ?harmType <span class="t-p">rdfs:label</span> ?type .
+    OPTIONAL { ?event <span class="t-p">ex:severity</span> ?severity }
+}
+ORDER BY DESC(?date)
+</code></pre>
+<h3 id="find-high-severity-events">Find High-Severity Events</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?event ?label ?severity ?record WHERE {
+    ?event <span class="t-k">a</span> <span class="t-p">ex:HarmEvent</span> ;
+           <span class="t-p">rdfs:label</span> ?label ;
+           <span class="t-p">ex:severity</span> ?severity ;
+           <span class="t-p">ex:harms</span> ?record .
+    FILTER(?severity &gt;= <span class="t-n">8</span>)
+}
+ORDER BY DESC(?severity)
+</code></pre>
+<h3 id="events-by-perpetrator">Events by Perpetrator</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?perpetrator ?perpLabel (COUNT(?event) as ?eventCount) WHERE {
+    ?event <span class="t-k">a</span> <span class="t-p">ex:HarmEvent</span> ;
+           <span class="t-p">ex:perpetrator</span> ?perpetrator .
+    ?perpetrator <span class="t-p">rdfs:label</span> ?perpLabel .
+}
+GROUP BY ?perpetrator ?perpLabel
+ORDER BY DESC(?eventCount)
+</code></pre>
+<h3 id="timeline-of-events-against-specific-record">Timeline of Events Against Specific Record</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+PREFIX <span class="t-p">dc:</span> <span class="t-i">&lt;http://purl.org/dc/terms/&gt;</span>
+
+SELECT ?event ?label ?type ?date ?severity WHERE {
+    ?event <span class="t-k">a</span> <span class="t-p">ex:HarmEvent</span> ;
+           <span class="t-p">rdfs:label</span> ?label ;
+           <span class="t-p">ex:harms</span> <span class="t-p">ex:AuditLog2026Q2</span> ;
+           <span class="t-p">ex:ofType</span> ?harmType ;
+           <span class="t-p">dc:date</span> ?date .
+    ?harmType <span class="t-p">rdfs:label</span> ?type .
+    OPTIONAL { ?event <span class="t-p">ex:severity</span> ?severity }
+}
+ORDER BY ?date
+</code></pre>
+<h2 id="pattern-analysis">Pattern Analysis</h2>
+<h3 id="identify-potential-cover-up-patterns">Identify Potential Cover-up Patterns</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?record ?recordLabel 
+       (COUNT(DISTINCT ?suppressionEvent) as ?suppressions)
+       (COUNT(DISTINCT ?alterationEvent) as ?alterations)
+       (COUNT(DISTINCT ?denialEvent) as ?denials)
+WHERE {
+    ?record <span class="t-k">a</span> <span class="t-p">ex:Record</span> ;
+            <span class="t-p">rdfs:label</span> ?recordLabel .
+    
+    OPTIONAL {
+        ?suppressionEvent <span class="t-p">ex:ofType</span> <span class="t-p">ex:Suppression</span> ;
+                         <span class="t-p">ex:harms</span> ?record .
+    }
+    OPTIONAL {
+        ?alterationEvent <span class="t-p">ex:ofType</span> <span class="t-p">ex:Alteration</span> ;
+                        <span class="t-p">ex:harms</span> ?record .
+    }
+    OPTIONAL {
+        ?denialEvent <span class="t-p">ex:ofType</span> <span class="t-p">ex:Denial</span> ;
+                    <span class="t-p">ex:harms</span> ?record .
+    }
+}
+GROUP BY ?record ?recordLabel
+HAVING (?suppressions &gt; <span class="t-n">0</span> &amp;&amp; ?alterations &gt; <span class="t-n">0</span> &amp;&amp; ?denials &gt; <span class="t-n">0</span>)
+</code></pre>
+<h2 id="aspect-analysis">Aspect Analysis</h2>
+<h3 id="aspect-attack-surface">Aspect Attack Surface</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">skos:</span> <span class="t-i">&lt;http://www.w3.org/2004/02/skos/core#&gt;</span>
+
+SELECT ?aspect ?aspectLabel (COUNT(DISTINCT ?harm) as ?harmCount) WHERE {
+    ?harm <span class="t-p">ex:targetsAspect</span> ?aspect .
+    ?aspect <span class="t-p">skos:prefLabel</span> ?aspectLabel .
+}
+GROUP BY ?aspect ?aspectLabel
+ORDER BY DESC(?harmCount)
+</code></pre>
+<h3 id="aspect-coverage-by-prime">Aspect Coverage by Prime</h3>
+<p>The diagnostic that found the v3.0 defect. Every aspect should appear with at
+least one prime; an aspect whose <code>primes</code> column is empty means some composite
+is rooted in a prime that does not actually attack that aspect — before v3.0
+<code>ex:Accessibility</code> came back empty, because <code>ex:Suppression</code> was a composite
+hanging off <code>ex:Omission</code> on an edge that contradicted both definitions.</p>
+<p><code>scripts/validate.py</code> runs this as a hard check (<code>check_aspect_coverage</code>); it
+is reproduced here because the grouped form is the one worth eyeballing when
+adding a harm or an aspect.</p>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">skos:</span> <span class="t-i">&lt;http://www.w3.org/2004/02/skos/core#&gt;</span>
+
+SELECT ?aspectLabel
+       (GROUP_CONCAT(DISTINCT ?primeLabel; separator=<span class="t-s">&quot;, &quot;</span>) AS ?primes)
+WHERE {
+    ?aspect <span class="t-p">skos:inScheme</span> <span class="t-p">ex:RecordAspectScheme</span> ;
+            <span class="t-p">skos:prefLabel</span> ?aspectLabel .
+    OPTIONAL {
+        ?prime <span class="t-k">a</span> <span class="t-p">ex:PrimeHarm</span> ;
+               <span class="t-p">ex:targetsAspect</span> ?aspect ;
+               <span class="t-p">rdfs:label</span> ?primeLabel .
+    }
+}
+GROUP BY ?aspectLabel
+ORDER BY ?aspectLabel
+</code></pre>
+<blockquote>
+<p><code>OPTIONAL</code> is load-bearing here: the point of the query is the aspects with
+<em>no</em> prime, and an inner join would silently drop exactly those rows. Note
+also that rdflib raises <code>NotBoundError</code> on <code>GROUP_CONCAT(DISTINCT ...)</code> over a
+variable left unbound by <code>OPTIONAL</code>, so with rdflib use
+<code>COALESCE(?primeLabel, &quot;NONE&quot;)</code> inside the concat, or do the grouping in
+Python as <code>check_aspect_coverage</code> does.</p>
+</blockquote>
+<h3 id="multi-aspect-harms">Multi-Aspect Harms</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?harm ?label (COUNT(?aspect) as ?aspectCount) WHERE {
+    ?harm <span class="t-k">a</span> <span class="t-p">ex:RecordHarm</span> ;
+          <span class="t-p">rdfs:label</span> ?label ;
+          <span class="t-p">ex:targetsAspect</span> ?aspect .
+}
+GROUP BY ?harm ?label
+HAVING (?aspectCount &gt; <span class="t-n">1</span>)
+ORDER BY DESC(?aspectCount)
+</code></pre>
+<h2 id="detectability-and-reversibility">Detectability and Reversibility</h2>
+<h3 id="difficult-to-detect-harms">Difficult to Detect Harms</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?harm ?label WHERE {
+    ?harm <span class="t-k">a</span> <span class="t-p">ex:RecordHarm</span> ;
+          <span class="t-p">rdfs:label</span> ?label ;
+          <span class="t-p">ex:detectability</span> <span class="t-p">ex:DifficultToDetect</span> .
+}
+</code></pre>
+<h3 id="irreversible-harms">Irreversible Harms</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?harm ?label WHERE {
+    ?harm <span class="t-k">a</span> <span class="t-p">ex:RecordHarm</span> ;
+          <span class="t-p">rdfs:label</span> ?label ;
+          <span class="t-p">ex:reversibility</span> <span class="t-p">ex:Irreversible</span> .
+}
+</code></pre>
+<h3 id="risk-matrix-detectability-reversibility">Risk Matrix (Detectability × Reversibility)</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+PREFIX <span class="t-p">skos:</span> <span class="t-i">&lt;http://www.w3.org/2004/02/skos/core#&gt;</span>
+
+SELECT ?harm ?label ?detectLabel ?reverseLabel WHERE {
+    ?harm <span class="t-k">a</span> <span class="t-p">ex:RecordHarm</span> ;
+          <span class="t-p">rdfs:label</span> ?label ;
+          <span class="t-p">ex:detectability</span> ?detect ;
+          <span class="t-p">ex:reversibility</span> ?reverse .
+    ?detect <span class="t-p">skos:prefLabel</span> ?detectLabel .
+    ?reverse <span class="t-p">skos:prefLabel</span> ?reverseLabel .
+}
+ORDER BY ?detectLabel ?reverseLabel
+</code></pre>
+<h2 id="validation-queries">Validation Queries</h2>
+<h3 id="find-unclassified-harms">Find Unclassified Harms</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?harm ?label WHERE {
+    ?harm <span class="t-k">a</span> <span class="t-p">ex:RecordHarm</span> ;
+          <span class="t-p">rdfs:label</span> ?label .
+    FILTER NOT EXISTS { ?harm <span class="t-k">a</span> <span class="t-p">ex:PrimeHarm</span> }
+    FILTER NOT EXISTS { ?harm <span class="t-k">a</span> <span class="t-p">ex:CompositeHarm</span> }
+}
+</code></pre>
+<h3 id="find-composites-without-dependencies">Find Composites Without Dependencies</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?harm ?label WHERE {
+    ?harm <span class="t-k">a</span> <span class="t-p">ex:CompositeHarm</span> ;
+          <span class="t-p">rdfs:label</span> ?label .
+    FILTER NOT EXISTS { ?harm <span class="t-p">ex:buildsUpon</span> ?dep }
+}
+</code></pre>
+<h3 id="find-harms-without-aspect-targeting">Find Harms Without Aspect Targeting</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?harm ?label WHERE {
+    ?harm <span class="t-k">a</span> <span class="t-p">ex:RecordHarm</span> ;
+          <span class="t-p">rdfs:label</span> ?label .
+    FILTER NOT EXISTS { ?harm <span class="t-p">ex:targetsAspect</span> ?aspect }
+}
+</code></pre>
+<h2 id="advanced-queries">Advanced Queries</h2>
+<h3 id="harm-propagation-analysis">Harm Propagation Analysis</h3>
+<p>Find all harms that could cascade from a prime harm:</p>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">rdfs:</span> <span class="t-i">&lt;http://www.w3.org/2000/01/rdf-schema#&gt;</span>
+
+SELECT ?prime ?primeLabel ?composite ?compositeLabel WHERE {
+    ?prime <span class="t-k">a</span> <span class="t-p">ex:PrimeHarm</span> ;
+           <span class="t-p">rdfs:label</span> ?primeLabel .
+    ?composite <span class="t-p">ex:buildsUpon</span>+ ?prime ;
+               <span class="t-p">rdfs:label</span> ?compositeLabel .
+}
+ORDER BY ?primeLabel ?compositeLabel
+</code></pre>
+<h3 id="event-clustering-by-time-window">Event Clustering by Time Window</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+PREFIX <span class="t-p">dc:</span> <span class="t-i">&lt;http://purl.org/dc/terms/&gt;</span>
+PREFIX <span class="t-p">xsd:</span> <span class="t-i">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+SELECT ?record (COUNT(?event) as ?eventCount) WHERE {
+    ?event <span class="t-k">a</span> <span class="t-p">ex:HarmEvent</span> ;
+           <span class="t-p">ex:harms</span> ?record ;
+           <span class="t-p">dc:date</span> ?date .
+    FILTER(?date &gt;= <span class="t-s">&quot;2026-05-01&quot;</span><span class="t-l">^^</span><span class="t-p">xsd:date</span> &amp;&amp; 
+           ?date &lt;= <span class="t-s">&quot;2026-05-31&quot;</span><span class="t-l">^^</span><span class="t-p">xsd:date</span>)
+}
+GROUP BY ?record
+HAVING (?eventCount &gt; <span class="t-n">1</span>)
+</code></pre>
+<h3 id="severity-distribution">Severity Distribution</h3>
+<pre class="language-sparql"><code>PREFIX <span class="t-p">ex:</span> <span class="t-i">&lt;https://www.epistemic-ontology.net/record-harm#&gt;</span>
+
+SELECT ?severity (COUNT(?event) as ?count) WHERE {
+    ?event <span class="t-k">a</span> <span class="t-p">ex:HarmEvent</span> ;
+           <span class="t-p">ex:severity</span> ?severity .
+}
+GROUP BY ?severity
+ORDER BY ?severity
+</code></pre>
+
+  </article>
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div>
+      <p class="footer-brand">Epistemic Ontology</p>
+      <p class="footer-note">Formal vocabularies for knowledge and record.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Secondary">
+      <a href="/feed.xml">Atom feed</a>
+      <a href="/sitemap.xml">Sitemap</a>
+      <a href="https://github.com/commuted/record-ontology">Source</a>
+    </nav>
+    <p class="footer-copy">© 2026 Ron Hinchley</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelector('.theme-toggle').addEventListener('click', function () {
+    var root = document.documentElement;
+    var dark = getComputedStyle(root).getPropertyValue('--is-dark').trim() === '1';
+    var next = dark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+</script>
+</body>
+</html>

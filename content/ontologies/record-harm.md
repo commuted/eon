@@ -21,6 +21,7 @@ files:
   - { file: record-harm-ontology.ttl, label: Ontology }
   - { file: record-harm-shapes.ttl, label: SHACL shapes }
   - { file: example-harm-events.ttl, label: Example events }
+  - { file: ONTOLOGY-COMPARISON.pdf, label: Framework comparison, type: application/pdf }
 ---
 
 ## Namespace

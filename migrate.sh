@@ -68,6 +68,46 @@ for src_rel in "${!FILES[@]}"; do
   echo "migrated  $src_rel  ->  site/record-harm/${FILES[$src_rel]}"
 done
 
+# --- binary downloads -------------------------------------------------------
+# PDFs are COPIED, never sed-ed: the namespace rewrite that every text file
+# above goes through would corrupt a compressed stream. The consequence is that
+# a PDF cannot be corrected here, so one carrying the placeholder namespace
+# cannot be published at all -- it has to be regenerated from a rewritten
+# source upstream.
+#
+# docs/README.pdf is deliberately NOT staged for exactly that reason: it freezes
+# three `PREFIX ex: <http://example.org/...>` query examples, which would hand
+# visitors SPARQL that returns nothing against the data served here.
+#
+# Note the trap this hides: `grep example.org` on a PDF finds NOTHING even when
+# the string is there, because the text stream is compressed. The text guards
+# below would give a false all-clear. Hence the pdftotext check.
+PDFS=(
+  "docs/ONTOLOGY-COMPARISON.pdf:ONTOLOGY-COMPARISON.pdf"
+)
+for spec in "${PDFS[@]}"; do
+  src="$SRC/${spec%%:*}" out="$DEST/${spec##*:}"
+  if [ ! -f "$src" ]; then
+    echo "warn: missing ${spec%%:*} -- skipping" >&2
+    continue
+  fi
+  cp "$src" "$out"
+  if command -v pdftotext >/dev/null; then
+    if pdftotext "$out" - 2>/dev/null | grep -qE "https?://[^ <>]*example[.]org"; then
+      echo "error: ${spec##*:} contains a placeholder IRI (found via pdftotext;" >&2
+      echo "       a plain grep cannot see it). Regenerate it from a rewritten" >&2
+      echo "       source -- a PDF cannot be corrected by this script." >&2
+      rm -f "$out"
+      exit 1
+    fi
+    echo "copied    ${spec%%:*}  ->  site/record-harm/${spec##*:}  (pdftotext: clean)"
+  else
+    echo "copied    ${spec%%:*}  ->  site/record-harm/${spec##*:}"
+    echo "warn: pdftotext not installed -- cannot verify the PDF carries no" >&2
+    echo "      placeholder IRI; a plain grep is blind to compressed PDF text." >&2
+  fi
+done
+
 # --- the documentation pages ------------------------------------------------
 # Two of the three docs/ files belong on the website. They are GENERATED here
 # rather than copied by hand for the same reason the serializations are: a hand

@@ -49,9 +49,13 @@ check:
 #   stage-record.sh copies (born permanent -- nothing to rewrite)
 #   migrate.sh      rewrites example.org -> epistemic-ontology.net, and fails
 #                   if any placeholder IRI survives
+#   pdf-docs.sh     generates the PDFs that cannot be copied, because a PDF
+#                   cannot be namespace-rewritten; skips when unchanged, since
+#                   Chromium stamps the clock into every print
 stage:
 	@./stage-record.sh $(RECORD_SRC)
 	@./migrate.sh $(HARM_SRC)
+	@./pdf-docs.sh $(HARM_SRC)
 	@$(PYTHON) build.py --check
 
 # Read-only. Verifies the live server: nginx running/enabled, nginx -t passing,

@@ -93,6 +93,42 @@ else
   section TESTERR | sed 's/^/          /'
 fi
 
+
+# --- certificate ----------------------------------------------------------
+# Expiry is invisible to every other check in this script. On 2026-09-24 this
+# certificate expired and the site served a browser interstitial for 13 days
+# while every check here still looked plausible: curl returns 000 on a TLS
+# failure, which reads as "unreachable", not as "expired". certbot renews at 30
+# days remaining, so a 21-day threshold fires only once renewal has genuinely
+# stopped working.
+section "certificate"
+CERT_WARN_DAYS=21
+for host in epistemic-ontology.net www.epistemic-ontology.net \
+            epistemic-ontology.org www.epistemic-ontology.org; do
+  notafter=$(echo | openssl s_client -servername "$host" -connect "$host:443" \
+               2>/dev/null | openssl x509 -noout -enddate 2>/dev/null | cut -d= -f2)
+  if [ -z "$notafter" ]; then
+    bad "$host: no certificate readable (TLS handshake failed)"; continue
+  fi
+  left=$(( ( $(date -d "$notafter" +%s) - $(date +%s) ) / 86400 ))
+  if   [ "$left" -lt 0 ]; then
+    bad "$host: certificate EXPIRED ${left#-} days ago ($notafter)"
+  elif [ "$left" -lt "$CERT_WARN_DAYS" ]; then
+    bad "$host: expires in $left days ($notafter) -- renewal is not working"
+  else
+    ok "$host: valid, $left days left"
+  fi
+done
+
+# The check that would have prevented the outage rather than reported it.
+timer=$("${SSH[@]}" 'systemctl is-enabled certbot-renew.timer' 2>/dev/null)
+if [ "$timer" = "enabled" ]; then
+  ok "certbot-renew.timer enabled"
+else
+  bad "certbot-renew.timer is '${timer:-unknown}' -- nothing will renew the certificate"
+fi
+
+
 head_ "loaded configuration"
 loaded=$(section LOADED | grep -c "conf.d/")
 site_loaded=$(section LOADED | grep -c "conf.d/$CONF_NAME")

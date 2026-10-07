@@ -1,0 +1,25 @@
+# Daily health check of the DEPLOYED site, from the workstation.
+#
+# Why here and not on the server: this check compares the live server against
+# THIS REPOSITORY -- nginx config and the served tree against site/ -- which
+# the server cannot do, having no checkout to compare with. The known cost is
+# that a workstation is sometimes off, which Persistent= below mitigates.
+#
+# Daily, not weekly: the failure this exists to catch ran 13 days unnoticed
+# (an expired TLS certificate, 2026-09-24 to 2026-10-07). Daily bounds that to
+# about one day.
+[Unit]
+Description=Daily epistemic-ontology.net health check
+
+[Timer]
+OnCalendar=daily
+# Spread the run so it is not competing with every other daily timer at
+# midnight, and so the server is not hit at a predictable instant.
+RandomizedDelaySec=30m
+# Run on next boot if the machine was off when it was due. Without this, a
+# workstation that is off overnight simply never checks -- which is exactly
+# the blind spot that made scheduling it here a question in the first place.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

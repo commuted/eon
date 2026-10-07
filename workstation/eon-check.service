@@ -1,0 +1,20 @@
+# Runs the deployed-site health check once. Paired with eon-check.timer.
+#
+# Invoked through `make check-server` rather than check-server.sh directly,
+# because the Makefile is what supplies the host and key from deploy.env
+# (gitignored) -- the script takes them as arguments.
+[Unit]
+Description=epistemic-ontology.net health check
+Documentation=https://github.com/commuted/eon
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/claude/eon
+ExecStart=/usr/bin/make --no-print-directory check-server
+
+# Best-effort desktop notification on failure. The journal is the record of
+# truth (`journalctl --user -u eon-check.service`); this just makes a red
+# result visible on a machine someone is sitting at, which is the whole reason
+# for scheduling it here rather than on the server. Guarded so a headless or
+# notify-send-less session degrades to silence rather than to a second failure.
+ExecStopPost=/bin/sh -c 'test "$EXIT_STATUS" = 0 || { command -v notify-send >/dev/null && notify-send -u critical "epistemic-ontology.net check FAILED" "run: make -C %h/claude/eon check-server"; } || true'

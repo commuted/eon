@@ -6,6 +6,7 @@
 #   make check      build and verify links, staging and namespaces
 #   make check-server  read-only health check of the DEPLOYED site
 #   make check-dns     report the domains' mail-authentication records
+#   make check-nginx   parse the nginx config locally (no server needed)
 #   make fresh      check that site/ matches its sources (fails if stale)
 #   make deploy     build, check, then rsync to the server (push)
 #   make release    commit-and-push, then have the server pull and install
@@ -31,7 +32,7 @@ STAGING_DIR ?= /home/$(shell echo $(DEPLOY_HOST) | cut -d@ -f1)/site
 GIT_REMOTE  ?= https://github.com/commuted/eon.git
 EON_CHECKOUT ?= /opt/eon
 
-.PHONY: all build serve stage check check-server check-dns fresh deploy release icons install clean help
+.PHONY: all build serve stage check check-server check-dns check-nginx fresh deploy release icons install clean help
 
 all: build
 
@@ -62,6 +63,16 @@ check-server:
 # Read-only DNS check: MX, SPF, DKIM, DMARC on both domains. See dns/README.md.
 check-dns:
 	@./dns/check-dns.sh
+
+# Parse nginx/epistemic-ontology.net.conf with the real nginx binary, in a
+# throwaway harness that supplies the http{} wrapper, a test certificate and
+# unprivileged ports. Catches syntax and wrong-context directives before a
+# deploy does. Needs nginx installed locally as a parser only -- nothing is
+# served, so this is NOT part of `make check`, which must work from a clean
+# checkout with no nginx. See the header of check-nginx.sh for what it does
+# and does not prove.
+check-nginx:
+	@./check-nginx.sh
 
 # site/ is committed so the served bytes are reviewable and deployable without
 # a Python environment. This target proves it is not stale.
@@ -102,4 +113,4 @@ clean:
 	@echo "removed site/"
 
 help:
-	@sed -n '2,10p' Makefile
+	@sed -n '2,12p' Makefile

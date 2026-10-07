@@ -54,17 +54,20 @@ arith:definedFrom a owl:ObjectProperty ;
     rdfs:label "defined from"@en ;
     rdfs:domain arith:Operation ;
     rdfs:range  arith:Operation ;
-    rdfs:comment "The definitional DAG over operations. Deliberately NON-transitive in the base -- the same §6 discipline as composition."@en .
+    rdfs:comment "The definitional DAG over operations. Deliberately NON-transitive in the base -- the same §6 discipline as composition."@en ;
+    rec:utilityPath "formula" .
 
 arith:inverseOperationOf a owl:ObjectProperty ;
     rdfs:label "inverse operation of"@en ;
     rdfs:subPropertyOf arith:definedFrom ;
-    rdfs:comment "Defined as the inverse of another operation."@en .
+    rdfs:comment "Defined as the inverse of another operation."@en ;
+    rec:utilityPath "formula" .
 
 arith:iterates a owl:ObjectProperty ;
     rdfs:label "iterates"@en ;
     rdfs:subPropertyOf arith:definedFrom ;
-    rdfs:comment "Defined as the iteration of another operation."@en .
+    rdfs:comment "Defined as the iteration of another operation."@en ;
+    rec:utilityPath "formula" .
 
 arith:Successor a owl:NamedIndividual , arith:Operation ;
     rdfs:label "successor"@en ;
@@ -113,7 +116,8 @@ arith:Numeral a owl:Class ;
 arith:numericValue a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:label "numeric value"@en ;
     rdfs:domain arith:Numeral ;
-    rdfs:range  xsd:integer .
+    rdfs:range  xsd:integer ;
+    rec:utilityPath "reference" .
 
 arith:Variable a owl:Class ;
     rdfs:label "Variable"@en ;
@@ -122,7 +126,8 @@ arith:Variable a owl:Class ;
 arith:symbol a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:label "symbol"@en ;
     rdfs:domain arith:Variable ;
-    rdfs:range  xsd:string .
+    rdfs:range  xsd:string ;
+    rec:utilityPath "reference" .
 
 # Binary application only, in the representative scope. The functional
 # properties are the DECIDABLE face of well-formedness (two distinct first
@@ -141,19 +146,22 @@ arith:operator a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:label "operator"@en ;
     rdfs:domain arith:Application ;
     rdfs:range  arith:Operation ;
-    rdfs:comment "Which operation is applied. A vocabulary reference, not a part."@en .
+    rdfs:comment "Which operation is applied. A vocabulary reference, not a part."@en ;
+    rec:utilityPath "formula" .
 
 arith:firstOperand a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:label "first operand"@en ;
     rdfs:subPropertyOf rec:composedOf ;
     rdfs:domain arith:Application ;
-    rdfs:range  arith:Expression .
+    rdfs:range  arith:Expression ;
+    rec:utilityPath "formula" .
 
 arith:secondOperand a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:label "second operand"@en ;
     rdfs:subPropertyOf rec:composedOf ;
     rdfs:domain arith:Application ;
-    rdfs:range  arith:Expression .
+    rdfs:range  arith:Expression ;
+    rec:utilityPath "formula" .
 
 # An equation relates two expressions; lhs/rhs are parts. A description --
 # "the whole thing: sides, and all, coming together" -- is simply a Record
@@ -168,10 +176,12 @@ arith:lhs a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:label "left-hand side"@en ;
     rdfs:subPropertyOf rec:composedOf ;
     rdfs:domain arith:Equation ;
-    rdfs:range  arith:Expression .
+    rdfs:range  arith:Expression ;
+    rec:utilityPath "formula" .
 
 arith:rhs a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:label "right-hand side"@en ;
     rdfs:subPropertyOf rec:composedOf ;
     rdfs:domain arith:Equation ;
-    rdfs:range  arith:Expression .
+    rdfs:range  arith:Expression ;
+    rec:utilityPath "formula" .

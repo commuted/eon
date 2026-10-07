@@ -554,6 +554,20 @@ def check(result: dict[str, Any]) -> int:
                 problems.append(f"{onto['slug']}: {entry['file']} is not staged")
         if onto["rdf"] and not onto["rdf"]["version"]:
             problems.append(f"{onto['slug']}: no owl:versionInfo in the Turtle")
+        # The front matter's licence is what the page SHOWS a reader; the
+        # Turtle's dc:license is what it tells a machine via JSON-LD. They are
+        # two sources for one fact, so they drift: record-harm's page said MIT
+        # for months after the ontology relicensed to CC BY 4.0, and the page
+        # served both answers at once. Compared scheme- and slash-insensitively
+        # because the Turtle uses http:// and the front matter https://.
+        declared = (onto.get("license") or {}).get("url", "")
+        in_turtle = (onto["rdf"] or {}).get("license", "")
+        if declared and in_turtle:
+            norm = lambda u: re.sub(r"^https?://", "", u).rstrip("/")
+            if norm(declared) != norm(in_turtle):
+                problems.append(
+                    f"{onto['slug']}: licence drift -- page says {declared}, "
+                    f"Turtle says {in_turtle}")
 
     leaked = [p.relative_to(OUT) for p in OUT.rglob("*.ttl")
               if re.search(r"https?://[^ <>]*example\.org", p.read_text(encoding="utf-8"))]
@@ -564,7 +578,8 @@ def check(result: dict[str, Any]) -> int:
     if problems:
         print(f"\n{len(problems)} problem(s) found.", file=sys.stderr)
         return 1
-    print("  all internal links resolve; every ontology staged; no example.org IRIs")
+    print("  all internal links resolve; every ontology staged; "
+          "licences agree with the Turtle; no example.org IRIs")
     return 0
 
 

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Record Harm Ontology — Epistemic Ontology</title>
-<meta name="description" content="A taxonomy of the ways an informational record can be damaged — prime harms (destruction, fabrication, alteration, omission, denial) and the composites built upon them — with SKOS vocabularies, SHACL validation and an event layer for specific occurrences.">
+<meta name="description" content="A taxonomy of the ways an informational record can be damaged — prime harms (destruction, fabrication, alteration, omission, denial, suppression) and the composites built upon them — with SKOS vocabularies, SHACL validation, an event layer for specific occurrences, and a record layer saying where a record lives.">
 <link rel="canonical" href="https://epistemic-ontology.net/record-harm/">
 <meta name="author" content="Ron Hinchley">
 <meta name="color-scheme" content="light dark">
@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Epistemic Ontology">
 <meta property="og:title" content="Record Harm Ontology">
-<meta property="og:description" content="A taxonomy of the ways an informational record can be damaged — prime harms (destruction, fabrication, alteration, omission, denial) and the composites built upon them — with SKOS vocabularies, SHACL validation and an event layer for specific occurrences.">
+<meta property="og:description" content="A taxonomy of the ways an informational record can be damaged — prime harms (destruction, fabrication, alteration, omission, denial, suppression) and the composites built upon them — with SKOS vocabularies, SHACL validation, an event layer for specific occurrences, and a record layer saying where a record lives.">
 <meta property="og:url" content="https://epistemic-ontology.net/record-harm/">
 <meta property="og:image" content="https://epistemic-ontology.net/logo.png">
 <meta name="twitter:card" content="summary">
@@ -24,7 +24,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="alternate" type="application/atom+xml" title="Epistemic Ontology — Blog" href="/feed.xml">
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Dataset", "creator": {"@type": "Person", "name": "Ron Hinchley"}, "description": "A taxonomy of the ways an informational record can be damaged \u2014 prime harms (destruction, fabrication, alteration, omission, denial) and the composites built upon them \u2014 with SKOS vocabularies, SHACL validation and an event layer for specific occurrences.", "encodingFormat": "text/turtle", "identifier": "https://www.epistemic-ontology.net/record-harm#", "license": "http://creativecommons.org/licenses/by/4.0/", "name": "Record Harm Ontology", "url": "https://epistemic-ontology.net/record-harm/", "version": "2.3"}
+{"@context": "https://schema.org", "@type": "Dataset", "creator": {"@type": "Person", "name": "Ron Hinchley"}, "description": "A taxonomy of the ways an informational record can be damaged \u2014 prime harms (destruction, fabrication, alteration, omission, denial, suppression) and the composites built upon them \u2014 with SKOS vocabularies, SHACL validation, an event layer for specific occurrences, and a record layer saying where a record lives.", "encodingFormat": "text/turtle", "identifier": "https://www.epistemic-ontology.net/record-harm#", "license": "http://creativecommons.org/licenses/by/4.0/", "name": "Record Harm Ontology", "url": "https://epistemic-ontology.net/record-harm/", "version": "3.1"}
 </script>
 <script>
   // Set the theme before first paint so there is no flash. Progressive: with
@@ -67,9 +67,9 @@
     <a href="/">Ontologies</a> <span aria-hidden="true">/</span> <span>Record Harm Ontology</span>
   </nav>
   <h1>Record Harm Ontology</h1>
-  <p class="lead">A taxonomy of the ways an informational record can be damaged — prime harms (destruction, fabrication, alteration, omission, denial) and the composites built upon them — with SKOS vocabularies, SHACL validation and an event layer for specific occurrences.</p>
+  <p class="lead">A taxonomy of the ways an informational record can be damaged — prime harms (destruction, fabrication, alteration, omission, denial, suppression) and the composites built upon them — with SKOS vocabularies, SHACL validation, an event layer for specific occurrences, and a record layer saying where a record lives.</p>
   <div class="meta">
-<span class="badge badge-version">v2.3</span><span class="badge">OWL 2 DL</span><span class="badge">SKOS</span><span class="badge">SHACL</span>  </div>
+<span class="badge badge-version">v3.1</span><span class="badge">OWL 2 DL</span><span class="badge">SKOS</span><span class="badge">SHACL</span>  </div>
 </div>
 
 <div class="wrap doc-layout">
@@ -81,14 +81,14 @@
         <dt>Prefix</dt><dd class="mono">rho:</dd>
         <dt>Classes</dt><dd>7</dd>
         <dt>Properties</dt>
-        <dd>10
-          <span class="dim">(9 object,
+        <dd>14
+          <span class="dim">(13 object,
           1 data)</span></dd>
         <dt>Individuals</dt><dd>0</dd>
-        <dt>Triples</dt><dd>310</dd>
+        <dt>Triples</dt><dd>357</dd>
         <dt>Source</dt>
         <dd><a href="https://github.com/commuted/record-harm-ontology">commuted/record-harm-ontology</a></dd>
-        <dt>Licence</dt><dd><a href="https://opensource.org/licenses/MIT">MIT</a></dd>
+        <dt>Licence</dt><dd><a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></dd>
       </dl>
     </div>
 
@@ -100,6 +100,7 @@
         <li class="toc-l2"><a href="#prime-harms">Prime harms</a></li>
         <li class="toc-l2"><a href="#composite-harms">Composite harms</a></li>
         <li class="toc-l2"><a href="#layers">Layers</a></li>
+        <li class="toc-l2"><a href="#where-a-record-lives">Where a record lives</a></li>
         <li class="toc-l2"><a href="#relation-to-the-record-ontology">Relation to the Record Ontology</a></li>
         <li><a href="#cite">Cite</a></li>
       </ol>
@@ -124,13 +125,13 @@
               <td>Ontology</td>
               <td><a class="mono" href="/record-harm/record-harm-ontology.ttl">record-harm-ontology.ttl</a></td>
               <td class="mono dim">text/turtle</td>
-              <td class="dim">28.5 kB</td>
+              <td class="dim">52.2 kB</td>
             </tr>
             <tr>
               <td>SHACL shapes</td>
               <td><a class="mono" href="/record-harm/record-harm-shapes.ttl">record-harm-shapes.ttl</a></td>
               <td class="mono dim">text/turtle</td>
-              <td class="dim">5.1 kB</td>
+              <td class="dim">7.6 kB</td>
             </tr>
             <tr>
               <td>Example events</td>
@@ -154,9 +155,16 @@
 <code>http://example.org/record-harm-ontology#</code>. The copies served here are
 rewritten to the permanent base at staging time, and the build fails if any
 <code>example.org</code> IRI survives. Adopting the permanent base <em>in the source
-repository</em> is that ontology's own v3.0 decision.</p>
+repository</em> is that ontology's own v4.0 decision — v3.0 went to the prime-set
+correction described below.</p>
 </blockquote>
 <h2 id="prime-harms">Prime harms</h2>
+<p>Six, since v3.0. <code>rho:Suppression</code> was a composite until then, said to build
+upon <code>rho:Omission</code> — a category error on the ontology's own definitions, since
+nothing is excluded <em>from</em> a suppressed record: it is complete, unmodified and
+merely out of reach. It was promoted because it is also the only prime
+attacking <code>rho:Accessibility</code>, which no prime had targeted at all; the
+composite had been hung off omission for want of anywhere else to attach.</p>
 <table>
 <thead>
 <tr>
@@ -179,11 +187,15 @@ repository</em> is that ontology's own v3.0 decision.</p>
 </tr>
 <tr>
 <td><code>rho:Omission</code></td>
-<td>Deliberate exclusion of elements that should be present.</td>
+<td>Deliberate exclusion of elements that should be present — where <em>elements</em> includes a record's internal relations, ordering and adjacent metadata, not only its content.</td>
 </tr>
 <tr>
 <td><code>rho:Denial</code></td>
 <td>Refusing to acknowledge a record's existence or validity.</td>
+</tr>
+<tr>
+<td><code>rho:Suppression</code></td>
+<td>Severing the channel between an intact record and an observer — classifying, burying, withholding.</td>
 </tr>
 </tbody>
 </table>
@@ -218,8 +230,59 @@ stay inside OWL 2 DL.</p>
 <td><code>rho:RecordAspect</code></td>
 <td>SKOS scheme of attacked aspects: existence, authenticity, integrity, accessibility, context, trustworthiness.</td>
 </tr>
+<tr>
+<td><code>rho:Record</code></td>
+<td>The thing harmed. Since v3.1 it has structure of its own: <code>rho:hasElement</code> for records made of records, <code>rho:bearer</code> for where a record lives.</td>
+</tr>
 </tbody>
 </table>
+<h2 id="where-a-record-lives">Where a record lives</h2>
+<p>Added in v3.1. A record is borne by an agent — <code>rho:bearer</code> — and that one
+property carries the whole distinction between a record held <strong>inside an
+agent</strong> (a memory, a belief, a private ledger: one individual bearer) and one
+held <strong>inside a community</strong> (a register, an archive: many bearers, or a single
+collective bearer). Records can also contain records, via <code>rho:hasElement</code>, so
+a community's register is a record in its own right rather than a bag of them.</p>
+<p>The distinction needed no new harm. Every case lands on a prime already there:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>forgetting</td>
+<td><code>rho:Destruction</code></td>
+</tr>
+<tr>
+<td>confabulated memory</td>
+<td><code>rho:Fabrication</code></td>
+</tr>
+<tr>
+<td>self-deception</td>
+<td><code>rho:Denial</code></td>
+</tr>
+<tr>
+<td>repression</td>
+<td><code>rho:Suppression</code></td>
+</tr>
+<tr>
+<td>testimony kept out of a register</td>
+<td><code>rho:Omission</code> <em>from that register</em></td>
+</tr>
+</tbody>
+</table>
+<p>So location is a property of the record, not a dimension of harm. What it does
+make expressible for the first time is <strong>self-directed harm</strong> — a <code>HarmEvent</code>
+whose perpetrator is also the bearer of the record it harms. Repression is
+suppression with the perpetrator inside.</p>
+<p>Two boundaries are deliberate. A private memory is <strong>not</strong> a suppressed record:
+suppression means access was severed from someone who would otherwise have had
+it, which is a change in the configuration, not the configuration itself. And
+an agent who witnesses something and records nothing harms no record, because
+there is no record — pure non-creation sits outside the vocabulary.</p>
 <h2 id="relation-to-the-record-ontology">Relation to the Record Ontology</h2>
 <p>The two vocabularies are <strong>two readings of the same web</strong>, and the translation
 between them is written out in full as the harm dictionary in <code>ROOT.md</code> §18.</p>
@@ -254,7 +317,7 @@ detected, never charged.</p>
   <span class="t-p">title</span>   = <span class="t-s">{Record Harm Ontology: A Formal Model of Ontological Attacks on Information}</span>,
   <span class="t-p">author</span>  = <span class="t-s">{Hinchley, Ron}</span>,
   <span class="t-p">year</span>    = <span class="t-s">{2026}</span>,
-  <span class="t-p">version</span> = <span class="t-s">{2.3}</span>,
+  <span class="t-p">version</span> = <span class="t-s">{3.1}</span>,
   <span class="t-p">url</span>     = <span class="t-s">{https://epistemic-ontology.net/record-harm}</span>
 }</code></pre>
     </section>

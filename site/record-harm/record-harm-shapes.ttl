@@ -2,6 +2,7 @@
 @prefix ex:   <https://www.epistemic-ontology.net/record-harm#> .
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix dc:   <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 # ============================================
 # Record Harm Ontology -- SHACL Validation Shapes
@@ -58,6 +59,46 @@ ex:BuildsUponEndpointTypeShape a sh:NodeShape ;
     sh:targetObjectsOf ex:buildsUpon ;
     sh:class ex:RecordHarm ;
     sh:message "Anything appearing as either side of buildsUpon must itself be typed RecordHarm. sh:targetClass-based shapes (everything above this one) only ever look at nodes already correctly typed; this shape instead starts from property USAGE, so it also catches a node that uses buildsUpon but was never given any RecordHarm typing in the first place." .
+
+# [v3.1] Record-side shapes. Division of labour worth keeping: these shapes
+# constrain DATA a consumer authors (their records, their nesting, their
+# bearers), while scripts/validate.py holds invariants about the ONTOLOGY's own
+# shape (OWL 2 DL simple-property rules, aspect coverage). A consumer
+# validating their own graph gets the first set and does not need the second.
+
+ex:RecordShape a sh:NodeShape ;
+    sh:targetClass ex:Record ;
+    sh:property [
+        sh:path ex:hasElement ;
+        sh:class ex:Record ;
+        sh:message "Every element of a record must itself be a Record. This is what makes a community register a Record in its own right rather than a bag of unrelated things -- if you want to attach something that is not a record, it is metadata or context, not an element." ;
+    ] ;
+    sh:property [
+        sh:path ex:bearer ;
+        sh:minCount 0 ;
+        sh:name "bearer" ;
+        sh:description "Encouraged but not required, and deliberately uncapped (no sh:maxCount) on the same reasoning as ex:perpetrator: multiple bearers is not an error, it is how a community-borne or redundantly-held record is stated. A record with exactly one individual bearer is inside-agent; with many bearers, or one collective bearer, inside-community. Absent means simply unstated -- not that the record is unborne." ;
+    ] .
+
+ex:RecordAcyclicShape a sh:NodeShape ;
+    sh:targetClass ex:Record ;
+    sh:sparql [
+        sh:message "A record must not contain itself, directly or through nesting (ex:hasElement+ loops back to the same record)." ;
+        sh:prefixes ex:ShapePrefixes ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this ex:hasElement+ $this .
+            }
+        """ ;
+    ] ;
+    rdfs:comment "ex:hasElement is asymmetric and irreflexive, which catches a DIRECT self-loop or a two-step cycle -- but only under a DL reasoner, and only for those depths. A longer nesting cycle (A contains B contains C contains A) violates no OWL axiom the ontology declares and would otherwise pass silently, so it is checked here as a SPARQL-based constraint over the full property path. Deliberately not solved by declaring ex:hasElement transitive: that would make it non-simple in OWL 2 DL and forbid the asymmetric/irreflexive declarations outright, which is the v2.3 defect all over again." .
+
+ex:ShapePrefixes
+    sh:declare [
+        sh:prefix "ex" ;
+        sh:namespace "https://www.epistemic-ontology.net/record-harm#"^^xsd:anyURI ;
+    ] .
 
 ex:HarmEventShape a sh:NodeShape ;
     sh:targetClass ex:HarmEvent ;

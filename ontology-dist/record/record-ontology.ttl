@@ -6,7 +6,7 @@
 @prefix rec:  <https://www.epistemic-ontology.net/record#> .
 
 # ============================================================================
-# The Record Ontology  --  SEED / BASE (v0.6.0)
+# The Record Ontology  --  SEED / BASE (v0.7.1)
 # ============================================================================
 # This is a deliberately minimal base. It encodes ONLY what ROOT.md records as
 # settled, and flags the open questions inline as comments. Read ROOT.md first;
@@ -29,7 +29,7 @@
     dc:title "The Record Ontology"@en ;
     dc:creator "Ron Hinchley / epistemic-ontology.net" ;
     dc:license <http://creativecommons.org/licenses/by/4.0/> ;
-    owl:versionInfo "0.6.0 — rec:formulation (the form as held, first datatype property); exercise-or-exorcise discipline recorded (ROOT.md §15)" ;
+    owl:versionInfo "0.7.1 — the audit reaches its own house: every rec: property now declares a utility path (v0.7.0 imposed the rule on companions while the base itself stood undeclared)" ;
     rdfs:comment "A base ontology of the Record, constrained to agents. One class (Record); warrant (formal/empirical/self-verifying) is an attribute, not a kind; the carrier dissolves into provenance + locus (no Carrier class); two excluded limits (world-in-itself, form-in-itself) are never instantiated. See ROOT.md for the full rationale."@en .
 
 
@@ -82,7 +82,8 @@ rec:forAgent a owl:ObjectProperty ;
     rdfs:label "for agent"@en ;
     rdfs:domain rec:Record ;
     rdfs:range  rec:Agent ;
-    rdfs:comment "Agent-relativity: the agent FOR WHOM this is a record."@en .
+    rdfs:comment "Agent-relativity: the agent FOR WHOM this is a record."@en ;
+    rec:utilityPath "formula" .
 
 
 # ----------------------------------------------------------------------------
@@ -118,13 +119,15 @@ rec:composedOf a owl:ObjectProperty ;
     rdfs:domain rec:Record ;
     rdfs:range  rec:Record ;
     owl:inverseOf rec:partOf ;
-    rdfs:comment "This Record is composed of (has as a part) another Record."@en .
+    rdfs:comment "This Record is composed of (has as a part) another Record."@en ;
+    rec:utilityPath "formula" .
 
 rec:partOf a owl:ObjectProperty ;
     rdfs:label "part of"@en ;
     rdfs:domain rec:Record ;
     rdfs:range  rec:Record ;
-    rdfs:comment "Inverse of rec:composedOf."@en .
+    rdfs:comment "Inverse of rec:composedOf. Consumed by no rule here; kept as the COMMON REFERENCE direction (schema.org isPartOf, BFO part_of) -- the reasoner produces its edges via owl:inverseOf, and external queriers are who read them."@en ;
+    rec:utilityPath "reference" .
 
 
 # ----------------------------------------------------------------------------
@@ -162,19 +165,22 @@ rec:hasWarrant a owl:ObjectProperty ;
     rdfs:label "has warrant"@en ;
     rdfs:domain rec:Record ;
     rdfs:range  rec:Warrant ;
-    rdfs:comment "Attaches a warrant to a record or (for patchworks) to a ground/part of it."@en .
+    rdfs:comment "Attaches a warrant to a record or (for patchworks) to a ground/part of it."@en ;
+    rec:utilityPath "formula" .
 
 # -- level of abstraction (grain): switch / Maxwell / QM ----------------------
 rec:atLevelOfAbstraction a owl:ObjectProperty ;
     rdfs:label "at level of abstraction"@en ;
     rdfs:domain rec:Record ;
-    rdfs:comment "Floridi's Level of Abstraction: the grain of the excision. The same phenomenon may be recorded at the level of a light switch (expected to work), Maxwell's equations, or quantum mechanics. Range deferred."@en .
+    rdfs:comment "Floridi's Level of Abstraction: the grain of the excision. The same phenomenon may be recorded at the level of a light switch (expected to work), Maxwell's equations, or quantum mechanics. Range deferred."@en ;
+    rec:utilityPath "explanation" .
 
 # -- directedness: the intentional object (what it is OF, as recorded) --------
 rec:directedToward a owl:ObjectProperty ;
     rdfs:label "directed toward"@en ;
     rdfs:domain rec:Record ;
-    rdfs:comment "The intentional object: what the record is of, AS RECORDED (Husserl; Peirce's immediate object). NOT a certified reference. The dynamical object / world-in-itself it asymptotically approaches is an EXCLUDED LIMIT -- never modelled as a class. Range therefore stays within the record web; deferred."@en .
+    rdfs:comment "The intentional object: what the record is of, AS RECORDED (Husserl; Peirce's immediate object). NOT a certified reference. The dynamical object / world-in-itself it asymptotically approaches is an EXCLUDED LIMIT -- never modelled as a class. Range therefore stays within the record web; deferred."@en ;
+    rec:utilityPath "formula" .
 
 # -- metadata: NOT a layer -- a record directed at another record --------------
 # There is no metadata in this ontology (the excision is part of the support, so
@@ -189,7 +195,8 @@ rec:metadataOf a owl:ObjectProperty ;
     rdfs:subPropertyOf rec:directedToward ;
     rdfs:domain rec:Record ;
     rdfs:range  rec:Record ;
-    rdfs:comment "Role-relation: this record is held AS metadata of another record, at some level of abstraction. Not a class; LoA/purpose-relative and reversible."@en .
+    rdfs:comment "Role-relation: this record is held AS metadata of another record, at some level of abstraction. Not a class; LoA/purpose-relative and reversible."@en ;
+    rec:utilityPath "verification" .
 
 # -- provenance: the genealogy (constitutive, not metadata) -------------------
 # Provenance (whence) + locus (where/when) are what the CARRIER dissolves into
@@ -197,19 +204,22 @@ rec:metadataOf a owl:ObjectProperty ;
 rec:hasProvenance a owl:ObjectProperty ;
     rdfs:label "has provenance"@en ;
     rdfs:domain rec:Record ;
-    rdfs:comment "The genealogy (WHENCE): observation -> formal mental paths -> traversal between agents -> social fixation. The excision is always part of the support, so provenance is CONSTITUTIVE, not strippable metadata. With rec:hasLocus, this is what the carrier dissolves into. Range deferred."@en .
+    rdfs:comment "The genealogy (WHENCE): observation -> formal mental paths -> traversal between agents -> social fixation. The excision is always part of the support, so provenance is CONSTITUTIVE, not strippable metadata. With rec:hasLocus, this is what the carrier dissolves into. Range deferred."@en ;
+    rec:utilityPath "reference" .
 
 # -- locus: where/when the form is borne (agent-relative) ---------------------
 rec:hasLocus a owl:ObjectProperty ;
     rdfs:label "has locus"@en ;
     rdfs:domain rec:Record ;
-    rdfs:comment "WHERE/WHEN this record's form is borne -- agent-relative (as experienced/individuated), NEVER a certified position in space-time-in-itself. The other half of the dissolved carrier (with rec:hasProvenance; ROOT.md §11). Range deferred."@en .
+    rdfs:comment "WHERE/WHEN this record's form is borne -- agent-relative (as experienced/individuated), NEVER a certified position in space-time-in-itself. The other half of the dissolved carrier (with rec:hasProvenance; ROOT.md §11). Range deferred."@en ;
+    rec:utilityPath "explanation" .
 
 # -- pragmatic adequacy: fitness for purpose ----------------------------------
 rec:pragmaticAdequacy a owl:ObjectProperty ;
     rdfs:label "pragmatic adequacy"@en ;
     rdfs:domain rec:Record ;
-    rdfs:comment "Fitness for purpose ('expected to work'), relative to a purpose and an agent (Peirce/Dewey). Range deferred."@en .
+    rdfs:comment "Fitness for purpose ('expected to work'), relative to a purpose and an agent (Peirce/Dewey). Range deferred. VAIN BY DECLARATION: asserted in one example, consumed by no rule, no check and no companion, and kept anyway -- the theory names it, and a use nobody has written yet is not a use that will never be written. The base ontology does not get a gentler audit than its companions."@en ;
+    rec:utilityPath "vain" .
 
 # -- formulation: the FORM AS HELD (ROOT.md §15) -------------------------------
 # The first datatype property. A Record is "a form, in a carrier, for an
@@ -224,7 +234,87 @@ rec:pragmaticAdequacy a owl:ObjectProperty ;
 rec:formulation a owl:DatatypeProperty ;
     rdfs:label "formulation"@en ;
     rdfs:domain rec:Record ;
-    rdfs:comment "The form as held, serialized (ROOT.md §15). Opaque content to the reasoner; for formal records, a description sufficient to exercise them (engine-side). Notation is a content decision, not ontology."@en .
+    rdfs:comment "The form as held, serialized (ROOT.md §15). Opaque content to the reasoner; for formal records, a description sufficient to exercise them (engine-side). Notation is a content decision, not ontology."@en ;
+    rec:utilityPath "formula" .
+
+
+# ----------------------------------------------------------------------------
+# UTILITY PATH  --  no vain entries.
+#
+# An ontology grows by asking "what else is true of this?", and that question
+# has no stopping point. The result is a vocabulary that looks like a model and
+# behaves like a list. This annotation asks the question that DOES stop: what
+# consumes this term?
+#
+# Six answers are permitted, and they are not a ranking. The temptation when
+# auditing is to keep only what drives computation and cut the rest -- which
+# would be a serious mistake, because it would cut precisely the terms that let
+# anyone else read the vocabulary.
+#
+#   formula      Drives the rules. Remove it and the model's output changes.
+#                The strongest path and, in practice, the rarest.
+#   derivation   Feeds another derived value. Remove it and something stops
+#                computing.
+#   reference    The COMMON REFERENCE terms -- the ones other vocabularies use.
+#                Nothing internal consumes them, and that is not a defect:
+#                their utility is INTEROPERABILITY. Convention is a warrant in
+#                its own right (§12), and this is what it buys. A vocabulary
+#                that derived everything and named nothing in common would be
+#                correct and unusable.
+#   verification Consumed by, or constituting, a check that EARNS warrant. An
+#                unexercised derivation is held testimonially however formal it
+#                claims to be (§15.3), so a term a check consumes is
+#                load-bearing for warrant even when no rule reads it.
+#   explanation  Shows the working. Not consumed, but without it a derivation
+#                arrives as an oracle -- and a derivation nobody can inspect is
+#                held TESTIMONIALLY however formal it claims to be (§15.2). So
+#                legibility is utility, not decoration.
+#   vain         Collected, with no consumer, AND SAID SO. A legitimate
+#                declaration and not a failure -- see below.
+#
+# ON `vain`
+# ---------
+# The audit exists to make utility explicit, NOT to license deletion. A term
+# with no consumer is not thereby worthless, because a model is a poor judge of
+# what data is worth keeping: it can only recognise the uses it already
+# implements. Pruning on that basis discards exactly the observations that would
+# support a use nobody has written yet -- and this project's standing complaint
+# about tabulated data is that it arrives with its provenance already discarded
+# by someone who could not see the use.
+#
+# chem:color is the honest case. Nothing consumes it. It earned its place twice
+# regardless: it is real measured data, and it exposed a bug -- a non-numeric
+# reading rendering as "unbound", which conflated chlorine's colour with
+# nitrogen having no stable anion. A term with no consumer still had
+# consequences.
+#
+# So the failure condition is UNDECLARED, never `vain`. What the audit requires
+# is that somebody looked at each term and said what it is for, with "kept
+# deliberately, unused" among the permitted answers.
+#
+# What the annotation forbids is not conventional or decorative terms. It is
+# UNDECLARED ones: a term whose utility nobody ever stated, which is how a
+# vocabulary accumulates without anyone deciding it should. An audit that finds
+# a term with no path has found either a missing declaration or a term to cut,
+# and the author has to say which.
+#
+# WHAT A DECLARED PATH IS, AND IS NOT
+# -----------------------------------
+# A path is a CLAIM, and the validator checks that the claim is made, not that
+# it is true -- a `formula` annotation is not proof that anything consumes the
+# term. Where consumption is visible in the graph (the term appears as a
+# predicate, as another term's superproperty, or under a restriction) the
+# validator witnesses it and says so; where consumption is engine-side, the
+# path is held ON THE ENGINE'S TESTIMONY, and the validator names that too.
+# Stating this boundary is the point: a declaration audit that let itself be
+# read as a consumption audit would be claiming a warrant it never earned --
+# precisely the pretender (§15.3) this annotation exists to catch. The paths
+# in this file were assigned from observed consumers (the validator's checks,
+# the engine's code, the examples' triples), and they remain defeasible
+# records, revisable when a consumer appears or disappears.
+rec:utilityPath a owl:AnnotationProperty ;
+    rdfs:label "utility path"@en ;
+    rdfs:comment "What consumes this term: formula, derivation, verification, reference, explanation, or vain (ROOT.md §15.3). Every term declares one; only an UNDECLARED term fails audit. The paths are not a ranking. `reference` terms are consumed by no local rule and exist for interoperability, which is a warrant (§12), not an excuse; `vain` marks data kept deliberately with no consumer, which is a defensible choice because a model can only recognise the uses it already implements."@en .
 
 
 # ----------------------------------------------------------------------------
@@ -239,13 +329,15 @@ rec:hasPremise a owl:ObjectProperty ;
     rdfs:label "has premise"@en ;
     rdfs:domain rec:Record ;
     rdfs:range  rec:Record ;
-    rdfs:comment "A record this inference takes as input. Premises may themselves be conclusions of other inferences -> derivation DAG."@en .
+    rdfs:comment "A record this inference takes as input. Premises may themselves be conclusions of other inferences -> derivation DAG."@en ;
+    rec:utilityPath "formula" .
 
 rec:concludes a owl:ObjectProperty ;
     rdfs:label "concludes"@en ;
     rdfs:domain rec:Record ;
     rdfs:range  rec:Record ;
-    rdfs:comment "The record this inference yields as output."@en .
+    rdfs:comment "The record this inference yields as output."@en ;
+    rec:utilityPath "formula" .
 
 # `Inference` is a DEFINED class, never a primitive kind: a record BECOMES an
 # inference by having premises and a conclusion (reasoner-recognised). This keeps
@@ -284,7 +376,8 @@ rec:hasForce a owl:ObjectProperty ;
     rdfs:label "has force"@en ;
     rdfs:domain rec:Inference ;
     rdfs:range  rec:InferentialForce ;
-    rdfs:comment "The force of an inference. A record whose force is ampliative cannot be internally completed regardless of its premises."@en .
+    rdfs:comment "The force of an inference. A record whose force is ampliative cannot be internally completed regardless of its premises."@en ;
+    rec:utilityPath "formula" .
 
 
 # ============================================================================
